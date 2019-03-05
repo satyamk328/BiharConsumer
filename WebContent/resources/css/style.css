@@ -1,0 +1,135 @@
+html {
+	min-height: 100%;
+	ont-family: Open Sans, sans-serif;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	font-size: 1.4rem;
+	font-weight: 400;
+	background: #f3f7f8;
+}
+
+body>.container {
+	padding: 60px 15px 0;
+}
+
+header {
+	left: 0;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+}
+
+.main-container {
+	min-height: 51vh;
+}
+
+footer {
+	position: relative;
+	width: 100%;
+	float: left;
+	background-color: #223e99;
+	border-bottom: 1.4rem solid #223e99;
+	padding: 50px 0 60px;
+}
+
+footer .list-unstyled li a {
+	color: rgba(255, 255, 255, 0.6);
+	line-height: 2;
+}
+
+.copyright-content {
+	color: #fff;
+	line-height: 2;
+	margin: 30px 0 0;
+	padding: 40px 0 0;
+	font-size: 14px;
+}
+
+.copyright-content .social-media {
+	display: block;
+	float: none;
+	list-style: none;
+	margin: 0 0 20px;
+	padding: 0;
+	text-align: center;
+	width: 100%;
+}
+
+.copyright-content .social-media li {
+	display: inline-block;
+	height: 42px;
+	line-height: 32px;
+	margin: 0 2px 0 0;
+	padding: 0;
+	width: 42px;
+}
+
+.copyright-content .social-media li a {
+	border: 2px solid #fff;
+	border-radius: 50%;
+	color: #fff;
+	display: block;
+	float: left;
+	font-size: 20px;
+	height: 38px;
+	line-height: 36px;
+	margin: 0;
+	padding: 0;
+	width: 38px;
+}
+
+.footer-logo {
+	font-size: 2.2rem;
+	line-height: 3.4rem;
+	margin-top: 1.2rem;
+	color: #fff
+}
+
+#back-top {
+	position: fixed;
+	bottom: 50px;
+	margin-right: 32px;
+	background: #333;
+	width: 46px;
+	height: 46px;
+	z-index: 54;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+	color: #fff;
+	font-size: 24px;
+	padding-top: 11px;
+	opacity: 0.8;
+	border: none !important;
+	transition: all 0.1s ease-in;
+	right: 0% !important;
+	position: fixed; /* Fixed/sticky position */
+	display: none;
+}
+
+#back-top .back-to-top-icon {
+	width: 17px; height : 29px;
+	background-position: 0px 0px;
+	height: 29px;
+}
+
+.backTopImg {
+	background-image: url(../../resources/img/footer/ic_back_to_top.png);
+	display: inline-block;
+	vertical-align: middle;
+	background-position: center; /* Center the image */
+	background-repeat: no-repeat; /* Do not repeat the image */
+}
+
+.letter-spacing-1 {
+	letter-spacing: .1em !important;
+	padding-top: 40px;
+	margin-bottom: 20px;
+	color: #fff;
+	font-size:
+}
