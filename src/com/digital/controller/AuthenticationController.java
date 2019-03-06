@@ -22,7 +22,7 @@ import com.digital.service.AuthenticationService;
 import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
-import com.digital.utils.Constants;
+import com.digital.utils.GlobalConstants;
 import com.digital.utils.DataUtils;
 /**
  * @author Satyam Kumar
@@ -98,8 +98,8 @@ public class AuthenticationController {
 			return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		String otp = DataUtils.getGenerateOTP();
-		emailService.sendEmail(Constants.OTP_HEADER, user.getEmail(),
-				Constants.OTP_BODY.replaceAll("USER_NAME", user.getName()).replaceAll("OTP_VALUES", otp));
+		emailService.sendEmail(GlobalConstants.OTP_HEADER, user.getEmail(),
+				GlobalConstants.OTP_BODY.replaceAll("USER_NAME", user.getName()).replaceAll("OTP_VALUES", otp));
 		user.setOtp(otp);
 		return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.OK);
 	}

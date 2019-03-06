@@ -3,9 +3,9 @@ package com.digital.utils;
  * @author Satyam Kumar
  *
  */
-public class Constants {
+public class GlobalConstants {
 
-	private Constants() {
+	private GlobalConstants() {
 	}
 
 	public static final String SUCCESS = "success";
@@ -18,5 +18,6 @@ public class Constants {
 	public static final String OTP_BODY = "<html><body><p> Dear USER_NAME,<br> <br> We detected that you are trying to sign-in into a new browser. Your <b>OTP</b> for logging in is : <b>OTP_VALUES</b><br>For security reasons, please do not share this OTP with anyone.<br><br>Thank you,<br>Team Digital Bihar</p></body></html>";
 	
 	public static final String HTML_CONTENT = "";
+	public static final String REQUEST_HEADER_SERVICE_NAME = "X-SERVICE-NAME";
 
 }
