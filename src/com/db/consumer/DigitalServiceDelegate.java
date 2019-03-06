@@ -7,6 +7,6 @@ public interface DigitalServiceDelegate {
 
 	public DigitalAuthToken generateAuthToken() throws BaseException;
 
-	public RestResponse createOrUpdateLeads(RestResponse request) throws BaseException;
+	public RestResponse<?> createOrUpdateLeads(RestResponse<?> request) throws BaseException;
 
 }

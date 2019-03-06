@@ -18,7 +18,7 @@ public class DigitalServiceDelegateImpl implements DigitalServiceDelegate{
 	}
 
 	@Override
-	public RestResponse createOrUpdateLeads(RestResponse request) throws BaseException {
+	public RestResponse<?> createOrUpdateLeads(RestResponse<?> request) throws BaseException {
 		return null;
 	}
 

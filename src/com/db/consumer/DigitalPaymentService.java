@@ -14,7 +14,7 @@ import com.db.spring.model.RestResponse;
 
 
 @Service
-public class DigitalPaymentService extends DigitalService<RestResponse> {
+public class DigitalPaymentService extends DigitalService<RestResponse<?>> {
 
 	private static final Logger logger = Logger.getLogger(DigitalPaymentService.class);
 
@@ -30,11 +30,11 @@ public class DigitalPaymentService extends DigitalService<RestResponse> {
 	}
 
 	@Override	
-	public ParameterizedTypeReference<RestResponse> buildParameterizedTypeReference() {
-		return new ParameterizedTypeReference<RestResponse>(){};
+	public ParameterizedTypeReference<RestResponse<?>> buildParameterizedTypeReference() {
+		return new ParameterizedTypeReference<RestResponse<?>>(){};
 	}
 	
-	public RestResponse execute(String leadId, String param) throws BaseException {
+	public RestResponse<?> execute(String leadId, String param) throws BaseException {
 		Assert.assertNotNull(param, "The paramMergeRequest must not be null");
 		//logger.info("Request that is going to sent to digital: " + paramLeadRequest.jsonMap());
 		HttpHeaders headers = new HttpHeaders();
