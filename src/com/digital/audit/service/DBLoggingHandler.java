@@ -1,4 +1,4 @@
-package com.digital.service;
+package com.digital.audit.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.digital.dao.AuditDao;
+import com.digital.audit.dao.AuditDao;
 import com.digital.model.vo.CentralizedLogsVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package com.digital.service;
+package com.digital.audit.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,13 +16,13 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-import com.digital.dao.ServiceApiResponseLogDao;
+import com.digital.audit.dao.ServiceApiResponseLogDao;
 import com.digital.payment.model.ServiceApiAuditLog;
 import com.digital.utils.GlobalConstants;
 
-@Repository
+@Component
 public class RestTemplateLoggingInterceptor implements ClientHttpRequestInterceptor {
 
 	private static final Logger log = LoggerFactory.getLogger(RestTemplateLoggingInterceptor.class);

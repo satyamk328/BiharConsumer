@@ -1,4 +1,4 @@
-package com.digital.dao;
+package com.digital.audit.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

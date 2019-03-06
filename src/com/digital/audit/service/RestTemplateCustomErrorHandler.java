@@ -1,4 +1,4 @@
-package com.digital.service;
+package com.digital.audit.service;
 
 import java.io.IOException;
 
