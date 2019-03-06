@@ -21,9 +21,9 @@ import com.digital.audit.service.RestTemplateService;
 import com.digital.model.SMSResponse;
 
 @Service
-public class SMSService {
+public class SMSWrapperService {
 
-	private static final Logger log = LoggerFactory.getLogger(SMSService.class);
+	private static final Logger log = LoggerFactory.getLogger(SMSWrapperService.class);
 
 	@Autowired
 	private RestTemplateService restTemplateService;
@@ -33,7 +33,8 @@ public class SMSService {
 
 	@Value("${sms_gateWay_URL}")
 	private String smsGateWayAPi;
-	@Value("${select_trip_by_city}")
+	
+	@Value("${sms_tocken}")
 	private String smsAccessToken;
 
 	public SMSResponse sendSMS(String phoneNumber) {
