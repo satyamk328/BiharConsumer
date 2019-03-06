@@ -63,14 +63,14 @@ public class AuthenticationController {
 	
 
 	@PostMapping(value = "/serviceLoginAuth")
-	public ResponseEntity<RestResponse<Object>> authUser(@RequestBody(required = true) User user)
+	public ResponseEntity<RestResponse<Object>> loginauthentication(@RequestBody(required = true) User user)
 			throws UnsupportedEncodingException {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
 		if (user.getEmail() == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Please enter valid Email/Phone");
 			return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
-			user = authService.authUser(user);
+			user = authService.loginauthentication(user);
 			if (user == null) {
 				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 						"Unauthorized User. Please login with your valid credential!");

@@ -24,7 +24,7 @@ import com.digital.model.Login;
 import com.digital.model.User;
 import com.digital.model.mapper.UserRowMapper;
 import com.digital.utils.DataUtils;
-import com.digital.utils.SecurityDigester;
+import com.digital.utils.CommonUtil;
 /**
  * @author Satyam Kumar
  *
@@ -146,21 +146,21 @@ public class AuthenticationDao {
 	@Transactional
 	public int resetPassword(String uid, String pass) throws UnsupportedEncodingException {
 		log.debug("Running insert query for getUserDetails {}", updateUserPasswordQuery);
-		return jdbcTemplate.update(updateUserPasswordQuery, SecurityDigester.encrypt(pass.trim()), uid);
+		return jdbcTemplate.update(updateUserPasswordQuery, CommonUtil.encrypt(pass.trim()), uid);
 	}
 
 	@Transactional
-	public User authUser(User user) throws UnsupportedEncodingException {
+	public User loginauthentication(User user) throws UnsupportedEncodingException {
 		try {
 			if (DataUtils.validatePhoneNumber(user.getEmail())) {
 				log.debug("Running insert query for authUser {}", selectUserAuthByPhoneQuery);
 				user = jdbcTemplate.queryForObject(selectUserAuthByPhoneQuery,
-						new Object[] { user.getEmail(), SecurityDigester.encrypt(user.getPassword()) },
+						new Object[] { user.getEmail(), CommonUtil.encrypt(user.getPassword()) },
 						new UserRowMapper());
 			} else {
 				log.debug("Running insert query for authUser {}", selectUserAuthByEmailQuery);
 				user = jdbcTemplate.queryForObject(selectUserAuthByEmailQuery,
-						new Object[] { user.getEmail(), SecurityDigester.encrypt(user.getPassword()) },
+						new Object[] { user.getEmail(), CommonUtil.encrypt(user.getPassword()) },
 						new UserRowMapper());
 			}
 			return user;

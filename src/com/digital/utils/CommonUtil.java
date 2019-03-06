@@ -11,7 +11,7 @@ import java.util.Base64;
  * @author Satyam Kumar
  *
  */
-public class SecurityDigester {
+public class CommonUtil {
 
 	public static String encrypt(String data) throws UnsupportedEncodingException {
 		return Base64.getEncoder().encodeToString(data.getBytes("utf-8"));

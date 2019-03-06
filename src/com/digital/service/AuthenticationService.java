@@ -24,9 +24,9 @@ public class AuthenticationService {
 	private AuthenticationDao authenticationDao;
 
 	//@Cacheable("authUser")
-	public User authUser(User user) throws UnsupportedEncodingException {
+	public User loginauthentication(User user) throws UnsupportedEncodingException {
 		log.info("call authUser()");
-		return authenticationDao.authUser(user);
+		return authenticationDao.loginauthentication(user);
 	}
 
 	public User addUser(User user) {
