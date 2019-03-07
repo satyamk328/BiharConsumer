@@ -8,34 +8,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.digital.dao.TopCityDao;
+import com.digital.dao.CityDao;
 import com.digital.model.TopCities;
 /**
  * @author Satyam Kumar
  *
  */
 @Service
-public class TopCityService {
+public class CityService {
 	
-	private static final Logger log = LoggerFactory.getLogger(TopCityService.class);
+	private static final Logger log = LoggerFactory.getLogger(CityService.class);
 	
 	@Autowired
-	private TopCityDao topCityDao;
+	private CityDao cityDao;
 	
 	@Cacheable("topAllCity")
 	public List<TopCities> getAllStation() {
 		log.info("call getAllStation()");
-		return topCityDao.getAllStation();
+		return cityDao.getAllStation();
 	}
 	
 	@Cacheable(value="topAllCityByCity", key="#stationName")
 	public List<TopCities> searchStationByStationName(String stationName) {
 		log.info("call searchStationByStationName [{}]",stationName);
-		return topCityDao.searchStationByStationName(stationName);
+		return cityDao.searchStationByStationName(stationName);
 	}
 	
 	public String addStationName(TopCities searchStation) {
 		log.info("call addStationName [{}]",searchStation);
-		return topCityDao.addStationName(searchStation);
+		return cityDao.addStationName(searchStation);
 	}
 }

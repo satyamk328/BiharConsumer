@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.Cacheable;
 
-import com.digital.dao.BusBookingDao;
+import com.digital.dao.BusDao;
 import com.digital.model.BusDetailsObject;
 import com.digital.model.BusRouteDetails;
 import com.digital.model.BusSeatDetailsObject;
@@ -18,10 +18,10 @@ import com.digital.utils.DataUtils;
  *
  */
 @Service
-public class BusBookingService {
+public class BusService {
 
 	@Autowired
-	private BusBookingDao busBookingDao;
+	private BusDao busBookingDao;
 
 	@Cacheable("routesDetails")
 	public BusDetailsObject searchBusRoutDetails(String source, String destination, String date) {

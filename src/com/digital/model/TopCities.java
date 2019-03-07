@@ -5,26 +5,27 @@ import java.io.Serializable;
  * @author Satyam Kumar
  *
  */
-public class TopCities extends BaseModel implements Serializable {
+public class TopCities implements Serializable {
 
 	private static final long serialVersionUID = -950330307004124256L;
-	private long id;
+	private long cityid;
 	private String displayName;
 	private String cityName;
 	private String stateName;
 	private String country;
 	private String district;
+	
 	/**
-	 * @return the id
+	 * @return the cityid
 	 */
-	public long getId() {
-		return id;
+	public long getCityid() {
+		return cityid;
 	}
 	/**
-	 * @param id the id to set
+	 * @param cityid the cityid to set
 	 */
-	public void setId(long id) {
-		this.id = id;
+	public void setCityid(long cityid) {
+		this.cityid = cityid;
 	}
 	/**
 	 * @return the displayName

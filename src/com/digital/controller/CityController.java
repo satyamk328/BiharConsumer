@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.TopCities;
-import com.digital.service.TopCityService;
+import com.digital.service.CityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 
@@ -31,12 +31,12 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "topCity")
 @RestController
 @RequestMapping(value = "/api/v0")
-public class TopCityController {
+public class CityController {
 
-	private static final Logger log = LoggerFactory.getLogger(TopCityController.class);
+	private static final Logger log = LoggerFactory.getLogger(CityController.class);
 
 	@Autowired
-	private TopCityService topCityService;
+	private CityService cityService;
 
 	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
@@ -50,7 +50,7 @@ public class TopCityController {
 	@GetMapping("/cities")
 	public ResponseEntity<RestResponse<List<TopCities>>> getAllStation() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = topCityService.getAllStation();
+		List<TopCities> searchStations = cityService.getAllStation();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
@@ -68,7 +68,7 @@ public class TopCityController {
 	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop,
 			Principal principal) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
-		String integer = topCityService.addStationName(busStop);
+		String integer = cityService.addStationName(busStop);
 		if (integer == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Top Cities not Registered Successfully");
@@ -90,7 +90,7 @@ public class TopCityController {
 	public ResponseEntity<RestResponse<List<TopCities>>> searchStation(
 			@PathVariable(name = "stationName", required = true) String stationName) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = topCityService.searchStationByStationName(stationName);
+		List<TopCities> searchStations = cityService.searchStationByStationName(stationName);
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
 }

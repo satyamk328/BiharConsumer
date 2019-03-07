@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import com.digital.model.BusDetails;
 import com.digital.model.BusRouteDetails;
 import com.digital.model.BusSeatDetails;
 import com.digital.model.BusType;
+import com.digital.model.CustomerVo;
 import com.digital.model.mapper.BusAmenitiesExtractor;
 import com.digital.model.mapper.BusInformationDetailsExtractor;
 import com.digital.model.mapper.BusSeatDetailsExtractor;
@@ -41,9 +45,9 @@ import com.digital.utils.DataUtils;
  *
  */
 @Repository("busRoutDao")
-public class BusBookingDao {
+public class BusDao {
 
-	private static final Logger log = LoggerFactory.getLogger(BusBookingDao.class);
+	private static final Logger log = LoggerFactory.getLogger(BusDao.class);
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
@@ -187,5 +191,16 @@ public class BusBookingDao {
 		log.debug("Running insert query for getHistoryBusTicket: {}", selectCustomerBookTicketQuery);
 		return jdbcTemplate.query(selectCustomerBookTicketQuery, new Object[] { uid.toLowerCase(), limit },
 				new CustomerMapperExtrator());
+	}
+	
+	public int generateTicket(BusDetails busDetails, CustomerVo customerVo) {
+		int customerId = 0;
+		int scheduleDepartureId = 0;
+		int ticketNum = 0;
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
+		if(jdbcTemplate.update("", "")>0) {
+			
+		}
+		return 0;
 	}
 }
