@@ -1,6 +1,5 @@
 package com.digital.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,10 +22,13 @@ import com.digital.model.vo.SearchTripVO;
 import com.digital.service.BusBookingService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+
+import io.swagger.annotations.Api;
 /**
  * @author Satyam Kumar
  *
  */
+@Api(value = "busBooking")
 @RestController
 @RequestMapping(value = "/api/v0/bus")
 public class BusBookingController {

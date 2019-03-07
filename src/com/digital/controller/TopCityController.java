@@ -2,6 +2,7 @@ package com.digital.controller;
 
 import java.security.Principal;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,16 @@ import com.digital.model.TopCities;
 import com.digital.service.TopCityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 /**
  * @author Satyam Kumar
  *
  */
+@Api(value = "topCity")
 @RestController
 @RequestMapping(value = "/api/v0")
 public class TopCityController {
@@ -31,6 +38,15 @@ public class TopCityController {
 	@Autowired
 	private TopCityService topCityService;
 
+	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
+			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Message not found/intended resource not found "),
+			@ApiResponse(code = 500, message = "General exceptions "),
+			@ApiResponse(code = 504, message = "Gateway timeout error"),
+			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@GetMapping("/cities")
 	public ResponseEntity<RestResponse<List<TopCities>>> getAllStation() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
@@ -39,6 +55,15 @@ public class TopCityController {
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Add City", notes = "This API is used to add citiess")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
+			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Message not found/intended resource not found "),
+			@ApiResponse(code = 500, message = "General exceptions "),
+			@ApiResponse(code = 504, message = "Gateway timeout error"),
+			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@PostMapping("/cities")
 	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop,
 			Principal principal) {
@@ -52,6 +77,15 @@ public class TopCityController {
 		return new ResponseEntity<>(new RestResponse(busStop, status), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Search by City Name", notes = "This API is used to search by city name")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
+			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Message not found/intended resource not found "),
+			@ApiResponse(code = 500, message = "General exceptions "),
+			@ApiResponse(code = 504, message = "Gateway timeout error"),
+			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@GetMapping("/cities/{stationName}")
 	public ResponseEntity<RestResponse<List<TopCities>>> searchStation(
 			@PathVariable(name = "stationName", required = true) String stationName) {

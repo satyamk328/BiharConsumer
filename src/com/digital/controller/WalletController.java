@@ -18,10 +18,13 @@ import com.digital.model.Wallet;
 import com.digital.service.WalletService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+
+import io.swagger.annotations.Api;
 /**
  * @author Satyam Kumar
  *
  */
+@Api(value="wallet")
 @Controller
 @RequestMapping(value = "/api/v0/wallet")
 public class WalletController {

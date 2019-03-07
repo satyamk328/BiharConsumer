@@ -23,11 +23,15 @@ import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.utils.GlobalConstants;
+
+import io.swagger.annotations.Api;
+
 import com.digital.utils.DataUtils;
 /**
  * @author Satyam Kumar
  *
  */
+@Api(value = "authentication")
 @RestController
 @RequestMapping(value = "/api/v0/auth")
 public class AuthenticationController {

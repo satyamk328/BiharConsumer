@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Random;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PaymentUtil {
 	/*
 	 * sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|

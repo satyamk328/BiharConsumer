@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.Payment;
+
+import io.swagger.annotations.Api;
 /**
  * @author Satyam Kumar
  *
  */
+@Api(value="payment")
 @RestController
 @RequestMapping("/api/v0/payment")
 public class PaymentController {
