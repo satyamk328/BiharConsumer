@@ -30,6 +30,7 @@ import com.digital.model.vo.SearchTripVO;
 import com.digital.service.BusService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.CommonUtil;
 
 import io.swagger.annotations.Api;
 /**
@@ -97,10 +98,10 @@ public class BusController {
 		return new ResponseEntity<>(new RestResponse(customerBusTicketVOs, status), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "generateTicket")
-	public @ResponseBody ResponseEntity<InputStreamResource> generateTicket(@RequestBody Object objCombined) {
+	@GetMapping(value = "generateTicket")
+	public @ResponseBody ResponseEntity<InputStreamResource> generateTicket(@RequestBody(required=false) Object objCombined) {
 		String name = "customrname";
-		int ticketId = 0;
+		int ticketId = 1;
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Disposition", "inline; filename=" + name + "_ticket.pdf");
 
@@ -108,7 +109,7 @@ public class BusController {
 
 		if (ticketId > 0) {
 
-			//ticketPdf = Utility.generatePdf(bus, customer, ticketId);
+			ticketPdf = CommonUtil.generatePdf(null, null, ticketId);
 
 			return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
 					.body(new InputStreamResource(ticketPdf));
