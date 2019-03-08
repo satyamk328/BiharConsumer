@@ -18,6 +18,12 @@ public class RestStatus<T> {
         this.message = statusMessage;
     }
 
+    public RestStatus(final String statusCode, final String statusMessage, final T messageCode) {
+        this.code = statusCode;
+        this.message = statusMessage;
+        this.messageCode = messageCode;
+    }
+    
     public RestStatus() {
 
     }

@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusDetailsObject;
@@ -99,18 +100,20 @@ public class BusController {
 	}
 	
 	@GetMapping(value = "generateTicket")
-	public @ResponseBody ResponseEntity<InputStreamResource> generateTicket(@RequestBody(required=false) Object objCombined) {
+	public ResponseEntity<InputStreamResource> generateTicket(HttpServletResponse response,@RequestBody(required=false) Object objCombined) {
 		String name = "customrname";
 		int ticketId = 1;
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Disposition", "inline; filename=" + name + "_ticket.pdf");
+        response.setHeader("Content-Disposition", String.format("inline; filename=" + name + "_ticket.pdf"));
+        
+
 
 		ByteArrayInputStream ticketPdf = null;
 
 		if (ticketId > 0) {
 
 			ticketPdf = CommonUtil.generatePdf(null, null, ticketId);
-
+			response.setContentLength(200);
 			return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
 					.body(new InputStreamResource(ticketPdf));
 		} else {
