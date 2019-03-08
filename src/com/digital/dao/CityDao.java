@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.model.TopCities;
 import com.digital.model.mapper.TopCityRowMapper;
+
 /**
  * @author Satyam Kumar
  *
@@ -25,11 +26,13 @@ public class CityDao {
 	private static final Logger log = LoggerFactory.getLogger(CityDao.class);
 
 	@Value("${select_top_cities}")
-    private String selectAllCityQuery;
+	private String selectAllCityQuery;
 	@Value("${select_search_top_cities}")
-    private String selectSearchTopCityQuery;
+	private String selectSearchTopCityQuery;
 	@Value("${insert_top_city}")
-    private String insertTopCityQuery;
+	private String insertTopCityQuery;
+	@Value("${delete_top_city}")
+	private String deleteCityQuery;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -42,7 +45,7 @@ public class CityDao {
 
 	@Transactional
 	public List<TopCities> searchStationByStationName(String stationName) {
-		log.debug("Running insert query for getAllStation {}", selectSearchTopCityQuery);
+		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityQuery);
 		return jdbcTemplate.query(selectSearchTopCityQuery, new Object[] { stationName }, new TopCityRowMapper());
 	}
 
@@ -53,5 +56,12 @@ public class CityDao {
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(topCities);
 		jdbcTemplate.update(insertTopCityQuery, parameters, holder);
 		return (holder.getKey() == null) ? "" : holder.getKey().toString();
+	}
+
+	@Transactional
+	public boolean deleteCity(String id) {
+		log.debug("Running insert query for deleteCity {}", deleteCityQuery);
+		int i = jdbcTemplate.update(deleteCityQuery, id);
+		return i > 0 ? true : false;
 	}
 }

@@ -24,6 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 /**
  * @author Satyam Kumar
  *
@@ -92,5 +93,22 @@ public class CityController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<TopCities> searchStations = cityService.searchStationByStationName(stationName);
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Delete by City id", notes = "This API is used to delete by city id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
+			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Message not found/intended resource not found "),
+			@ApiResponse(code = 500, message = "General exceptions "),
+			@ApiResponse(code = 504, message = "Gateway timeout error"),
+			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
+	@GetMapping("/cities/{id}")
+	public ResponseEntity<RestResponse<Boolean>> deleteCity(
+			@PathVariable(name = "id", required = true) String stationName) {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
+		boolean delete = cityService.deleteCity(stationName);
+		return new ResponseEntity<>(new RestResponse(delete, status), HttpStatus.OK);
 	}
 }

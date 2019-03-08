@@ -58,4 +58,7 @@ public class BusService {
 		return busBookingDao.getHistoryBusTicket(uid, limit);
 	}
 
+	public boolean deleteScheduleDeparture(String busId) {
+		return busBookingDao.deleteScheduleDeparture(busId);
+	}
 }

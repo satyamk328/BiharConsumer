@@ -46,6 +46,7 @@ import com.digital.utils.GlobalConstants;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+	
 	@Autowired
     private MailService emailService;
     
@@ -87,8 +88,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		log.error(ex.getMessage());
 		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
 		RestResponse<String> response = new RestResponse<>(null,
-				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
-						"Internal Server Error while performing Operation"));
+				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

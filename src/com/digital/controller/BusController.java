@@ -1,15 +1,21 @@
 package com.digital.controller;
 
-import java.io.ByteArrayInputStream;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
+import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpHeaders.EXPIRES;
+import static org.springframework.http.HttpHeaders.PRAGMA;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +40,7 @@ import com.digital.spring.model.RestStatus;
 import com.digital.utils.CommonUtil;
 
 import io.swagger.annotations.Api;
+
 /**
  * @author Satyam Kumar
  *
@@ -53,23 +60,24 @@ public class BusController {
 			@PathVariable(name = "source", required = true) String source,
 			@PathVariable(name = "destination", required = true) String destination,
 			@PathVariable(name = "date", required = true) String date) {
-		log.info("call search searchBusRoutDetails:{},{},{}", source,destination,date);
+		log.info("call search searchBusRoutDetails:{},{},{}", source, destination, date);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		BusDetailsObject busDetailsObject = busService.searchBusRoutDetails(source, destination, date);
 		if (busDetailsObject.getAvailableRoutes().isEmpty())
-			status = new RestStatus<>(HttpStatus.OK.toString(),
-					String.format("There are no buses between these two cities. Please try a different date or search with an alternate route."));
+			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
+					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
 		return new ResponseEntity<>(new RestResponse(busDetailsObject, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/trip")
 	public ResponseEntity<RestResponse<BusSeatDetailsObject>> getSeatAvailability(
-			@RequestBody(required=true) SearchTripVO tripVO) {
+			@RequestBody(required = true) SearchTripVO tripVO) {
 		log.info("call search getSeatAvailability:{} ", tripVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		BusSeatDetailsObject busSeatDetailsAvailability = busService.getSeatAvailability(tripVO);
 		if (busSeatDetailsAvailability.getBusSeatDetails() == null) {
-			status = new RestStatus<>(HttpStatus.OK.toString(),	"There are no seats available in this bus. Please select a different bus.");
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are no seats available in this bus. Please select a different bus.");
 		}
 		return new ResponseEntity<>(new RestResponse(busSeatDetailsAvailability, status), HttpStatus.OK);
 	}
@@ -98,51 +106,63 @@ public class BusController {
 					"There are no seats available in this bus. Please select a different bus.");
 		return new ResponseEntity<>(new RestResponse(customerBusTicketVOs, status), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "generateTicket")
-	public ResponseEntity<InputStreamResource> generateTicket(HttpServletResponse response,@RequestBody(required=false) Object objCombined) {
+	public HttpEntity<byte[]> generateTicket(@RequestBody(required = false) Object objCombined) throws IOException {
 		String name = "customrname";
 		int ticketId = 1;
+
 		HttpHeaders headers = new HttpHeaders();
-        response.setHeader("Content-Disposition", String.format("inline; filename=" + name + "_ticket.pdf"));
-        
+		headers.setContentType(MediaType.parseMediaType("application/pdf"));
+		headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		headers.add(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT");
+		headers.add(ACCESS_CONTROL_ALLOW_HEADERS, CONTENT_TYPE);
+		headers.add(CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+		headers.add(PRAGMA, "no-cache");
+		headers.add(EXPIRES, "0");
 
+		headers.add("Content-Disposition", String.format("inline; filename=" + name + "_ticket.pdf"));
 
-		ByteArrayInputStream ticketPdf = null;
+		byte[] ticketPdf = null;
 
 		if (ticketId > 0) {
 
 			ticketPdf = CommonUtil.generatePdf(null, null, ticketId);
-			response.setContentLength(200);
-			return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
-					.body(new InputStreamResource(ticketPdf));
+			headers.setContentLength(ticketPdf.length);
+			return new HttpEntity<byte[]>(ticketPdf, headers);
 		} else {
 			return null;
 		}
-		
+
 	}
-	
+
 	@PostMapping(value = "/scheduleDeparture")
 	public ResponseEntity<RestResponse<Map<String, String>>> scheduleDeparture(@RequestBody Object bus) {
-		
-		//Map<String, String> statusMsg = BusControllerRepo.scheduleDeparture(bus);
+
+		// Map<String, String> statusMsg = BusControllerRepo.scheduleDeparture(bus);
 		return null;
 	}
-	
+
 	@PutMapping(value = "/editScheduleDeparture")
-	public ResponseEntity<RestResponse<Map<String, String>>> editScheduleDeparture(@RequestBody Map<String, Object> mapBusObj) {
-		
-		//BusDAO busObj = mapBusObj.get("busObj");
-		//BusDAO oldBusObj = mapBusObj.get("oldBusObj");
-		//Map<String, String> statusMsg = BusControllerRepo.editScheduleDeparture(busObj, oldBusObj);
+	public ResponseEntity<RestResponse<Boolean>> editScheduleDeparture(@RequestBody Map<String, Object> mapBusObj) {
+
+		// BusDAO busObj = mapBusObj.get("busObj");
+		// BusDAO oldBusObj = mapBusObj.get("oldBusObj");
+		// Map<String, String> statusMsg =
+		// BusControllerRepo.editScheduleDeparture(busObj, oldBusObj);
 		return null;
 	}
-	
-	
+
 	@DeleteMapping(value = "/deleteScheduleDeparture/{busId}")
-	public ResponseEntity<Map<String, String>> deleteScheduleDeparture(@PathVariable(required=true) int busId) {
-		
-		//Map<String, String> statusMsg = BusControllerRepo.deleteScheduleDeparture(busId);
-		return null;
+	public ResponseEntity<RestResponse<Boolean>> deleteScheduleDeparture(@PathVariable(required = true) String busId) {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(),
+				String.format("The bus with the number %s has been deleted", busId));
+		boolean flag = busService.deleteScheduleDeparture(busId);
+		if (!flag) {
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+					String.format("Unable to delete the bus with bus number %s", busId));
+			new ResponseEntity<>(new RestResponse(flag, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(new RestResponse(flag, status), HttpStatus.OK);
 	}
 }

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ import com.digital.model.mapper.CustomerMapperExtrator;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
+
 /**
  * @author Satyam Kumar
  *
@@ -74,10 +77,11 @@ public class BusDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Transactional(readOnly = true)
-	public List<BusRouteDetails> searchTriBySrcDescAndDate(String source,String destination, String date) {
+	public List<BusRouteDetails> searchTriBySrcDescAndDate(String source, String destination, String date) {
 		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
-		return jdbcTemplate.query(selectSearchTripBySrcAndDescDateQuery,
-				new Object[] { "%" + source.toLowerCase() + "%", "%" + destination.toLowerCase() + "%", DataUtils.convertFormat(date) },
+		return jdbcTemplate.query(
+				selectSearchTripBySrcAndDescDateQuery, new Object[] { "%" + source.toLowerCase() + "%",
+						"%" + destination.toLowerCase() + "%", DataUtils.convertFormat(date) },
 				new BusTripDetailsExtrator());
 	}
 
@@ -105,22 +109,24 @@ public class BusDao {
 	@Transactional(readOnly = true)
 	public List<BusCancellationPolicies> getCancellationPolicy(String operatorId) {
 		log.debug("Running insert query for getCancellationPolicy {}", selectBusCancellationPolicyQuery);
-		return jdbcTemplate.query(selectBusCancellationPolicyQuery,new Object[] {operatorId}, new RowMapper<BusCancellationPolicies>() {
-			public BusCancellationPolicies mapRow(ResultSet rs, int rowNum) throws SQLException {
-				BusCancellationPolicies busCancellation = new BusCancellationPolicies();
-				busCancellation.setRuleId(rs.getString("policyid"));
-				busCancellation.setBusid(rs.getString("busid"));
-				busCancellation.setDepartureheading(rs.getString("departureheading"));
-				busCancellation.setPolicyheading(rs.getString("policyheading"));
-				return busCancellation;
-			}
-		});
+		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { operatorId },
+				new RowMapper<BusCancellationPolicies>() {
+					public BusCancellationPolicies mapRow(ResultSet rs, int rowNum) throws SQLException {
+						BusCancellationPolicies busCancellation = new BusCancellationPolicies();
+						busCancellation.setRuleId(rs.getString("policyid"));
+						busCancellation.setBusid(rs.getString("busid"));
+						busCancellation.setDepartureheading(rs.getString("departureheading"));
+						busCancellation.setPolicyheading(rs.getString("policyheading"));
+						return busCancellation;
+					}
+				});
 	}
 
 	@Transactional(readOnly = true)
 	public List<Integer> getBusFilterAmenitiesByBusId(String bid) {
 		log.debug("Running insert query for getBusAmenitiesByBusId {}", selectFilterAminitiesQuery);
-		return jdbcTemplate.query(selectFilterAminitiesQuery, new Object[] { bid },	new ResultSetExtractor<List<Integer>>() {
+		return jdbcTemplate.query(selectFilterAminitiesQuery, new Object[] { bid },
+				new ResultSetExtractor<List<Integer>>() {
 					@Override
 					public List<Integer> extractData(ResultSet rs) throws SQLException {
 						List<Integer> amenitiesList = new ArrayList<>();
@@ -129,7 +135,7 @@ public class BusDao {
 						}
 						return amenitiesList;
 					}
-		});
+				});
 	}
 
 	@Transactional(readOnly = true)
@@ -192,15 +198,45 @@ public class BusDao {
 		return jdbcTemplate.query(selectCustomerBookTicketQuery, new Object[] { uid.toLowerCase(), limit },
 				new CustomerMapperExtrator());
 	}
-	
+
 	public int generateTicket(BusDetails busDetails, CustomerVo customerVo) {
 		int customerId = 0;
 		int scheduleDepartureId = 0;
 		int ticketNum = 0;
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
-		if(jdbcTemplate.update("", "")>0) {
-			
+		if (jdbcTemplate.update("", "") > 0) {
+
 		}
 		return 0;
+	}
+
+	public Map<String, String> scheduleDeparture(// BusDAO bus
+	) {
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
+
+		return null;
+	}
+
+	public Map<String, String> editScheduleDeparture(// BusDAO busObj, BusDAO oldBusObj
+	) {
+		return null;
+	}
+
+	private List<String> getCityIds(String fromCity, String toCity) {
+		List<String> cityIds = new ArrayList<String>();
+		String queryForCityIds = "SELECT from_city_id, to_city_id FROM (SELECT cityid as from_city_id FROM top_cities WHERE cityname = ?) as fc, (SELECT cityid as to_city_id FROM top_cities WHERe cityname = ?) as tc";
+		SqlRowSet cityIdsRowSet = jdbcTemplate.queryForRowSet(queryForCityIds, fromCity, toCity);
+
+		while (cityIdsRowSet.next()) {
+			cityIds.add(cityIdsRowSet.getString("from_city_id"));
+			cityIds.add(cityIdsRowSet.getString("to_city_id"));
+		}
+		return cityIds;
+	}
+
+	public boolean deleteScheduleDeparture(String busId) {
+		log.debug("Running delete query for deleteScheduleDeparture: {}", selectCustomerBookTicketQuery);
+		int i = jdbcTemplate.update("DELETE FROM schedule_departure " + "WHERE bus_id = ?", busId);
+		return i > 0 ? true : false;
 	}
 }

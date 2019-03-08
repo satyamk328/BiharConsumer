@@ -37,7 +37,7 @@ public class CommonUtil {
 	}
 
 	
-	public static ByteArrayInputStream generatePdf(BusDetails bus, CustomerVo customer, int ticketId) {
+	public static byte[] generatePdf(BusDetails bus, CustomerVo customer, int ticketId) {
 
 		Document document = new Document(new Rectangle(350f, 300f), 36f, 72f, 108f, 108f);
 		document.setMargins(2, 2, 2, 2);
@@ -89,7 +89,7 @@ public class CommonUtil {
 
 		}
 
-		return new ByteArrayInputStream(out.toByteArray());
+		return out.toByteArray();
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -38,4 +38,9 @@ public class CityService {
 		log.info("call addStationName [{}]",searchStation);
 		return cityDao.addStationName(searchStation);
 	}
+	
+	public boolean deleteCity(String id) {
+		log.info("call deleteCity [{}]",id);
+		return cityDao.deleteCity(id);
+	}
 }
