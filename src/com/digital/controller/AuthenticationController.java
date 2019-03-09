@@ -2,8 +2,6 @@ package com.digital.controller;
 
 import java.io.UnsupportedEncodingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +20,11 @@ import com.digital.service.AuthenticationService;
 import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;
-
-import com.digital.utils.DataUtils;
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
@@ -34,9 +32,8 @@ import com.digital.utils.DataUtils;
 @Api(value = "authentication")
 @RestController
 @RequestMapping(value = "/api/v0/auth")
+@Slf4j
 public class AuthenticationController {
-
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
 	@Autowired
 	private AuthenticationService authService;

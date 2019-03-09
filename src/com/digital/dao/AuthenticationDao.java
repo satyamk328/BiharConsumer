@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,16 +21,17 @@ import com.digital.enums.PrevilageType;
 import com.digital.model.Login;
 import com.digital.model.User;
 import com.digital.model.mapper.UserRowMapper;
-import com.digital.utils.DataUtils;
 import com.digital.utils.CommonUtil;
+import com.digital.utils.DataUtils;
+
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
  */
 @Repository("userDetailsDao")
+@Slf4j
 public class AuthenticationDao {
-
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationDao.class);
 
 	@Value("${select_user_history}")
     private String selectAllUserQuery;

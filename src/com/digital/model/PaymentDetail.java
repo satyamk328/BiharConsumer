@@ -1,5 +1,10 @@
 package com.digital.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class PaymentDetail {
 	private String email;
 	private String name;

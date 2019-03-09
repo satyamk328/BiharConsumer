@@ -2,8 +2,6 @@ package com.digital.dao;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,14 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.digital.model.TopCities;
 import com.digital.model.mapper.TopCityRowMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
  */
 @Repository("topCityDao")
+@Slf4j
 public class CityDao {
-
-	private static final Logger log = LoggerFactory.getLogger(CityDao.class);
 
 	@Value("${select_top_cities}")
 	private String selectAllCityQuery;

@@ -2,8 +2,6 @@ package com.digital.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,7 @@ import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
@@ -27,9 +26,8 @@ import io.swagger.annotations.Api;
 @Api(value="wallet")
 @Controller
 @RequestMapping(value = "/api/v0/wallet")
+@Slf4j
 public class WalletController {
-
-	private static final Logger log = LoggerFactory.getLogger(WalletController.class);
 
 	@Autowired
 	private WalletService walletService;

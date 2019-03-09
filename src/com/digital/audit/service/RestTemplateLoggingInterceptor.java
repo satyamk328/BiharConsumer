@@ -7,8 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpRequest;
@@ -22,10 +20,11 @@ import com.digital.audit.dao.ServiceApiResponseLogDao;
 import com.digital.payment.model.ServiceApiAuditLog;
 import com.digital.utils.GlobalConstants;
 
-@Component
-public class RestTemplateLoggingInterceptor implements ClientHttpRequestInterceptor {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger log = LoggerFactory.getLogger(RestTemplateLoggingInterceptor.class);
+@Component
+@Slf4j
+public class RestTemplateLoggingInterceptor implements ClientHttpRequestInterceptor {
 
 	@Autowired
 	private ServiceApiResponseLogDao restLogRepository;

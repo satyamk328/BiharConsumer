@@ -8,12 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class PerformanceFilter extends OncePerRequestFilter {
+import lombok.extern.slf4j.Slf4j;
 
-	private static Logger log = Logger.getLogger(PerformanceFilter.class);
+@Slf4j
+public class PerformanceFilter extends OncePerRequestFilter {
 
 	public PerformanceFilter() {
 		super();
@@ -22,7 +22,6 @@ public class PerformanceFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
 		String message = String.format("Request [%s] Parameters %s", request.getRequestURI(), buildStringFromRequestParameters(request));
 
 		if (log.isDebugEnabled()) {

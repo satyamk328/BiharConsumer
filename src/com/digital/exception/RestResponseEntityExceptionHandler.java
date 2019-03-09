@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,14 +36,16 @@ import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.utils.GlobalConstants;
+
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
  */
 @ControllerAdvice
+@Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 	@Autowired
     private MailService emailService;
     

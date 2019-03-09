@@ -2,8 +2,6 @@ package com.digital.dao;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,14 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.model.Wallet;
 import com.digital.model.mapper.WalletRowMapper;
+
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
  */
 @Repository("walletDao")
+@Slf4j
 public class WalletDao {
-
-	private static final Logger log = LoggerFactory.getLogger(WalletDao.class);
 
 	@Value("${select_wallet_details_by_user}")
     private String selectWallletByUserQuery;

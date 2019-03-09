@@ -1,7 +1,5 @@
 package com.digital.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.digital.model.Payment;
 
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
@@ -21,9 +20,8 @@ import io.swagger.annotations.Api;
 @Api(value="payment")
 @RestController
 @RequestMapping("/api/v0/payment")
+@Slf4j
 public class PaymentController {
-
-	private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
 
 	public ResponseEntity<Object> processTransaction(
 			@RequestBody Payment paymentForm) {
@@ -32,6 +30,7 @@ public class PaymentController {
 	
 	@PostMapping(value = "pay")
 	public ResponseEntity<String> pay() {
+		log.info("");
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 

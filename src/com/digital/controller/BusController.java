@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +38,7 @@ import com.digital.spring.model.RestStatus;
 import com.digital.utils.CommonUtil;
 
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Satyam Kumar
@@ -48,9 +47,8 @@ import io.swagger.annotations.Api;
 @Api(value = "busBooking")
 @RestController
 @RequestMapping(value = "/api/v0/bus")
+@Slf4j
 public class BusController {
-
-	private static final Logger log = LoggerFactory.getLogger(BusController.class);
 
 	@Autowired
 	private BusService busService;

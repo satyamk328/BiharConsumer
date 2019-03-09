@@ -9,8 +9,6 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,10 +20,11 @@ import com.digital.model.vo.CentralizedLogsVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component
-public class DBLoggingHandler {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DBLoggingHandler.class);
+@Component
+@Slf4j
+public class DBLoggingHandler {
 
 	public static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -45,7 +44,7 @@ public class DBLoggingHandler {
 			vo.setLogMessage(exceptionStacktraceToString(throwable, method, obj));
 			auditDao.addCentralizedLog(vo);
 		} catch (final Exception e) {
-			LOGGER.error("Unable to insert error in to log table : " + throwable.getMessage(), e);
+			log.error("Unable to insert error in to log table : " + throwable.getMessage(), e);
 		}
 
 	}
@@ -62,7 +61,7 @@ public class DBLoggingHandler {
 					ps.append(MAPPER.writeValueAsString(parameter));
 					ps.append(" , ");
 				} catch (final JsonProcessingException e) {
-					LOGGER.error("JSON Processing Exception {}", e);
+					log.error("JSON Processing Exception {}", e);
 				}
 			}
 		}
@@ -91,7 +90,7 @@ public class DBLoggingHandler {
 			}
 			auditDao.addCentralizedLog(vo);
 		} catch (final Exception e) {
-			LOGGER.error("Unable to insert error in to log table : " + e.getMessage(), e);
+			log.error("Unable to insert error in to log table : " + e.getMessage(), e);
 		}
 
 	}
@@ -130,7 +129,7 @@ public class DBLoggingHandler {
 				try {
 					message += MAPPER.writeValueAsString(paltformResponse);
 				} catch (final Exception e) {
-					LOGGER.debug("Unable to add platform repsonse to response", e);
+					log.debug("Unable to add platform repsonse to response", e);
 				}
 			}
 
@@ -138,7 +137,7 @@ public class DBLoggingHandler {
 
 			auditDao.addCentralizedLog(vo);
 		} catch (final Exception e) {
-			LOGGER.error("Unable to insert message in to log table : " + message, e);
+			log.error("Unable to insert message in to log table : " + message, e);
 		}
 	}
 
@@ -173,7 +172,7 @@ public class DBLoggingHandler {
 		try {
 			servletRequest = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get Request Object", e);
+			log.debug("Unable to get Request Object", e);
 		}
 		if (servletRequest == null) {
 			return null;
@@ -191,31 +190,31 @@ public class DBLoggingHandler {
 		try {
 			buffer.append("\n BODY: " + getRequestBody(request));
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get request Body", e);
+			log.debug("Unable to get request Body", e);
 		}
 
 		try {
 			buffer.append("\n METHOD: " + request.getMethod());
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get request Method", e);
+			log.debug("Unable to get request Method", e);
 		}
 
 		try {
 			buffer.append("\n URL: " + request.getRequestURL());
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get request Url", e);
+			log.debug("Unable to get request Url", e);
 		}
 
 		try {
 			buffer.append("\nQueryParams: " + request.getQueryString());
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get request QueryParams", e);
+			log.debug("Unable to get request QueryParams", e);
 		}
 
 		try {
 			buffer.append("\n HEADER: " + getHeaders(request));
 		} catch (final Exception e) {
-			LOGGER.debug("Unable to get request Headers", e);
+			log.debug("Unable to get request Headers", e);
 		}
 		return buffer.toString();
 

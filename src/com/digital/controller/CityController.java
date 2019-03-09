@@ -3,8 +3,6 @@ package com.digital.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Satyam Kumar
@@ -33,9 +32,8 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "topCity")
 @RestController
 @RequestMapping(value = "/api/v0")
+@Slf4j
 public class CityController {
-
-	private static final Logger log = LoggerFactory.getLogger(CityController.class);
 
 	@Autowired
 	private CityService cityService;

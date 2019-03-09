@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,14 +41,15 @@ import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
  */
 @Repository("busRoutDao")
+@Slf4j
 public class BusDao {
-
-	private static final Logger log = LoggerFactory.getLogger(BusDao.class);
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
