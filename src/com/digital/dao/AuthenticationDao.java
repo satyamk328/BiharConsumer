@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.digital.enums.PrevilageType;
 import com.digital.model.Login;
 import com.digital.model.User;
-import com.digital.model.mapper.UserRowMapper;
+import com.digital.model.extrator.UserRowMapper;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 

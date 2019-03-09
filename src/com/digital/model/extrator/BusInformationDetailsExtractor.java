@@ -1,4 +1,4 @@
-package com.digital.model.mapper;
+package com.digital.model.extrator;
 
 
 import java.sql.ResultSet;

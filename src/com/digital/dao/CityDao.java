@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.model.TopCities;
-import com.digital.model.mapper.TopCityRowMapper;
+import com.digital.model.extrator.TopCityRowMapper;
 
 import lombok.extern.slf4j.Slf4j;
 

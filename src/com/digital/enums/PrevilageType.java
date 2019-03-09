@@ -6,3 +6,4 @@ package com.digital.enums;
 public enum PrevilageType {
 	ADMIN, VIEWER, RETAILER
 }
+
