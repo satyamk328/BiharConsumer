@@ -39,6 +39,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @PropertySource({ "classpath:application.properties", "classpath:sql.properties" })
 public class WebConfig implements WebMvcConfigurer {
 
+	 public static final Integer SECONDS_IN_DAY = 86400;
+	 
 	@Autowired
 	private Environment env;
 
@@ -83,13 +85,14 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/**");
 	}
 
+	
 	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 	    registry.addResourceHandler("swagger-ui.html")
-	      .addResourceLocations("classpath:/META-INF/resources/");
+	      .addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(SECONDS_IN_DAY);;
 	 
 	    registry.addResourceHandler("/webjars/**")
-	      .addResourceLocations("classpath:/META-INF/resources/webjars/");
+	      .addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(SECONDS_IN_DAY);;
 	}
 	
 	@Override
