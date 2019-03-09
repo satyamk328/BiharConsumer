@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.digital.audit.service.DBLoggingHandler;
 import com.digital.audit.service.RestTemplateService;
@@ -43,6 +44,9 @@ public class SMSWrapperService {
 	public SMSResponse sendSMSGET(String phoneNumber) {
 		log.debug("smsGateWayAPi ={}", smsGateWayAPi);
 
+		// UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(smsGateWayAPi)
+	    //            .queryParam("transactionId", "1")
+	    //            .queryParam("email", "chathuranga.t@gmail.com");
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("transactionId", 1);
 
@@ -92,10 +96,9 @@ public class SMSWrapperService {
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		// set up HTTP Basic Authentication Header
-		String auth = username + ":" + password;
-		byte[] encodedAuth = Base64Utils.encode(auth.getBytes(Charset.forName("US-ASCII")));
-		String authHeader = "Basic " + new String(encodedAuth);
-		httpHeaders.set("Authorization", authHeader);
+		//String auth = username + ":" + password;
+		String authToken  = Base64Utils.encodeToString((username + ":" + password).getBytes());//auth.getBytes(Charset.forName("US-ASCII"))
+		httpHeaders.set("Authorization", "Basic " + authToken);
 
 		//setting up the request body
         SMS user = new SMS();
