@@ -29,6 +29,5 @@ public class ServiceApiResponseLogDao {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(apiAuditLog);
         KeyHolder holder = new GeneratedKeyHolder();
         return jdbcTemplate.update(insertApiAuditLogSql, params, holder);
-
     }
 }

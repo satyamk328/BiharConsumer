@@ -29,7 +29,7 @@ public class MailService {
 
 	public void sendEmail(String Subject, String emailTo, String Content) {
 		log.info("call sendEmail()");
-		if (!isOffLine)
+		if (isOffLine)
 			return;
 		sendMail(emailTo, null, null, Subject, Content);
 	}

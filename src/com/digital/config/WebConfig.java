@@ -37,7 +37,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableTransactionManagement
 @EnableScheduling
 @PropertySource({ "classpath:application.properties", "classpath:sql.properties" })
-public class WebServiceConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private Environment env;

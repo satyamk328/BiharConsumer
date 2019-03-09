@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SchedulerService {
 
-	//@Scheduled(fixedRate = 5000) // for every 5 minutes
+	//@Scheduled(fixedRate = 5000) // for every 5 second
 	public void run2() {
 		System.out.println("I am called by Spring scheduler " + new Date());
 	}

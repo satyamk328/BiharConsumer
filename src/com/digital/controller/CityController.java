@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -104,11 +105,11 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/cities/{id}")
+	@DeleteMapping("/cities/{id}")
 	public ResponseEntity<RestResponse<Boolean>> deleteCity(
-			@PathVariable(name = "id", required = true) String stationName) {
+			@PathVariable(name = "id", required = true) String id) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
-		boolean delete = cityService.deleteCity(stationName);
+		boolean delete = cityService.deleteCity(id);
 		return new ResponseEntity<>(new RestResponse(delete, status), HttpStatus.OK);
 	}
 }

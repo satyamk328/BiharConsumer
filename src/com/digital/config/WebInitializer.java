@@ -14,7 +14,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] { WebServiceConfig.class, EhCacheConfig.class, MailConfig.class, SwaggerConfig.class };
+		return new Class[] { WebConfig.class, EhCacheConfig.class, MailConfig.class, SwaggerConfig.class };
 	}
 
 	@Override
