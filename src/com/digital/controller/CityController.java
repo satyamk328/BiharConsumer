@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.TopCities;
-import com.digital.service.CityService;
+import com.digital.service.CityServiceImpl;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CityController {
 
 	@Autowired
-	private CityService cityService;
+	private CityServiceImpl cityService;
 
 	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
@@ -50,7 +50,7 @@ public class CityController {
 	@GetMapping("/cities")
 	public ResponseEntity<RestResponse<List<TopCities>>> getAllStation() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = cityService.getAllStation();
+		List<TopCities> searchStations = cityService.getAll();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
@@ -68,8 +68,8 @@ public class CityController {
 	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop,
 			Principal principal) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
-		String integer = cityService.addStationName(busStop);
-		if (integer == null) {
+		long integer = cityService.save(busStop);
+		if (integer == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Top Cities not Registered Successfully");
 			return new ResponseEntity<>(new RestResponse(integer, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -105,9 +105,9 @@ public class CityController {
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@DeleteMapping("/cities/{id}")
 	public ResponseEntity<RestResponse<Boolean>> deleteCity(
-			@PathVariable(name = "id", required = true) String id) {
+			@PathVariable(name = "id", required = true) int id) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
-		boolean delete = cityService.deleteCity(id);
+		int delete = cityService.delete(id);
 		return new ResponseEntity<>(new RestResponse(delete, status), HttpStatus.OK);
 	}
 }

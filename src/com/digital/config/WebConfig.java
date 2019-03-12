@@ -88,11 +88,8 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-	    registry.addResourceHandler("swagger-ui.html")
-	      .addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(SECONDS_IN_DAY);;
-	 
-	    registry.addResourceHandler("/webjars/**")
-	      .addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(SECONDS_IN_DAY);;
+		 registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(SECONDS_IN_DAY);
+         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(SECONDS_IN_DAY);
 	}
 	
 	@Override

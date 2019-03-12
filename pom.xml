@@ -79,6 +79,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Documentary collection API / Swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -98,10 +99,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+		<!-- Servlet+JSP+JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
+		<!-- MySQL -->
 		<!-- <dependency> -->
 		<!-- <groupId>mysql</groupId> -->
 		<!-- <artifactId>mysql-connector-java</artifactId> -->

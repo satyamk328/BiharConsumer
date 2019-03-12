@@ -49,18 +49,17 @@ public class CityDao {
 	}
 
 	@Transactional
-	public String addStationName(TopCities topCities) {
+	public long addStationName(TopCities topCities) {
 		log.debug("Running insert query for addStationName {}", insertTopCityQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(topCities);
 		jdbcTemplate.update(insertTopCityQuery, parameters, holder);
-		return (holder.getKey() == null) ? "" : holder.getKey().toString();
+		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
 
 	@Transactional
-	public boolean deleteCity(String id) {
+	public int deleteCity(Integer id) {
 		log.debug("Running insert query for deleteCity {}", deleteCityQuery);
-		int i = jdbcTemplate.update(deleteCityQuery, id);
-		return i > 0 ? true : false;
+		return jdbcTemplate.update(deleteCityQuery, id);
 	}
 }
