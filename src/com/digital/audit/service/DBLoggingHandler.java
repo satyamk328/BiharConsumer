@@ -16,7 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.digital.audit.dao.AuditDao;
-import com.digital.audit.model.CentralizedLogsVO;
+import com.digital.audit.model.CentralizedLogs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,7 +37,7 @@ public class DBLoggingHandler {
 	public void handleException(final Throwable throwable, final Method method, final Object... obj) {
 
 		try {
-			final CentralizedLogsVO vo = new CentralizedLogsVO();
+			final CentralizedLogs vo = new CentralizedLogs();
 			vo.setAppName(applicationName);
 			vo.setLogLevel("ERROR");
 			vo.setLogTimeStamp(new Date());
@@ -79,7 +79,7 @@ public class DBLoggingHandler {
 
 	public void handleException(final String message, final Exception ex) {
 		try {
-			final CentralizedLogsVO vo = new CentralizedLogsVO();
+			final CentralizedLogs vo = new CentralizedLogs();
 			vo.setAppName(applicationName);
 			vo.setLogLevel("ERROR");
 			vo.setLogTimeStamp(new Date());
@@ -121,7 +121,7 @@ public class DBLoggingHandler {
 	public void logMessage(String message, final String logLevel, final Object paltformResponse) {
 
 		try {
-			final CentralizedLogsVO vo = new CentralizedLogsVO();
+			final CentralizedLogs vo = new CentralizedLogs();
 			vo.setAppName(applicationName);
 			vo.setLogLevel(logLevel);
 			vo.setLogTimeStamp(new Date());

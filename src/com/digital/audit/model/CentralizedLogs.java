@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CentralizedLogsVO {
+public class CentralizedLogs {
 	private String appName;
 	private String logLevel;
 	private Date logTimeStamp;
