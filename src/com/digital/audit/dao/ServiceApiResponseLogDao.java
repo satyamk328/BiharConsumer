@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.digital.payment.model.ServiceApiAuditLog;
+import com.digital.audit.model.ServiceApiAuditLog;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.digital.model.vo.CentralizedLogsVO;
+import com.digital.audit.model.CentralizedLogsVO;
 
 import lombok.extern.slf4j.Slf4j;
 

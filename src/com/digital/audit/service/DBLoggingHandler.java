@@ -16,7 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.digital.audit.dao.AuditDao;
-import com.digital.model.vo.CentralizedLogsVO;
+import com.digital.audit.model.CentralizedLogsVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

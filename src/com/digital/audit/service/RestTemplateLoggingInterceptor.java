@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.digital.audit.dao.ServiceApiResponseLogDao;
-import com.digital.payment.model.ServiceApiAuditLog;
+import com.digital.audit.model.ServiceApiAuditLog;
 import com.digital.utils.GlobalConstants;
 
 import lombok.extern.slf4j.Slf4j;
