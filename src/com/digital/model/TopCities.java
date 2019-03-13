@@ -11,9 +11,9 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class TopCities implements Serializable {
-	private static final long serialVersionUID = -950330307004124256L;
-	private long cityid;
+public class TopCities implements Serializable{
+	private static final long serialVersionUID = -2496060421142221098L;
+	private long cityId;
 	private String displayName;
 	private String cityName;
 	private String stateName;

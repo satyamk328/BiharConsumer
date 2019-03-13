@@ -1,6 +1,5 @@
 package com.digital.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.TopCities;
-import com.digital.service.CityServiceImpl;
+import com.digital.service.CityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CityController {
 
 	@Autowired
-	private CityServiceImpl cityService;
+	private CityService cityService;
 
 	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
@@ -65,8 +64,7 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@PostMapping("/cities")
-	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop,
-			Principal principal) {
+	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		long integer = cityService.save(busStop);
 		if (integer == 0) {
@@ -94,6 +92,23 @@ public class CityController {
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Det by City id", notes = "This API is used to get by city id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
+			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Message not found/intended resource not found "),
+			@ApiResponse(code = 500, message = "General exceptions "),
+			@ApiResponse(code = 504, message = "Gateway timeout error"),
+			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
+	@GetMapping("/cities/{id}")
+	public ResponseEntity<RestResponse<TopCities>> getCityById(
+			@PathVariable(name = "id", required = true) long id) {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records fetch Successfully");
+		TopCities topCities = cityService.getCityById(id);
+		return new ResponseEntity<>(new RestResponse(topCities, status), HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "Delete by City id", notes = "This API is used to delete by city id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
 			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),

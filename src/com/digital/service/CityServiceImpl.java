@@ -2,22 +2,21 @@ package com.digital.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.CityDao;
 import com.digital.model.TopCities;
+
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author Satyam Kumar
  *
  */
 @Service
+@Slf4j
 public class CityServiceImpl implements CityService{
-	
-	private static final Logger log = LoggerFactory.getLogger(CityServiceImpl.class);
 	
 	@Autowired
 	private CityDao cityDao;
@@ -38,17 +37,12 @@ public class CityServiceImpl implements CityService{
 	@Override
 	public long save(TopCities object) {
 		log.info("call addStationName [{}]",object);
-		return cityDao.addStationName(object);
+		return cityDao.addCity(object);
 	}
 
 	@Override
-	public TopCities get(Integer id) {
-		return null;
-	}
-
-	@Override
-	public int count() {
-		return 0;
+	public TopCities getCityById(long id) {
+		return cityDao.getCityById(id).get(0);
 	}
 
 	@Override
