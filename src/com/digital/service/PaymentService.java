@@ -56,12 +56,6 @@ public class PaymentService {
 		params.put("curl", "cancel_url");
 
 		paymentUtil.validate(params);
-
-		/*
-		 * generates hashString like:
-		 * "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10|SALT";
-		 * "gtKFFx|PLS-999994w5-3|600.000|SAU Admission 2014|RobinsKumar|robinsxxxxx@xxxx.com|||||||||||eCwWELxi"
-		 */
 		String hashString = paymentUtil.generateHashString(params);
 
 		/*

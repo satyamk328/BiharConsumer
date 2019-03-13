@@ -28,7 +28,6 @@ public class PaymentWrapperService {
 	}
 	private HttpHeaders getHeaders() {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		// set up HTTP Basic Authentication Header
 		String authToken = Base64Utils.encodeToString(("user:password").getBytes());
 		httpHeaders.set("Authorization", "Basic " + authToken);
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
