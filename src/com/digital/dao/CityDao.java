@@ -85,7 +85,7 @@ public class CityDao {
         parameters.addValue("district", topCities.getDistrict());
         parameters.addValue("country", topCities.getCountry());
         log.debug("Update TopCities configuration for id: %s", id);
-		return jdbcTemplate.update(deleteCityQuery, parameters);
+		return jdbcTemplateObject.update(deleteCityQuery, parameters);
 	}
 	
 	@Transactional
@@ -93,6 +93,6 @@ public class CityDao {
 		log.debug("Running insert query for deleteCity {}", deleteCityQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", id);
-		return jdbcTemplate.update(deleteCityQuery,  parameters);
+		return jdbcTemplateObject.update(deleteCityQuery,  parameters);
 	}
 }
