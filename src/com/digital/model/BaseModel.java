@@ -15,8 +15,8 @@ public abstract class BaseModel implements Serializable {
 
 	protected static final long serialVersionUID = 1L;
 	private String createdBy;
-	private Date createdOn;
-	private String modifyBy;
-	private Date modifyOn;
+	private Date dateCreated;
+	private String modifiedBy;
+	private Date dateModified;
 
 }

@@ -23,19 +23,19 @@ public class WalletService {
 	private WalletDao walletDao;
 
 	//@Cacheable(value="walletHistory", key="#uid")
-	public List<Wallet> getWalletHistory(String uid) {
-		log.info("call getWalletHistory {}", uid);
-		return walletDao.getWalletHistory(uid);
+	public List<Wallet> getWalletHistory(Long userId) {
+		log.info("call getWalletHistory {}", userId);
+		return walletDao.getWalletHistory(userId);
 	}
 
 	//@Cacheable(value="walletDetails", key="#uid")
-	public Wallet getWalletDetails(String uid) {
-		log.info("call getWalletDetails {}", uid);
-		return walletDao.getWalletDetails(uid);
+	public Wallet getWalletDetails(Long userId) {
+		log.info("call getWalletDetails {}", userId);
+		return walletDao.getWalletDetails(userId);
 	}
 
-	public int updateWallet(double addedAmount, String uid) {
-		log.info("call updateWallet addedAmount: {}, UserId: {}", addedAmount, uid);
-		return walletDao.updateWallet(addedAmount, uid);
+	public int updateWallet(double addedAmount, Long userId) {
+		log.info("call updateWallet addedAmount: {}, UserId: {}", addedAmount, userId);
+		return walletDao.updateWallet(addedAmount, userId);
 	}
 }

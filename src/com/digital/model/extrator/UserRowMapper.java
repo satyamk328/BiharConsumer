@@ -29,9 +29,9 @@ public class UserRowMapper implements RowMapper<User> {
 		user.setActive(rs.getBoolean("IsActive"));
 		user.setAttempt(rs.getInt("Attempt"));
 		user.setCreatedBy(rs.getString("CreatedBy"));
-		user.setCreatedOn(rs.getDate("DateCreated"));
-		user.setModifyBy(rs.getString("ModifiedBy"));
-		user.setModifyOn(rs.getDate("DateModified"));
+		user.setDateCreated(rs.getDate("DateCreated"));
+		user.setModifiedBy(rs.getString("ModifiedBy"));
+		user.setDateModified(rs.getDate("DateModified"));
 		return user;
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,24 +30,31 @@ public class WalletDao {
     private String updateWalletQuery;
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
 	@Transactional(readOnly = true)
-	public List<Wallet> getWalletHistory(String uid) {
+	public List<Wallet> getWalletHistory(Long userId) {
 		log.debug("Running insert query for getWalletHistory: {}", selectWallletByUserQuery);
-		return jdbcTemplate.query(selectWallletByUserQuery, new Object[] { uid }, new WalletRowMapper());
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", userId);
+		return jdbcTemplateObject.query(selectWallletByUserQuery, parameters, new WalletRowMapper());
 	}
 
 	@Transactional(readOnly = true)
-	public Wallet getWalletDetails(String uid) {
+	public Wallet getWalletDetails(Long userId) {
 		log.debug("Running insert query for getWalletDetails: {}", selectUpdateWalletQuery);
-		return jdbcTemplate.queryForObject(selectUpdateWalletQuery, new Object[] { uid }, new WalletRowMapper());
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", userId);
+		return jdbcTemplateObject.queryForObject(selectUpdateWalletQuery, parameters, new WalletRowMapper());
 	}
 
 	@Transactional
-	public int updateWallet(double addedAmount, String uid) {
+	public int updateWallet(double addedAmount, Long userId) {
 		log.debug("Running insert query for updateWallet: {}", updateWalletQuery);
-		return jdbcTemplate.update(updateWalletQuery, addedAmount,uid);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", userId);
+		parameters.addValue("addedBalance", addedAmount);
+		return jdbcTemplateObject.update(updateWalletQuery, parameters);
 	}
 
 }

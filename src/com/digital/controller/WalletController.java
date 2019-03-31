@@ -19,11 +19,12 @@ import com.digital.spring.model.RestStatus;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
  */
-@Api(value="wallet")
+@Api(value = "wallet")
 @Controller
 @RequestMapping(value = "/api/v0/wallet")
 @Slf4j
@@ -35,10 +36,10 @@ public class WalletController {
 	@PutMapping(value = "/{addedAmount}")
 	public ResponseEntity<RestResponse<Object>> updateWallet(
 			@PathVariable(name = "addedAmount", required = true) Double addedAmount,
-			@RequestParam(name = "uid", required = true) String uid) {
-		log.info("call addWallet updateWallet:{}, uid:{}", addedAmount, uid);
+			@RequestParam(name = "userId", required = true) Long userId) {
+		log.info("call addWallet updateWallet:{}, uid:{}", addedAmount, userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Wallet Updated Successfully");
-		int row = walletService.updateWallet(addedAmount, uid);
+		int row = walletService.updateWallet(addedAmount, userId);
 		if (row == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
@@ -47,21 +48,21 @@ public class WalletController {
 		return new ResponseEntity<>(new RestResponse(row, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{uid}")
+	@GetMapping(value = "/{userId}")
 	public ResponseEntity<RestResponse<List<Wallet>>> getWalletHistory(
-			@PathVariable(name = "uid", required = true) String uid) {
-		log.info("call getWalletHistory uid:{}", uid);
+			@PathVariable(name = "userId", required = true) Long userId) {
+		log.info("call getWalletHistory userId:{}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<Wallet> wallets = walletService.getWalletHistory(uid);
+		List<Wallet> wallets = walletService.getWalletHistory(userId);
 		return new ResponseEntity<>(new RestResponse(wallets, status), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/customuserbalance/{uid}")
 	public ResponseEntity<RestResponse<Wallet>> getWalletDetails(
-			@PathVariable(name = "uid", required = true) String uid) {
-		log.info("call getWalletDetails uid:{}", uid);
+			@PathVariable(name = "uid", required = true) Long userId) {
+		log.info("call getWalletDetails uid:{}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-	    Wallet wallets = walletService.getWalletDetails(uid);
+		Wallet wallets = walletService.getWalletDetails(userId);
 		return new ResponseEntity<>(new RestResponse(wallets, status), HttpStatus.OK);
 	}
 

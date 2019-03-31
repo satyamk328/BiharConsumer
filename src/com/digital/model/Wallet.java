@@ -13,13 +13,13 @@ import lombok.Setter;
 public class Wallet extends BaseModel implements Serializable{
 	
 	private static final long serialVersionUID = 7198033653493021478L;
-	private String id;
-	private String userId;
+	private Long walletId;
+	private Long userId;
 	private double previousBalance = 0;
 	private double currentBalance = 0;
 	private double addedBalance = 0;
-	private String remark;
-	private String txId;
+	private String transactionId;
+	private String description;
 	private String paymentMode;
 	private String senderName;
 	
