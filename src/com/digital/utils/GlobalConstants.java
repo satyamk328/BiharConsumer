@@ -19,5 +19,7 @@ public class GlobalConstants {
 	
 	public static final String HTML_CONTENT = "";
 	public static final String REQUEST_HEADER_SERVICE_NAME = "X-SERVICE-NAME";
-
+	
+	public static final String BOOKING_CONFIRMATION_HEADER = "Booking Confirmation on DIGITALBIHAR, Bus No: 12398, 21-Feb-2019, 3A, NDLS - SSM";
+	public static final String BOOKING_CONFIRMATION_TICKET = "";
 }

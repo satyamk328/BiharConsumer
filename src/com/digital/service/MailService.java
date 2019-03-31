@@ -1,8 +1,11 @@
 package com.digital.service;
 
+import java.util.Date;
+
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +42,16 @@ public class MailService {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-				if (emailCC != null && !"".equals(emailCC.trim())) {
+				if (!StringUtils.isEmpty(emailCC.trim())) {
 					helper.setCc(InternetAddress.parse(emailCC));
 				}
-				if (emailBcc != null && !"".equals(emailBcc.trim())) {
+				if (!StringUtils.isEmpty(emailBcc.trim())) {
 					helper.setBcc(InternetAddress.parse(emailBcc));
 				}
+				helper.setSentDate(new Date());
 				helper.setSubject(Subject);
 				helper.setTo(InternetAddress.parse(emailTo));
+				helper.setFrom(emailTo);  
 				helper.setText(Content, true);
 			}
 		};
