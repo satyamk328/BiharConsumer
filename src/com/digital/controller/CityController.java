@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Api(value = "topCity")
 @RestController
-@RequestMapping(value = "/api/v0")
+@RequestMapping(value = "/api/v0/cities")
 @Slf4j
 public class CityController {
 
@@ -46,10 +46,10 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/cities")
-	public ResponseEntity<RestResponse<List<TopCities>>> getAllStation() {
+	@GetMapping("/")
+	public ResponseEntity<RestResponse<List<TopCities>>> getAllCities() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = cityService.getAll();
+		List<TopCities> searchStations = cityService.getAllCities();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
@@ -63,8 +63,8 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@PostMapping("/cities")
-	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody TopCities busStop) {
+	@PostMapping("/")
+	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody(required=true) TopCities busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		long integer = cityService.save(busStop);
 		if (integer == 0) {
@@ -84,11 +84,11 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/cities/{stationName}")
+	@GetMapping("/{stationName}")
 	public ResponseEntity<RestResponse<List<TopCities>>> searchStation(
 			@PathVariable(name = "stationName", required = true) String stationName) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = cityService.searchStationByStationName(stationName);
+		List<TopCities> searchStations = cityService.getCityByName(stationName);
 		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
 	}
 
@@ -101,11 +101,11 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/cities/{id}")
+	@GetMapping("/{cityId}")
 	public ResponseEntity<RestResponse<TopCities>> getCityById(
-			@PathVariable(name = "id", required = true) long id) {
+			@PathVariable(name = "cityId", required = true) long cityId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records fetch Successfully");
-		TopCities topCities = cityService.getCityById(id);
+		TopCities topCities = cityService.getCityById(cityId);
 		return new ResponseEntity<>(new RestResponse(topCities, status), HttpStatus.OK);
 	}
 	
@@ -118,11 +118,11 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@DeleteMapping("/cities/{id}")
+	@DeleteMapping("/{cityId}")
 	public ResponseEntity<RestResponse<Boolean>> deleteCity(
-			@PathVariable(name = "id", required = true) int id) {
+			@PathVariable(name = "cityId", required = true) long cityId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
-		int delete = cityService.delete(id);
+		int delete = cityService.delete(cityId);
 		return new ResponseEntity<>(new RestResponse(delete, status), HttpStatus.OK);
 	}
 }

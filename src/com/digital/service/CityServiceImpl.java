@@ -21,34 +21,34 @@ public class CityServiceImpl implements CityService{
 	@Autowired
 	private CityDao cityDao;
 	
+	@Override
 	@Cacheable("topAllCity")
-	@Override
-	public List<TopCities> getAll() {
+	public List<TopCities> getAllCities() {
 		log.info("call getAllStation()");
-		return cityDao.getAllStation();
+		return cityDao.getAllCities();
 	}
 	
-	@Cacheable(value="topAllCityByCity", key="#stationName")
-	public List<TopCities> searchStationByStationName(String stationName) {
-		log.info("call searchStationByStationName [{}]",stationName);
-		return cityDao.searchStationByStationName(stationName);
+	@Cacheable(value="topAllCityByCity", key="#cityName")
+	public List<TopCities> getCityByName(String cityName) {
+		log.info("call searchStationByStationName {}",cityName);
+		return cityDao.getCityByName(cityName);
 	}
 	
 	@Override
-	public long save(TopCities object) {
-		log.info("call addStationName [{}]",object);
-		return cityDao.addCity(object);
+	public long save(TopCities city) {
+		log.info("call addStationName [{}]",city);
+		return cityDao.addCity(city);
 	}
 
 	@Override
-	public TopCities getCityById(long id) {
-		return cityDao.getCityById(id).get(0);
+	public TopCities getCityById(Long cityId) {
+		return cityDao.getCityById(cityId).get(0);
 	}
 
 	@Override
-	public int delete(Integer id) {
-		log.info("call deleteCity [{}]",id);
-		return cityDao.deleteCity(id);
+	public int delete(Long cityId) {
+		log.info("call deleteCity [{}]",cityId);
+		return cityDao.deleteCity(cityId);
 		
 	}
 }

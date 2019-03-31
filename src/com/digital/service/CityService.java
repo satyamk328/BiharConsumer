@@ -5,13 +5,13 @@ import java.util.List;
 import com.digital.model.TopCities;
 
 public interface CityService {
-	public List<TopCities> getAll();
+	public List<TopCities> getAllCities();
 
-	public long save(TopCities object);
+	public long save(TopCities city);
 
-	public TopCities getCityById(long id);
+	public TopCities getCityById(Long cityId);
 
-	public int delete(Integer id);
+	public int delete(Long cityId);
 
-	public List<TopCities> searchStationByStationName(String stationName);
+	public List<TopCities> getCityByName(String cityName);
 }
