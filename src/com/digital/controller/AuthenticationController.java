@@ -20,11 +20,13 @@ import com.digital.service.AuthenticationService;
 import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
@@ -37,62 +39,74 @@ public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationService authService;
-	
+
 	@Autowired
 	private MailService emailService;
+
+	private int attempt;
+
+	@GetMapping(value = "/{userId}")
+	public ResponseEntity<RestResponse<Object>> getUserDetail(
+			@PathVariable(name = "userId", required = true) Long userId) {
+		log.info("call getUserDetail {}", userId);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
+		User user = authService.getUser(userId);
+		return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/registerUser")
 	public ResponseEntity<RestResponse<Object>> registration(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
-		if (authService.getUserDetails(user.getEmail()) == null) {
+		if (authService.loginauthentication(user.getEmail()) == null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this email address already exist into system!");
-		} else if (authService.getUserDetails(user.getPhoneNumber()) == null) {
+		} else if (authService.loginauthentication(String.valueOf(user.getPhoneNumber())) == null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this phone number already exist into system!");
 		} else {
-			user = authService.addUser(user);
+			Long userId = authService.addUser(user);
 			if (user == null) {
 				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 						"User not Registered Successfully");
 				return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+			user.setUserId(userId);
 		}
 		return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.OK);
 	}
-	
 
 	@PostMapping(value = "/serviceLoginAuth")
-	public ResponseEntity<RestResponse<Object>> loginauthentication(@RequestBody(required = true) User user)
+	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestBody(required = true) User user)
 			throws UnsupportedEncodingException {
+		attempt++;
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
-		if (user.getEmail() == null) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Please enter valid Email/Phone");
+		user = authService.loginauthentication(user.getEmail());
+		if (user == null) {
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
 			return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
-		} else {
-			user = authService.loginauthentication(user);
-			if (user == null) {
-				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-						"Unauthorized User. Please login with your valid credential!");
-				return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			Login login = new Login();
-			login.setUid(user.getUserId());
-			login.setName(user.getName());
-			login.setSessionId(null);
-			login.setAddress(user.getAddress());
-			login.setClientIP("localhost");
-			authService.auditing(login);
 		}
+		if (user.isLock()) {
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+					"Your account has been lock. Please contact system administrator!");
+			return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (!user.getPassword().equals(CommonUtil.encrypt(user.getPassword()))) {
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
+			return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		attempt = 0;
+		Login login = new Login();
+		authService.prepareLogin(login, user);
+		authService.addLoginDetail(login);
 		return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/changePassword")
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
-			@RequestParam(name = "email", required = true) String email) {
+			@RequestParam(name = "userId", required = true) Long userId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
-		User user = authService.getUserDetails(email);
+		User user = authService.getUser(userId);
 		if (user == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Invalid Email/password. Please enter valid email!");
@@ -105,11 +119,12 @@ public class AuthenticationController {
 		return new ResponseEntity<>(new RestResponse(user, status), HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/resetpassword/{uid}")
-	public ResponseEntity<RestResponse<Object>> resetPassword(@PathVariable(name = "uid", required = true) String uid,
+	@PutMapping(value = "/resetpassword/{userId}")
+	public ResponseEntity<RestResponse<Object>> resetPassword(
+			@PathVariable(name = "userId", required = true) Long userId,
 			@RequestParam(name = "newPassword", required = true) String pass) throws UnsupportedEncodingException {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
-		int i = authService.resetPassword(uid, pass);
+		int i = authService.resetPassword(userId, pass);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
@@ -117,14 +132,13 @@ public class AuthenticationController {
 		}
 		return new ResponseEntity<>(new RestResponse(true, status), HttpStatus.OK);
 	}
-	
+
 	@PutMapping(value = "/logout/{uid}")
-	public ResponseEntity<RestResponse<Object>> logOut(
-			@PathVariable(name = "uid", required = true) String uid,
-			@RequestParam(name = "ip", required = false, defaultValue="127.0.0.0") String ip) {
+	public ResponseEntity<RestResponse<Object>> logOut(@PathVariable(name = "uid", required = true) String uid,
+			@RequestParam(name = "ip", required = false, defaultValue = "127.0.0.0") String ip) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Logout Successfully");
 		int i = authService.logOut(ip, uid);
-		if(i == 0 ) {
+		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
 			return new ResponseEntity<>(new RestResponse(true, status), HttpStatus.INTERNAL_SERVER_ERROR);

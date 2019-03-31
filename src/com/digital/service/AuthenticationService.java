@@ -1,6 +1,5 @@
 package com.digital.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import com.digital.model.Login;
 import com.digital.model.User;
 
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
@@ -22,45 +22,54 @@ public class AuthenticationService {
 	@Autowired
 	private AuthenticationDao authenticationDao;
 
-	//@Cacheable("authUser")
-	public User loginauthentication(User user) throws UnsupportedEncodingException {
+	// @Cacheable("authUser")
+	public User loginauthentication(String email) {
 		log.info("call authUser()");
-		return authenticationDao.loginauthentication(user);
+		return authenticationDao.loginAuthentication(email);
 	}
 
-	public User addUser(User user) {
+	public void prepareLogin(Login login, User user) {
+		login.setAddress(user.getAddress());
+		login.setCity(user.getCity());
+		login.setState(user.getState());
+		login.setUserName(user.getName());
+		login.setUserId(user.getUserId());
+		login.setClientHost("localhost");
+		login.setClientIp("127.0.0.1");
+		login.setSessionId("");
+	}
+	
+	public Long addUser(User user) {
 		log.info("call addUser()");
 		return authenticationDao.addUser(user);
 	}
 
-	//@Cacheable(value="userDetails", key="#email")
-	public User getUserDetails(String email) {
-		log.info("call forgotPassword()");
-		return authenticationDao.getUserDetails(email);
+	public int resetPassword(Long userId, String pass) {
+		log.info("call resetPassword()");
+		return authenticationDao.resetPassword(userId, pass);
 	}
 
-	public int resetPassword(String email, String pass) throws UnsupportedEncodingException {
-		log.info("call changePassword()");
-		return authenticationDao.resetPassword(email, pass);
-	}
-
-	public int lockUser(String userName, boolean isLock, int attempt) {
+	public Long lockUser(Long userId, Boolean isLock, int attempt) {
 		log.info("call lockUser()");
-		return authenticationDao.lockUser(userName, isLock, attempt);
+		return authenticationDao.lockUser(userId, isLock, attempt);
 	}
 
-	//@Cacheable("userAllData")
+	// @Cacheable("userAllData")
 	public List<User> getUsers() {
 		log.info("call getUsers()");
 		return authenticationDao.findAllUser();
 	}
 
-	public void auditing(Login login) {
+	public User getUser(Long userId) {
+		return authenticationDao.getUser(userId);
+	}
+	
+	public void addLoginDetail(Login login) {
 		authenticationDao.auditing(login);
 	}
 
 	public int logOut(String ip, String uid) {
 		log.info("call logOut()");
-		return authenticationDao.logOut(ip, uid);
+		return authenticationDao.updateLogOutTime(ip, uid);
 	}
 }

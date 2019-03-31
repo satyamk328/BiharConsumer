@@ -13,19 +13,19 @@ import lombok.Setter;
 public class User extends BaseModel implements Serializable {
 
 	private static final long serialVersionUID = 8773592091012906066L;
-	private String userId;
+	private Long userId;
 	private String name;
 	private String email;
 	private String address;
-	private String phoneNumber;
+	private Long phoneNumber;
 	private String panNumber;
 	private String password;
 	private String city;
 	private String state;
 	private String country;
-	private boolean isLock = false;
+	private boolean isLock;
 	private Integer attempt;
-	private boolean isActive = false;
+	private boolean isActive;
 	private String otp;
 	
 }

@@ -10,16 +10,16 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class UserModule extends BaseModel implements Serializable {
+public class UserRole extends BaseModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String roleId;
-	private String privilegeName;
+	private String roleName;
 	private boolean isRecharge;
 	private boolean isBillPayment;
 	private boolean isMoneyTransfer;
-	private boolean isAddMonry;
+	private boolean isAddMoney;
 	private boolean isExportReport;
 	private boolean isBusBook;
-	private String userId;
+	private Long userId;
 	
 }

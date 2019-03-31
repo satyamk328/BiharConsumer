@@ -1,17 +1,13 @@
 package com.digital.dao;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -20,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.digital.enums.PrevilageType;
 import com.digital.model.Login;
 import com.digital.model.User;
+import com.digital.model.UserRole;
 import com.digital.model.extrator.UserRowMapper;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Satyam Kumar
  *
@@ -34,146 +32,122 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationDao {
 
 	@Value("${select_user_history}")
-    private String selectAllUserQuery;
+	private String selectAllUserQuery;
+	
+	@Value("${select_user_byid}")
+	private String selectUserByIdQuery;
+	
 	@Value("${insert_user_detail}")
-    private String insertUserDetailQuery;
+	private String insertUserDetailQuery;
+	
 	@Value("${insert_user_module}")
 	private String insertUserModuleQuery;
+	
 	@Value("${insert_user_login_detail}")
 	private String insertUserLoginQuery;
-	@Value("${update_user_master_lock}")
-	private String updateUserLockQuery;
+	
+	@Value("${update_user_master_Attempt}")
+	private String updateUserAttemptQuery;
+	
+	@Value("${update_user_password}")
+	private String resetUserPasswordQuery;
+	
 	@Value("${select_user_detail_by_phone}")
 	private String selectUserDetailsByPhoneQuery;
+	
 	@Value("${select_user_detail_by_email}")
 	private String selectUserDetailsByEmailQuery;
-	@Value("${update_user_password}")
-	private String updateUserPasswordQuery;
-	@Value("${select_auth_user_by_phone}")
-	private String selectUserAuthByPhoneQuery;
-	@Value("${select_auth_user_by_email}")
-	private String selectUserAuthByEmailQuery;
-	@Value("${upadte_logintime}")
+	
+	@Value("${upadte_logout_date}")
 	private String updateLoginLogoutTimeQuery;
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
 	@Transactional(readOnly = true)
 	public List<User> findAllUser() {
 		log.debug("Running insert query for addUser: {}", selectAllUserQuery);
-		return jdbcTemplate.query(selectAllUserQuery, new UserRowMapper());
+		return jdbcTemplateObject.query(selectAllUserQuery, new UserRowMapper());
 	}
 
+	public User getUser(Long userId) {
+		log.debug("Running insert query for getUserDetails {}", selectUserByIdQuery);
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", userId);
+		List<User> users = jdbcTemplateObject.query(selectUserByIdQuery, parameters, new UserRowMapper());
+		return (users != null && !users.isEmpty()) ? users.get(0) : null;
+	}
+	
 	@Transactional
-	public User addUser(User user) {
-		log.debug("Running insert query for addUser: {}", insertUserDetailQuery);
+	public Long addUser(User user) {
+		log.debug("Running insert query for addUser {}", insertUserDetailQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(insertUserDetailQuery, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, user.getName());
-				ps.setString(2, user.getEmail());
-				ps.setString(3, user.getAddress());
-				ps.setString(4, user.getPhoneNumber());
-				ps.setString(5, user.getPanNumber());
-				ps.setString(6, user.getPassword());
-				ps.setString(7, user.getCity());
-				ps.setString(8, user.getState());
-				return ps;
-			}
-		}, holder);
-		String newUserId = (String) holder.getKeys().get("userid");
-		user.setUserId(String.valueOf(newUserId));
+		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(user);
+		jdbcTemplateObject.update(insertUserDetailQuery, parameters, holder);
+		Long userId = (holder.getKey() == null) ? null : holder.getKey().longValue();
+		
+		UserRole role = new UserRole();
+		role.setRoleName(PrevilageType.CUSTOMER.name());
+		role.setUserId(userId);
+		
+		BeanPropertySqlParameterSource parameters1 = new BeanPropertySqlParameterSource(role);
 		log.debug("Running insert query for addUser {}", insertUserModuleQuery);
 		KeyHolder holder1 = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(insertUserModuleQuery, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, newUserId);
-				ps.setString(2, PrevilageType.RETAILER.toString());
-				return ps;
-			}
-		}, holder1);
-		return user;
+		jdbcTemplateObject.update(insertUserModuleQuery, parameters1, holder1);
+		return userId;
 	}
 
 	@Transactional
-	public void auditing(Login login) {
+	public Long auditing(Login login) {
 		log.debug("Running insert query for auditing: {}", insertUserLoginQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(insertUserLoginQuery, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, login.getUid());
-				ps.setString(2, login.getName());
-				ps.setString(3, login.getSessionId());
-				ps.setString(4, login.getAddress());
-				ps.setString(5, login.getClientIP());
-				ps.setString(6, "127.0.0.0");
-				return ps;
-			}
-		}, holder);
-	}
-		
-	@Transactional
-	public int lockUser(String userName, boolean isLock, int attempt) {
-		log.debug("Running insert query for addUser {}", updateUserLockQuery);
-		return jdbcTemplate.update(updateUserLockQuery, userName, isLock, attempt);
-	}
-
-	@Transactional(readOnly = true)
-	public User getUserDetails(String email) {
-		try {
-			User user = null;
-			if (DataUtils.validatePhoneNumber(email)) {
-				log.debug("Running insert query for getUserDetails : {}", selectUserDetailsByPhoneQuery);
-				user = jdbcTemplate.queryForObject(selectUserDetailsByPhoneQuery, new Object[] { email }, new UserRowMapper());
-			} else {
-				log.debug("Running insert query for getUserDetails: {}", selectUserDetailsByEmailQuery);
-				user = jdbcTemplate.queryForObject(selectUserDetailsByEmailQuery, new Object[] { email }, new UserRowMapper());
-			}
-			return user;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(login);
+		jdbcTemplateObject.update(insertUserLoginQuery, parameters, holder);
+		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
 
 	@Transactional
-	public int resetPassword(String uid, String pass) throws UnsupportedEncodingException {
-		log.debug("Running insert query for getUserDetails {}", updateUserPasswordQuery);
-		return jdbcTemplate.update(updateUserPasswordQuery, CommonUtil.encrypt(pass.trim()), uid);
+	public long lockUser(Long userId, Boolean isLock, int attempt) {
+		log.debug("Running upadte query for lockUser {}", updateUserAttemptQuery);
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", userId);
+		parameters.addValue("isLock", isLock);
+		parameters.addValue("attempt", attempt);
+		return jdbcTemplateObject.update(updateUserAttemptQuery, parameters);
 	}
-
-	@Transactional
-	public User loginauthentication(User user) throws UnsupportedEncodingException {
-		try {
-			if (DataUtils.validatePhoneNumber(user.getEmail())) {
-				log.debug("Running insert query for authUser {}", selectUserAuthByPhoneQuery);
-				user = jdbcTemplate.queryForObject(selectUserAuthByPhoneQuery,
-						new Object[] { user.getEmail(), CommonUtil.encrypt(user.getPassword()) },
-						new UserRowMapper());
-			} else {
-				log.debug("Running insert query for authUser {}", selectUserAuthByEmailQuery);
-				user = jdbcTemplate.queryForObject(selectUserAuthByEmailQuery,
-						new Object[] { user.getEmail(), CommonUtil.encrypt(user.getPassword()) },
-						new UserRowMapper());
-			}
-			return user;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-	}
-
-	@Transactional
-	public int logOut(String ip, String uid) {
-		log.debug("Running insert query for addUser {}", updateLoginLogoutTimeQuery);
-		return jdbcTemplate.update(updateLoginLogoutTimeQuery, new Object[] {ip, uid});
-	}
-
 	
+	@Transactional
+	public int resetPassword(Long userId, String pass) {
+		log.debug("Running reset query for resetPassword {}", resetUserPasswordQuery);
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("password", CommonUtil.decrypt(pass));
+		parameters.addValue("userId", userId);
+		return jdbcTemplateObject.update(resetUserPasswordQuery, parameters);
+	}
+
+	@Transactional
+	public User loginAuthentication(String email) {
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		List<User> users = new ArrayList<>();
+		if (DataUtils.validatePhoneNumber(email)) {
+			log.debug("Running insert query for authUser {}", selectUserDetailsByPhoneQuery);
+			parameters.addValue("phone", email);
+			users = jdbcTemplateObject.query(selectUserDetailsByPhoneQuery, parameters, new UserRowMapper());
+		} else {
+			log.debug("Running insert query for authUser {}", selectUserDetailsByEmailQuery);
+			parameters.addValue("email", email);
+			users = jdbcTemplateObject.query(selectUserDetailsByEmailQuery, parameters, new UserRowMapper());
+		}
+		return (users != null && !users.isEmpty()) ? users.get(0) : null;
+	}
+
+	@Transactional
+	public int updateLogOutTime(String clientIp, String userId) {
+		log.debug("Running insert query for addUser {}", updateLoginLogoutTimeQuery);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("cityId", userId);
+		parameters.addValue("clientIp", clientIp);
+		return jdbcTemplateObject.update(updateLoginLogoutTimeQuery, parameters);
+	}
 
 }

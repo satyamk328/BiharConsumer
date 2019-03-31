@@ -69,7 +69,7 @@ public class CityDao {
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(city);
 		jdbcTemplateObject.update(insertTopCityQuery, parameters, holder);
-		return (holder.getKey() == null) ? null : holder.getKey().intValue();
+		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
 
 	@Transactional

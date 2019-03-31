@@ -15,23 +15,23 @@ public class UserRowMapper implements RowMapper<User> {
 	@Override
 	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 		User user = new User();
-		user.setUserId(rs.getString("userid"));
-		user.setName(rs.getString("name"));
-		user.setEmail(rs.getString("email"));
-		user.setAddress(rs.getString("address"));
-		user.setPhoneNumber(rs.getString("phonenumber"));
-		user.setPanNumber(rs.getString("pannumber"));
-		user.setPassword(rs.getString("password"));
-		user.setCity(rs.getString("city"));
-		user.setState(rs.getString("state"));
-		user.setCountry(rs.getString("country"));
-		user.setLock(rs.getBoolean("islock"));
-		user.setActive(rs.getBoolean("isactive"));
-		user.setAttempt(rs.getInt("attempt"));
-		user.setCreatedBy(rs.getString("createdby"));
-		user.setCreatedOn(rs.getDate("createdon"));
-		user.setModifyBy(rs.getString("modifyby"));
-		user.setModifyOn(rs.getDate("modifyon"));
+		user.setUserId(rs.getLong("UserId"));
+		user.setName(rs.getString("Name"));
+		user.setEmail(rs.getString("Email"));
+		user.setAddress(rs.getString("Address"));
+		user.setPhoneNumber(rs.getLong("PhoneNumber"));
+		user.setPanNumber(rs.getString("PanNumber"));
+		user.setPassword(rs.getString("Password"));
+		user.setCity(rs.getString("City"));
+		user.setState(rs.getString("State"));
+		user.setCountry(rs.getString("Country"));
+		user.setLock(rs.getBoolean("IsLock"));
+		user.setActive(rs.getBoolean("IsActive"));
+		user.setAttempt(rs.getInt("Attempt"));
+		user.setCreatedBy(rs.getString("CreatedBy"));
+		user.setCreatedOn(rs.getDate("DateCreated"));
+		user.setModifyBy(rs.getString("ModifiedBy"));
+		user.setModifyOn(rs.getDate("DateModified"));
 		return user;
 	}
 

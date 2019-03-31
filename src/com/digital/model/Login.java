@@ -15,14 +15,16 @@ import lombok.Setter;
 public class Login implements Serializable{
 	
 	private static final long serialVersionUID = 3576009501244716303L;
-	private String id;
-	private String uid;
-	private String name;
+	private Long loginId;
+	private Long userId;
+	private String userName;
 	private String sessionId;
-	private Date date = new Date();
+	private Date loginDate;
 	private String address;
-	private Date logoutd = new Date();
-	private String clientIP;
-	private String chost;
+	private String city;
+	private String state;
+	private Date logoutDate;
+	private String clientIp;
+	private String clientHost;
 	
 }

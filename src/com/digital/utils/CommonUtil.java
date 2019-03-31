@@ -26,16 +26,23 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
  */
 public class CommonUtil {
 
-	public static String encrypt(String data) throws UnsupportedEncodingException {
-		return Base64.getEncoder().encodeToString(data.getBytes("utf-8"));
+	public static String encrypt(String data) {
+		try {
+			return Base64.getEncoder().encodeToString(data.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+		}
+		return null;
 	}
 
-	public static String decrypt(String encryptedData) throws UnsupportedEncodingException {
+	public static String decrypt(String encryptedData) {
 		byte[] asBytes = Base64.getDecoder().decode(encryptedData);
-		return new String(asBytes, "utf-8");
+		try {
+			return new String(asBytes, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		return null;
 	}
 
-	
 	public static byte[] generatePdf(BusDetails bus, CustomerVo customer, int ticketId) {
 
 		Document document = new Document(new Rectangle(350f, 300f), 36f, 72f, 108f, 108f);
@@ -50,18 +57,16 @@ public class CommonUtil {
 			Paragraph companyName = new Paragraph("Bus Ticket Booking System", headFont);
 			companyName.setAlignment(Element.ALIGN_CENTER);
 
-			Paragraph sourceDestination = new Paragraph("From DELHI to Gaya",
-					headFont);
+			Paragraph sourceDestination = new Paragraph("From DELHI to Gaya", headFont);
 			sourceDestination.setAlignment(Element.ALIGN_CENTER);
 
 			Paragraph busNumber = new Paragraph("Bus Number: " + bus.getBusId());
 
-			Paragraph passengerName = new Paragraph(
-					"Passenger Name: SATYAM KUMAR ", headFont);
+			Paragraph passengerName = new Paragraph("Passenger Name: SATYAM KUMAR ", headFont);
 
 			Paragraph ticketNumber = new Paragraph("Ticket Number: " + ticketId);
-			Paragraph departure = new Paragraph("Departure: 12:30" );
-			Paragraph cost = new Paragraph("Travel Cost: € 12000" );
+			Paragraph departure = new Paragraph("Departure: 12:30");
+			Paragraph cost = new Paragraph("Travel Cost: € 12000");
 
 			Paragraph footer = new Paragraph("Happy Journey!", headFont);
 			footer.setAlignment(Element.ALIGN_CENTER);
