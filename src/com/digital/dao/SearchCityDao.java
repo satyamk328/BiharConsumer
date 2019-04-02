@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository("topCityDao")
 @Slf4j
-public class CityDao {
+public class SearchCityDao {
 
 	@Value("${select_search_cities}")
 	private String selectAllCityQuery;

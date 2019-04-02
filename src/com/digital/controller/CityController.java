@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.TopCities;
-import com.digital.service.CityService;
+import com.digital.service.SearchCityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CityController {
 
 	@Autowired
-	private CityService cityService;
+	private SearchCityService cityService;
 
 	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),

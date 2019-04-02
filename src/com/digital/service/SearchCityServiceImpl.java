@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.digital.dao.CityDao;
+import com.digital.dao.SearchCityDao;
 import com.digital.model.TopCities;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +16,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class CityServiceImpl implements CityService{
+public class SearchCityServiceImpl implements SearchCityService{
 	
 	@Autowired
-	private CityDao cityDao;
+	private SearchCityDao cityDao;
 	
 	@Override
 	@Cacheable("topAllCity")

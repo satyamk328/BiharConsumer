@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.digital.model.TopCities;
 
-public interface CityService {
+public interface SearchCityService {
 	public List<TopCities> getAllCities();
 
 	public long save(TopCities city);
