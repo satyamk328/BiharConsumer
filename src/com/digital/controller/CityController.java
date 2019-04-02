@@ -51,7 +51,7 @@ public class CityController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<TopCities> searchStations = cityService.getAllCities();
 		log.debug("Data fetched successfully from Top cities table");
-		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(searchStations, status), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Add City", notes = "This API is used to add citiess")
@@ -64,15 +64,14 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@PostMapping("/")
-	public ResponseEntity<RestResponse<List<TopCities>>> addSearchStation(@RequestBody(required=true) TopCities busStop) {
+	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required=true) TopCities busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		long integer = cityService.save(busStop);
 		if (integer == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					"Top Cities not Registered Successfully");
-			return new ResponseEntity<>(new RestResponse(integer, status), HttpStatus.INTERNAL_SERVER_ERROR);
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Top Cities not Registered Successfully");
+			return new ResponseEntity<>(new RestResponse<>(integer, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(new RestResponse(busStop, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(integer, status), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Search by City Name", notes = "This API is used to search by city name")
@@ -89,7 +88,7 @@ public class CityController {
 			@PathVariable(name = "stationName", required = true) String stationName) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<TopCities> searchStations = cityService.getCityByName(stationName);
-		return new ResponseEntity<>(new RestResponse(searchStations, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(searchStations, status), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Det by City id", notes = "This API is used to get by city id")
@@ -106,7 +105,7 @@ public class CityController {
 			@PathVariable(name = "cityId", required = true) long cityId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records fetch Successfully");
 		TopCities topCities = cityService.getCityById(cityId);
-		return new ResponseEntity<>(new RestResponse(topCities, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(topCities, status), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "Delete by City id", notes = "This API is used to delete by city id")
@@ -119,10 +118,10 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@DeleteMapping("/{cityId}")
-	public ResponseEntity<RestResponse<Boolean>> deleteCity(
+	public ResponseEntity<RestResponse<Object>> deleteCity(
 			@PathVariable(name = "cityId", required = true) long cityId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
 		int delete = cityService.delete(cityId);
-		return new ResponseEntity<>(new RestResponse(delete, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(delete, status), HttpStatus.OK);
 	}
 }

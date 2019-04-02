@@ -60,6 +60,9 @@ public class AuthenticationDao {
 	
 	@Value("${upadte_logout_date}")
 	private String updateLoginLogoutTimeQuery;
+	
+	@Autowired
+	private DataUtils dataUtils;
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
@@ -129,7 +132,7 @@ public class AuthenticationDao {
 	public User loginAuthentication(String email) {
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 		List<User> users = new ArrayList<>();
-		if (DataUtils.validatePhoneNumber(email)) {
+		if (dataUtils.validatePhoneNumber(email)) {
 			log.debug("Running insert query for authUser {}", selectUserDetailsByPhoneQuery);
 			parameters.addValue("phone", email);
 			users = jdbcTemplateObject.query(selectUserDetailsByPhoneQuery, parameters, new UserRowMapper());

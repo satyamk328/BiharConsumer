@@ -75,12 +75,15 @@ public class BusDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	private DataUtils dataUtils;
+	
 	@Transactional(readOnly = true)
 	public List<BusRouteDetails> searchTriBySrcDescAndDate(String source, String destination, String date) {
 		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
 		return jdbcTemplate.query(
 				selectSearchTripBySrcAndDescDateQuery, new Object[] { "%" + source.toLowerCase() + "%",
-						"%" + destination.toLowerCase() + "%", DataUtils.convertFormat(date) },
+						"%" + destination.toLowerCase() + "%", dataUtils.convertFormat(date) },
 				new BusTripDetailsExtrator());
 	}
 

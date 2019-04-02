@@ -22,6 +22,9 @@ public class BusService {
 
 	@Autowired
 	private BusDao busBookingDao;
+	
+	@Autowired
+	private DataUtils dataUtils;
 
 	@Cacheable("routesDetails")
 	public BusDetailsObject searchBusRoutDetails(String source, String destination, String date) {
@@ -35,7 +38,7 @@ public class BusService {
 		}
 		busDetailsObject.setAvailableRoutes(filterRoutes);
 		busDetailsObject.setAmenitiesList(busBookingDao.getAllAmenities());
-		List<String> timeList = DataUtils.getTimeList();
+		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);
 		busDetailsObject.setDepartureTimeList(timeList);
 		return busDetailsObject;

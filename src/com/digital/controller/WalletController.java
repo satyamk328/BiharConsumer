@@ -41,11 +41,10 @@ public class WalletController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Wallet Updated Successfully");
 		int row = walletService.updateWallet(addedAmount, userId);
 		if (row == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
-			return new ResponseEntity<>(new RestResponse(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
+			return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(new RestResponse(row, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{userId}")
@@ -54,7 +53,7 @@ public class WalletController {
 		log.info("call getWalletHistory userId:{}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<Wallet> wallets = walletService.getWalletHistory(userId);
-		return new ResponseEntity<>(new RestResponse(wallets, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(wallets, status), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/customuserbalance/{uid}")
@@ -63,7 +62,7 @@ public class WalletController {
 		log.info("call getWalletDetails uid:{}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		Wallet wallets = walletService.getWalletDetails(userId);
-		return new ResponseEntity<>(new RestResponse(wallets, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(wallets, status), HttpStatus.OK);
 	}
 
 }

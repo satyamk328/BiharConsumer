@@ -1,10 +1,15 @@
 package com.digital.spring.model;
 
 import java.util.Date;
+
+import lombok.Getter;
+import lombok.Setter;
 /**
  * @author Satyam Kumar
  *
  */
+@Getter
+@Setter
 public class RestStatus<T> {
 
 	private String code;
@@ -18,12 +23,6 @@ public class RestStatus<T> {
         this.message = statusMessage;
     }
 
-    public RestStatus(final String statusCode, final String statusMessage, final T messageCode) {
-        this.code = statusCode;
-        this.message = statusMessage;
-        this.messageCode = messageCode;
-    }
-    
     public RestStatus() {
 
     }
@@ -34,76 +33,4 @@ public class RestStatus<T> {
         this.uniqueErrorId = uniqueErrorId;
         this.messageCode = messageCode;
     }
-
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code the code to set
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
-	 * @return the uniqueErrorId
-	 */
-	public String getUniqueErrorId() {
-		return uniqueErrorId;
-	}
-
-	/**
-	 * @param uniqueErrorId the uniqueErrorId to set
-	 */
-	public void setUniqueErrorId(String uniqueErrorId) {
-		this.uniqueErrorId = uniqueErrorId;
-	}
-
-	/**
-	 * @return the messageCode
-	 */
-	public T getMessageCode() {
-		return messageCode;
-	}
-
-	/**
-	 * @param messageCode the messageCode to set
-	 */
-	public void setMessageCode(T messageCode) {
-		this.messageCode = messageCode;
-	}
-
-	/**
-	 * @return the timestamp
-	 */
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	/**
-	 * @param timestamp the timestamp to set
-	 */
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-	
-
 }

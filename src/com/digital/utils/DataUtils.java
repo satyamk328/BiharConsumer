@@ -13,19 +13,19 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Satyam Kumar
  *
  */
+@Component
 @Slf4j
 public class DataUtils {
 
-	private DataUtils() {
-	}
-
-	public static boolean validatePhoneNumber(String phoneNo) {
+	public boolean validatePhoneNumber(String phoneNo) {
 		// validate phone numbers of format "1234567890"
 		if (phoneNo.matches("\\d{10}"))
 			return true;
@@ -43,24 +43,8 @@ public class DataUtils {
 			return false;
 	}
 	
-	public static String getBaseURl(HttpServletRequest request) {
-		String scheme = request.getScheme();
-		String serverName = request.getServerName();
-		int serverPort = request.getServerPort();
-		String contextPath = request.getContextPath();
-		StringBuilder url = new StringBuilder();
-		url.append(scheme).append("://").append(serverName);
-		if ((serverPort != 80) && (serverPort != 443)) {
-			url.append(":").append(serverPort);
-		}
-		url.append(contextPath);
-		if (url.toString().endsWith("/")) {
-			url.append("/");
-		}
-		return url.toString();
-	}
 
-	public static Map<String, String> validIdCardTypes() {
+	public Map<String, String> validIdCardTypes() {
 		Map<String, String> idTypes = new HashMap<>();
 		idTypes.put("NULL_IDCARD", "NULL_IDCARD");
 		idTypes.put("DRIVING_LICENSE", "DRIVING_LICENSE");
@@ -75,7 +59,7 @@ public class DataUtils {
 		return idTypes;
 	}
 
-	public static List<String> getTimeList() {
+	public List<String> getTimeList() {
 		List<String> busTypes = new ArrayList<>();
 		busTypes.add("Before 6 am");
 		busTypes.add("6 am to 12 pm");
@@ -84,7 +68,7 @@ public class DataUtils {
 		return busTypes;
 	}
 	
-	public static List<String> getBusType() {
+	public List<String> getBusType() {
 		List<String> busTypes = new ArrayList<>();
 		busTypes.add("AC");
 		busTypes.add("Non AC");
@@ -93,7 +77,7 @@ public class DataUtils {
 		return busTypes;
 	}
 	
-	public static String parseBusDate(String str) {
+	public String parseBusDate(String str) {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = null;
 		try {
@@ -105,7 +89,7 @@ public class DataUtils {
 		return simpleDateFormat.format(date);
 	}
 	
-	public static Date convertStringToDateFormat(String date, String format) {
+	public Date convertStringToDateFormat(String date, String format) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat(format);
 			return dateFormat.parse(date);
@@ -115,13 +99,13 @@ public class DataUtils {
 		}
 	}
 
-	public static String convertFormat(String date) {
+	public String convertFormat(String date) {
 		Date dateValues = convertStringToDateFormat(date, "yyyy-MM-dd");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(dateValues);
 	}
 	
-	public static String formatDateToString(Date date) {
+	public String formatDateToString(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return sdf.format(date);
@@ -132,7 +116,7 @@ public class DataUtils {
 		System.out.println(str.split("::")[2]);
 	}
 
-	public static String getGenerateOTP() {
+	public String getGenerateOTP() {
 		Random rnd = new Random();
 		int otp = rnd.nextInt(900000) + 100000;
 		return String.valueOf(otp);
