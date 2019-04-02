@@ -22,14 +22,14 @@ public class AuditDao {
 	@Value("${central_log_insert_query}")
 	private String centralLogInsertQuery;
 
-	public int addCentralizedLog(final CentralizedLogs centralizedLogs) {
+	public long addCentralizedLog(final CentralizedLogs centralizedLogs) {
 		log.info("call addCentralizedLog {}", centralizedLogs);
 		final String sql = " insert into central_logs(AppName, LogLevel, LogTimeStamp, LogMessage)  "
 				+ " values( :appName, :logLevel, :logTimeStamp, :logMessage)";
 		final KeyHolder holder = new GeneratedKeyHolder();
 		final BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(centralizedLogs);
 		jdbcTemplate.update(sql, params, holder);
-		return (holder.getKey() == null) ? 0 : holder.getKey().intValue();
+		return (holder.getKey() == null) ? 0 : holder.getKey().longValue();
 	}
 
 }
