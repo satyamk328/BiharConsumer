@@ -2,8 +2,6 @@ package com.digital.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,10 +17,11 @@ import com.digital.audit.service.RestTemplateService;
 import com.digital.model.SMS;
 import com.digital.model.SMSResponse;
 
-@Service
-public class SMSWrapperService {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger log = LoggerFactory.getLogger(SMSWrapperService.class);
+@Service
+@Slf4j
+public class SMSWrapperService {
 
 	@Autowired
 	private RestTemplateService restTemplateService;
@@ -49,17 +48,17 @@ public class SMSWrapperService {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		// setting up the request body
-		SMS user = new SMS();
-		user.setUsername(smsUserName);
-		user.setPassword(password);
-		user.setFrom(headerValue);
-		user.setTo(numbers);
-		user.setText(text);
-		user.setFlash("1");
-		user.setCoding("0");
+		SMS sms = new SMS();
+		sms.setUsername(smsUserName);
+		sms.setPassword(password);
+		sms.setFrom(headerValue);
+		sms.setTo(numbers);
+		sms.setText(text);
+		sms.setFlash("1");
+		sms.setCoding("0");
 
 		// request entity is created with request headers
-		HttpEntity<SMS> requestEntity = new HttpEntity<>(user, httpHeaders);
+		HttpEntity<SMS> requestEntity = new HttpEntity<>(sms, httpHeaders);
 		ResponseEntity<SMSResponse> response = null;
 		try {
 			response = restTemplateService.getRestTemplate().exchange(smsGateWayAPi, HttpMethod.POST, requestEntity,
