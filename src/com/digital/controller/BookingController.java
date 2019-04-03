@@ -1,7 +1,13 @@
 package com.digital.controller;
 
+import java.io.ByteArrayInputStream;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +31,7 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 
-	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
+	@GetMapping(value = "cancel/{mobileNumber}/{ticketNumber}")
 	public ResponseEntity<RestResponse<Object>> cancelTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
@@ -35,7 +41,7 @@ public class BookingController {
 		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
+	@GetMapping(value = "print/{mobileNumber}/{ticketNumber}")
 	public ResponseEntity<RestResponse<Object>> printTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
@@ -45,14 +51,28 @@ public class BookingController {
 		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
-	public ResponseEntity<RestResponse<Object>> ticketPDF(
+	@GetMapping(value = "/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<InputStreamResource> ticketPDF(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Generated pdf ticket Successfully");
 		// TODO PDF code
-		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
+        ByteArrayInputStream bis = bookingService.citiesReport();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT");
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
+		headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+		headers.add(HttpHeaders.PRAGMA, "no-cache");
+		headers.add(HttpHeaders.EXPIRES, "0");
+		
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=123.pdf");
+		//headers.add("Content-Disposition", "inline; filename=citiesreport.pdf");
+		
+		//headers.setContentLength(bis.);
+		return new ResponseEntity<>(new InputStreamResource(bis), headers, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/")

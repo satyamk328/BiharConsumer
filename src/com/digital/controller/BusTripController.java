@@ -105,35 +105,7 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse(customerBusTicketVOs, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "generateTicket")
-	public HttpEntity<byte[]> generateTicket(@RequestBody(required = false) Object objCombined) throws IOException {
-		String name = "customrname";
-		int ticketId = 1;
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/pdf"));
-		headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-		headers.add(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT");
-		headers.add(ACCESS_CONTROL_ALLOW_HEADERS, CONTENT_TYPE);
-		headers.add(CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-		headers.add(PRAGMA, "no-cache");
-		headers.add(EXPIRES, "0");
-
-		headers.add("Content-Disposition", String.format("inline; filename=" + name + "_ticket.pdf"));
-
-		byte[] ticketPdf = null;
-
-		if (ticketId > 0) {
-
-			ticketPdf = CommonUtil.generatePdf(null, null, ticketId);
-			headers.setContentLength(ticketPdf.length);
-			return new HttpEntity<byte[]>(ticketPdf, headers);
-		} else {
-			return null;
-		}
-
-	}
-
+	
 	@PostMapping(value = "/scheduleDeparture")
 	public ResponseEntity<RestResponse<Map<String, String>>> scheduleDeparture(@RequestBody Object bus) {
 
