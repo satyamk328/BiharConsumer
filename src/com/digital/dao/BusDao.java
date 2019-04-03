@@ -28,7 +28,7 @@ import com.digital.model.BusBoadingStopingDetails;
 import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusDetails;
 import com.digital.model.BusRouteDetails;
-import com.digital.model.BusSeatDetails;
+import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
 import com.digital.model.CustomerVo;
 import com.digital.model.extrator.BusAmenitiesExtractor;
@@ -154,7 +154,7 @@ public class BusDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusSeatDetails> getSeatsDetails(SearchTripVO tripVO) {
+	public List<BusSeatBookingDetails> getSeatsDetails(SearchTripVO tripVO) {
 		log.debug("Running select query for getSeatsDetails: {}", selectBusSeatDetailsQuery);
 		Integer startStop = Integer.parseInt(tripVO.getTripId().split("::")[2]);
 		Integer endStop = Integer.parseInt(tripVO.getTripId().split("::")[3]);

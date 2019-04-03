@@ -1,6 +1,7 @@
 package com.digital.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,21 +13,9 @@ import lombok.Setter;
 @Getter
 public class BusSeatDetails implements Serializable{
 
-	private static final long serialVersionUID = 1L;
-	private int row;
-	private int column;
-	private int width;
-	private int length;
-	private String layoutId;
-	private String seatType;
-	private String seatNumber;
-	private String seatName;
-	private boolean isAvailable;
-	private boolean isLadiesSeat;
-	private boolean isMenSeat;
-	private boolean isLowerBerth;
-	private boolean isReservedForLadies;
-	private double fare;
-	private double serviceTaxPercent;
+	private static final long serialVersionUID = 8700716073667499536L;
+	private List<BusSeatBookingDetails> busSeatDetails;
+	private List<BusBoadingStopingDetails> boardingPoints;
+	private List<BusBoadingStopingDetails> droppingPoints;
 	
 }

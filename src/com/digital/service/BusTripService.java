@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.digital.dao.BusDao;
-import com.digital.model.BusDetailsObject;
+import com.digital.model.TripDetails;
 import com.digital.model.BusRouteDetails;
-import com.digital.model.BusSeatDetailsObject;
+import com.digital.model.BusSeatDetails;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
@@ -18,7 +18,7 @@ import com.digital.utils.DataUtils;
  *
  */
 @Service
-public class BusService {
+public class BusTripService {
 
 	@Autowired
 	private BusDao busBookingDao;
@@ -27,8 +27,8 @@ public class BusService {
 	private DataUtils dataUtils;
 
 	@Cacheable("routesDetails")
-	public BusDetailsObject searchBusRoutDetails(String source, String destination, String date) {
-		BusDetailsObject busDetailsObject = new BusDetailsObject();
+	public TripDetails searchBusRoutDetails(String source, String destination, String date) {
+		TripDetails busDetailsObject = new TripDetails();
 		List<BusRouteDetails> filterRoutes = busBookingDao.searchTriBySrcDescAndDate(source, destination, date);
 		for(BusRouteDetails route : filterRoutes) {
 			route.setBoardingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[0]));
@@ -45,8 +45,8 @@ public class BusService {
 	}
 	
 	@Cacheable("tripsDetails")
-	public BusSeatDetailsObject getSeatAvailability(SearchTripVO tripVO) {
-		BusSeatDetailsObject availability = new BusSeatDetailsObject();
+	public BusSeatDetails getSeatAvailability(SearchTripVO tripVO) {
+		BusSeatDetails availability = new BusSeatDetails();
 		availability.setBusSeatDetails(busBookingDao.getSeatsDetails(tripVO));
 		availability.setBoardingPoints(busBookingDao.getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[0]));
 		availability.setDroppingPoints(busBookingDao.getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[1]));

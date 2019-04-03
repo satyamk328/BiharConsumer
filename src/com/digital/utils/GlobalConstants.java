@@ -22,4 +22,6 @@ public class GlobalConstants {
 	
 	public static final String BOOKING_CONFIRMATION_HEADER = "Booking Confirmation on DIGITALBIHAR, Bus No: 12398, 21-Feb-2019, 3A, NDLS - SSM";
 	public static final String BOOKING_CONFIRMATION_TICKET = "";
+	
+	public static final int MAX_SHEET_ALLOWED_PER_BOOKING = 5;
 }
