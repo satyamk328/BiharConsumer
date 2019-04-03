@@ -1,13 +1,14 @@
 package com.digital.service;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 @Service("bookingService")
-@Transactional
 public class BookingService {
 
-	
+	public Optional<Object> cancelledTikcet(Long phoneNumber, Long ticketNumber){
+		return null;
+	}
 	 
 }
