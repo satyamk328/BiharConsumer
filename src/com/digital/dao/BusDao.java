@@ -59,10 +59,8 @@ public class BusDao {
 	private String selectBusTypeQuery;
 	@Value("${select_bus_cancellation}")
 	private String selectBusCancellationPolicyQuery;
-	@Value("${select_filter_aminities}")
-	private String selectFilterAminitiesQuery;
-	@Value("${select_all_aminities}")
-	private String selectAllAminitiesQuery;
+	
+	
 	@Value("${select_businfomation_detail}")
 	private String selectBusInfoQuery;
 	@Value("${insert_customer_ticket}")
@@ -109,7 +107,7 @@ public class BusDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusCancellationPolicies> getCancellationPolicy(String operatorId) {
+	public List<BusCancellationPolicies> getCancellationPolicy(Long operatorId) {
 		log.debug("Running insert query for getCancellationPolicy {}", selectBusCancellationPolicyQuery);
 		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { operatorId },
 				new RowMapper<BusCancellationPolicies>() {
@@ -124,27 +122,9 @@ public class BusDao {
 				});
 	}
 
-	@Transactional(readOnly = true)
-	public List<Integer> getBusFilterAmenitiesByBusId(String bid) {
-		log.debug("Running insert query for getBusAmenitiesByBusId {}", selectFilterAminitiesQuery);
-		return jdbcTemplate.query(selectFilterAminitiesQuery, new Object[] { bid },
-				new ResultSetExtractor<List<Integer>>() {
-					@Override
-					public List<Integer> extractData(ResultSet rs) throws SQLException {
-						List<Integer> amenitiesList = new ArrayList<>();
-						while (rs.next()) {
-							amenitiesList.add(rs.getInt("amenityid"));
-						}
-						return amenitiesList;
-					}
-				});
-	}
+	
 
-	@Transactional(readOnly = true)
-	public List<BusAmenity> getAllAmenities() {
-		log.debug("Running insert query for getAllAmenities {}", selectAllAminitiesQuery);
-		return jdbcTemplate.query(selectAllAminitiesQuery, new BusAmenitiesExtractor());
-	}
+	
 
 	@Transactional(readOnly = true)
 	public List<BusDetails> getBusDetails(String source, String destination) {

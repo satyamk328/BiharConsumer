@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.Cacheable;
 
+import com.digital.dao.AmenitiesDao;
 import com.digital.dao.BusDao;
 import com.digital.model.TripDetails;
 import com.digital.model.BusRouteDetails;
@@ -24,6 +25,9 @@ public class BusTripService {
 	private BusDao busBookingDao;
 	
 	@Autowired
+	private AmenitiesDao amenitiesDao;
+	
+	@Autowired
 	private DataUtils dataUtils;
 
 	@Cacheable("routesDetails")
@@ -34,10 +38,10 @@ public class BusTripService {
 			route.setBoardingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[0]));
 			route.setDroppingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[1]));
 		    route.setCancellationPolicy(busBookingDao.getCancellationPolicy(route.getOperatorId()));
-		    route.setAmenities(busBookingDao.getBusFilterAmenitiesByBusId(route.getOperatorId()));
+		    route.setAmenities(amenitiesDao.getAmenitiesByBusId(route.getOperatorId()));
 		}
 		busDetailsObject.setAvailableRoutes(filterRoutes);
-		busDetailsObject.setAmenitiesList(busBookingDao.getAllAmenities());
+		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);
 		busDetailsObject.setDepartureTimeList(timeList);

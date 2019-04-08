@@ -22,7 +22,7 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusRouteD
 			BusRouteDetails busRoutDetails = new BusRouteDetails();
 			busRoutDetails.setInclTaxes(true);
 			busRoutDetails.setClassType("Normal");
-			busRoutDetails.setOperatorId(rs.getString("busid"));
+			busRoutDetails.setOperatorId(rs.getLong("BusId"));
 			busRoutDetails.setProviderId(rs.getString("providerid"));
 			busRoutDetails.setTravelsName(rs.getString("travelsName"));
 			String busType = (rs.getBoolean("isac") ? "A/C " : "NON AC ").concat(rs.getBoolean("issleeper") ? "Sleaper " : " ").concat(rs.getBoolean("isseater") ? "Seater " : " ").concat(rs.getString("layoutname"));

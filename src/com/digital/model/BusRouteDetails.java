@@ -19,13 +19,13 @@ public class BusRouteDetails implements Serializable {
 	private List<BusBoadingStopingDetails> droppingLocations = new ArrayList<>();
 	private List<BusDetails> busInfo = new ArrayList<>();
 	private List<BusCancellationPolicies> cancellationPolicy = new ArrayList<>();
-	private List<Integer> amenities = new ArrayList<>();
+	private List<BusAmenity> amenities = new ArrayList<>();
 	private List<BusType> bustypes = new ArrayList<>();
 	private List<Double> fares = new ArrayList<>();
 	private List<BusRating> rating = new ArrayList<>();
 	private boolean inclTaxes = true;
 	private String classType;
-	private String operatorId;  
+	private Long operatorId;  
 	private String providerId;  
 	private String travelsName;
 	private String busType;

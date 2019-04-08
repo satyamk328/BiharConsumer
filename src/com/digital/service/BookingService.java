@@ -45,6 +45,8 @@ public class BookingService {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		try {
+			
+		
 			Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
 			LineSeparator addLine = new LineSeparator();
 			
