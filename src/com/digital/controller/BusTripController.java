@@ -51,7 +51,7 @@ public class BusTripController {
 		if (tripDetails.getAvailableRoutes().isEmpty())
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
-		return new ResponseEntity<>(new RestResponse(tripDetails, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/trip")
@@ -64,7 +64,7 @@ public class BusTripController {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no seats available in this bus. Please select a different bus.");
 		}
-		return new ResponseEntity<>(new RestResponse(busSeatDetailsAvailability, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(busSeatDetailsAvailability, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/bookedBusTicket")
@@ -76,7 +76,7 @@ public class BusTripController {
 		if (customerBusTicketVO != null)
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no seats available in this bus. Please select a different bus.");
-		return new ResponseEntity<>(new RestResponse(customerBusTicketVO, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVO, status), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getTicketHistory/{uid}")
@@ -89,7 +89,7 @@ public class BusTripController {
 		if (customerBusTicketVOs != null)
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no seats available in this bus. Please select a different bus.");
-		return new ResponseEntity<>(new RestResponse(customerBusTicketVOs, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVOs, status), HttpStatus.OK);
 	}
 
 	

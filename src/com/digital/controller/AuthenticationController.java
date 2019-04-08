@@ -1,6 +1,5 @@
 package com.digital.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class AuthenticationController {
 	private MailService emailService;
 	@Autowired
 	private DataUtils dataUtils;
-	
+
 	@GetMapping(value = "/")
 	public ResponseEntity<RestResponse<Object>> getAllUser(
 			@PathVariable(name = "userId", required = true) Long userId) {
@@ -53,7 +52,7 @@ public class AuthenticationController {
 		List<User> users = authService.getAllUsers();
 		return new ResponseEntity<>(new RestResponse<>(users, status), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/{userId}")
 	public ResponseEntity<RestResponse<Object>> getUserDetailById(
 			@PathVariable(name = "userId", required = true) Long userId) {
@@ -68,13 +67,16 @@ public class AuthenticationController {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
 		if (authService.loginauthentication(user.getEmail()) != null) {
-			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),"A user with this email address already exist into system!");
+			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
+					"A user with this email address already exist into system!");
 		} else if (authService.loginauthentication(String.valueOf(user.getPhoneNumber())) != null) {
-			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),"A user with this phone number already exist into system!");
+			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
+					"A user with this phone number already exist into system!");
 		} else {
 			Long userId = authService.addUser(user);
 			if (userId == null) {
-				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),	"User not Registered Successfully");
+				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+						"User not Registered Successfully");
 				return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			user.setUserId(userId);
@@ -83,8 +85,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/serviceLoginAuth")
-	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestBody(required = true) User user)
-			throws UnsupportedEncodingException {
+	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestBody(required = true) User user) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
 		user = authService.loginauthentication(user.getEmail());
 		if (user == null) {
@@ -112,7 +113,8 @@ public class AuthenticationController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
 		User user = authService.getUserDetailById(userId);
 		if (user == null) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Invalid Email/password. Please enter valid email!");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+					"Invalid Email/password. Please enter valid email!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		String otp = dataUtils.getGenerateOTP();
@@ -129,7 +131,8 @@ public class AuthenticationController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
 		int i = authService.resetPassword(userId, pass);
 		if (i == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
 			return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.OK);
