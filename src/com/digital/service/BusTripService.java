@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.digital.dao.AmenitiesDao;
-import com.digital.dao.BusDao;
+import com.digital.dao.BusTripDao;
 import com.digital.model.TripDetails;
 import com.digital.model.BusRouteDetails;
 import com.digital.model.BusSeatDetails;
@@ -22,7 +22,7 @@ import com.digital.utils.DataUtils;
 public class BusTripService {
 
 	@Autowired
-	private BusDao busBookingDao;
+	private BusTripDao busBookingDao;
 	
 	@Autowired
 	private AmenitiesDao amenitiesDao;

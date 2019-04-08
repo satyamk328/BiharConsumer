@@ -49,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository("busRoutDao")
 @Slf4j
-public class BusDao {
+public class BusTripDao {
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
