@@ -1,24 +1,11 @@
 package com.digital.utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 import java.util.Base64;
-
-import com.digital.model.BusDetails;
-import com.digital.model.CustomerVo;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 
 /**
  * @author Satyam Kumar

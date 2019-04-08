@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
-import com.digital.model.Payment;
 import com.digital.payment.model.PaymentRefund;
 
 @Component
@@ -16,10 +15,7 @@ public class PaymentWrapperService {
 	public PaymentRefund createRefund(PaymentRefund refund) {
 		return null;
 	}
-	public Payment getPaymentRequest(String id) {
-		
-		return null;
-	}
+	
 	public Boolean enablePaymentRequest(String id) {
 		return true;
 	}

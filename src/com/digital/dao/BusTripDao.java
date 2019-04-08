@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -23,15 +22,12 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusAmenity;
 import com.digital.model.BusBoadingStopingDetails;
 import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusDetails;
 import com.digital.model.BusRouteDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
-import com.digital.model.CustomerVo;
-import com.digital.model.extrator.BusAmenitiesExtractor;
 import com.digital.model.extrator.BusInformationDetailsExtractor;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusStopLocationDetailsRowMapper;
@@ -181,16 +177,6 @@ public class BusTripDao {
 				new CustomerMapperExtrator());
 	}
 
-	public int generateTicket(BusDetails busDetails, CustomerVo customerVo) {
-		int customerId = 0;
-		int scheduleDepartureId = 0;
-		int ticketNum = 0;
-		String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
-		if (jdbcTemplate.update("", "") > 0) {
-
-		}
-		return 0;
-	}
 
 	public Map<String, String> scheduleDeparture(// BusDAO bus
 	) {
