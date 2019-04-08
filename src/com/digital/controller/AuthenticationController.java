@@ -1,6 +1,7 @@
 package com.digital.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,16 +45,25 @@ public class AuthenticationController {
 	@Autowired
 	private DataUtils dataUtils;
 	
-	@GetMapping(value = "/{userId}")
-	public ResponseEntity<RestResponse<Object>> getUserDetail(
+	@GetMapping(value = "/")
+	public ResponseEntity<RestResponse<Object>> getAllUser(
 			@PathVariable(name = "userId", required = true) Long userId) {
 		log.info("call getUserDetail {}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		User user = authService.getUser(userId);
+		List<User> users = authService.getAllUsers();
+		return new ResponseEntity<>(new RestResponse<>(users, status), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/{userId}")
+	public ResponseEntity<RestResponse<Object>> getUserDetailById(
+			@PathVariable(name = "userId", required = true) Long userId) {
+		log.info("call getUserDetail {}", userId);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
+		User user = authService.getUserDetailById(userId);
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/registerUser")
+	@PostMapping(value = "/")
 	public ResponseEntity<RestResponse<Object>> registration(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
@@ -100,7 +110,7 @@ public class AuthenticationController {
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
 			@RequestParam(name = "userId", required = true) Long userId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
-		User user = authService.getUser(userId);
+		User user = authService.getUserDetailById(userId);
 		if (user == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Invalid Email/password. Please enter valid email!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -115,7 +125,7 @@ public class AuthenticationController {
 	@PutMapping(value = "/resetpassword/{userId}")
 	public ResponseEntity<RestResponse<Object>> resetPassword(
 			@PathVariable(name = "userId", required = true) Long userId,
-			@RequestParam(name = "newPassword", required = true) String pass) throws UnsupportedEncodingException {
+			@RequestParam(name = "newPassword", required = true) String pass) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
 		int i = authService.resetPassword(userId, pass);
 		if (i == 0) {

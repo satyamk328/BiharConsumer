@@ -22,6 +22,17 @@ public class AuthenticationService {
 	@Autowired
 	private AuthenticationDao authenticationDao;
 
+
+	// @Cacheable("userAllData")
+	public List<User> getAllUsers() {
+		log.info("call getUsers()");
+		return authenticationDao.findAllUser();
+	}
+
+	public User getUserDetailById(Long userId) {
+		return authenticationDao.getUserDetailById(userId);
+	}
+	
 	// @Cacheable("authUser")
 	public User loginauthentication(String email) {
 		log.info("call authUser()");
@@ -54,15 +65,6 @@ public class AuthenticationService {
 		return authenticationDao.lockUser(userId, isLock, attempt);
 	}
 
-	// @Cacheable("userAllData")
-	public List<User> getUsers() {
-		log.info("call getUsers()");
-		return authenticationDao.findAllUser();
-	}
-
-	public User getUser(Long userId) {
-		return authenticationDao.getUser(userId);
-	}
 	
 	public void addLoginDetail(Login login) {
 		authenticationDao.auditing(login);

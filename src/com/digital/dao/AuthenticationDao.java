@@ -73,7 +73,7 @@ public class AuthenticationDao {
 		return jdbcTemplateObject.query(selectAllUserQuery, new UserRowMapper());
 	}
 
-	public User getUser(Long userId) {
+	public User getUserDetailById(Long userId) {
 		log.debug("Running insert query for getUserDetails {}", selectUserByIdQuery);
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", userId);
