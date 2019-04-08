@@ -1,7 +1,6 @@
 package com.digital.controller;
 
 import java.io.ByteArrayInputStream;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
