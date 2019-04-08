@@ -68,8 +68,8 @@ public class AuthenticationService {
 		authenticationDao.auditing(login);
 	}
 
-	public int logOut(String ip, String uid) {
+	public int logOut(Long userId, String ip) {
 		log.info("call logOut()");
-		return authenticationDao.updateLogOutTime(ip, uid);
+		return authenticationDao.updateLogOutTime(userId, ip);
 	}
 }

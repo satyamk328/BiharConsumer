@@ -145,11 +145,11 @@ public class AuthenticationDao {
 	}
 
 	@Transactional
-	public int updateLogOutTime(String clientIp, String userId) {
+	public int updateLogOutTime(Long userId, String ip) {
 		log.debug("Running insert query for addUser {}", updateLoginLogoutTimeQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", userId);
-		parameters.addValue("clientIp", clientIp);
+		parameters.addValue("clientIp", ip);
 		return jdbcTemplateObject.update(updateLoginLogoutTimeQuery, parameters);
 	}
 

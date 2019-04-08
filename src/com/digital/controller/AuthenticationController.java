@@ -125,11 +125,11 @@ public class AuthenticationController {
 		return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/logout/{uid}")
-	public ResponseEntity<RestResponse<Object>> logOut(@PathVariable(name = "uid", required = true) String uid,
+	@PutMapping(value = "/logout/{userId}")
+	public ResponseEntity<RestResponse<Object>> logOut(@PathVariable(name = "userId", required = true) Long userId,
 			@RequestParam(name = "ip", required = false, defaultValue = "127.0.0.0") String ip) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Logout Successfully");
-		int i = authService.logOut(ip, uid);
+		int i = authService.logOut(userId, ip);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
