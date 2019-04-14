@@ -22,11 +22,13 @@ DROP TABLE IF EXISTS `amenity_mapping`;
 
 CREATE TABLE `amenity_mapping` (
   `AmenityMappingId` bigint(20) NOT NULL,
-  `BusId` bigint(255) DEFAULT NULL,
-  `AmenityId` varchar(255) DEFAULT NULL,
+  `BusId` bigint(20) NOT NULL,
+  `AmenityId` bigint(20) NOT NULL,
   PRIMARY KEY (`AmenityMappingId`),
-  KEY `fk1` (`BusId`),
-  CONSTRAINT `fk1` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
+  KEY `FK_BUS_MAS` (`BusId`),
+  KEY `FK_AM` (`AmenityId`),
+  CONSTRAINT `FK_AM` FOREIGN KEY (`AmenityId`) REFERENCES `amenity_master` (`AmenityId`),
+  CONSTRAINT `FK_BUS_MAS` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `amenity_mapping` */
@@ -112,44 +114,57 @@ CREATE TABLE `bus_cancellation_policy` (
   `ModifiedBy` varchar(100) DEFAULT NULL,
   `DateModified` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`PolicyId`),
-  KEY `fk` (`BusId`),
-  CONSTRAINT `fk` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
+  KEY `FK_BUS_CANCE` (`BusId`),
+  CONSTRAINT `FK_BUS_CANCE` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `bus_cancellation_policy` */
 
-/*Table structure for table `bus_layout` */
+/*Table structure for table `bus_layout_master` */
 
-DROP TABLE IF EXISTS `bus_layout`;
+DROP TABLE IF EXISTS `bus_layout_master`;
 
-CREATE TABLE `bus_layout` (
+CREATE TABLE `bus_layout_master` (
   `LayoutId` bigint(20) NOT NULL AUTO_INCREMENT,
   `LayoutType` varchar(200) NOT NULL,
   `BusType` varchar(200) NOT NULL,
   `Description` varchar(200) DEFAULT NULL,
   `IsSeater` tinyint(1) DEFAULT '0',
-  `IsAleeper` tinyint(1) DEFAULT '0',
+  `IsSleeper` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`LayoutId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*Data for the table `bus_layout` */
+/*Data for the table `bus_layout_master` */
+
+insert  into `bus_layout_master`(`LayoutId`,`LayoutType`,`BusType`,`Description`,`IsSeater`,`IsSleeper`) values 
+(1,'1','1',NULL,0,0);
 
 /*Table structure for table `bus_master` */
 
 DROP TABLE IF EXISTS `bus_master`;
 
 CREATE TABLE `bus_master` (
-  `BusId` bigint(20) NOT NULL,
+  `BusId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `UserId` bigint(20) NOT NULL,
+  `LayoutId` bigint(20) NOT NULL,
   `BusNumber` varchar(255) DEFAULT NULL,
   `TravelsName` varchar(100) DEFAULT NULL,
+  `RegistationNumber` varchar(100) DEFAULT NULL,
   `ContactNumber` varchar(200) DEFAULT NULL,
   `Color` varchar(255) DEFAULT NULL,
   `TotalSeats` decimal(10,0) DEFAULT '0',
   `IsAc` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`BusId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`BusId`),
+  KEY `FK_USER_MASTER_BUS` (`UserId`),
+  KEY `FK_LAYOUT_MASTER` (`LayoutId`),
+  CONSTRAINT `FK_LAYOUT_MASTER` FOREIGN KEY (`LayoutId`) REFERENCES `bus_layout_master` (`LayoutId`),
+  CONSTRAINT `FK_USER_MASTER_BUS` FOREIGN KEY (`UserId`) REFERENCES `user_master` (`UserId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `bus_master` */
+
+insert  into `bus_master`(`BusId`,`UserId`,`LayoutId`,`BusNumber`,`TravelsName`,`RegistationNumber`,`ContactNumber`,`Color`,`TotalSeats`,`IsAc`) values 
+(1,2,1,NULL,'Maa Travels',NULL,'8130787891',NULL,0,0);
 
 /*Table structure for table `bus_type` */
 
@@ -343,26 +358,34 @@ insert  into `role_privilege_mapping`(`RolePrivilegeId`,`PrivilegeId`,`RoleId`,`
 (2,1,1,1),
 (3,2,1,1);
 
-/*Table structure for table `route_city_mapping` */
+/*Table structure for table `route_city_stop_mapping` */
 
-DROP TABLE IF EXISTS `route_city_mapping`;
+DROP TABLE IF EXISTS `route_city_stop_mapping`;
 
-CREATE TABLE `route_city_mapping` (
+CREATE TABLE `route_city_stop_mapping` (
   `StopId` bigint(20) NOT NULL AUTO_INCREMENT,
   `RouteId` bigint(20) NOT NULL,
   `CityId` bigint(20) NOT NULL,
   `StopNumber` int(11) NOT NULL,
-  `Distance` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `Duration` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `BaseFare` decimal(10,2) NOT NULL,
+  `Distance` decimal(10,2) DEFAULT '0.00',
+  `Duration` decimal(10,2) DEFAULT '0.00',
+  `BaseFare` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`StopId`),
   KEY `FK_ROUTE_M` (`RouteId`),
   KEY `FK_CITY_M` (`CityId`),
   CONSTRAINT `FK_CITY_M` FOREIGN KEY (`CityId`) REFERENCES `city_master` (`CityId`),
   CONSTRAINT `FK_ROUTE_M` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*Data for the table `route_city_mapping` */
+/*Data for the table `route_city_stop_mapping` */
+
+insert  into `route_city_stop_mapping`(`StopId`,`RouteId`,`CityId`,`StopNumber`,`Distance`,`Duration`,`BaseFare`) values 
+(1,1,1,1,0.00,0.00,0.00),
+(2,1,2,2,200.00,200.00,120.00),
+(3,1,3,3,220.00,300.00,220.00),
+(4,1,4,4,150.00,220.00,350.00),
+(5,1,5,5,300.00,400.00,450.00),
+(6,1,6,6,500.00,500.00,430.00);
 
 /*Table structure for table `route_master` */
 
@@ -385,28 +408,31 @@ CREATE TABLE `route_master` (
 insert  into `route_master`(`RouteId`,`Source`,`Destination`,`Description`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
 (1,'New Delhi','Gaya',NULL,NULL,NULL,NULL,NULL);
 
-/*Table structure for table `schedule_departure` */
+/*Table structure for table `schedule_master` */
 
-DROP TABLE IF EXISTS `schedule_departure`;
+DROP TABLE IF EXISTS `schedule_master`;
 
-CREATE TABLE `schedule_departure` (
+CREATE TABLE `schedule_master` (
   `ScheduleId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `UserId` bigint(20) NOT NULL,
   `BusId` bigint(20) NOT NULL,
   `RouteId` bigint(20) NOT NULL,
-  `LayoutId` bigint(20) NOT NULL,
+  `DepartureDate` date DEFAULT NULL,
+  `DepartureTime` time DEFAULT NULL,
+  `ArrivalDate` date DEFAULT NULL,
+  `ArrivalTime` time DEFAULT NULL,
   `SleeperFare` decimal(10,0) DEFAULT NULL,
   `SeaterFare` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`ScheduleId`),
-  KEY `FK_SCE_USER_MASTER` (`UserId`),
-  KEY `FK_SCH_BUS_MASTER` (`BusId`),
   KEY `FK_ROUTER_MASTER` (`RouteId`),
-  CONSTRAINT `FK_ROUTER_MASTER` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
-  CONSTRAINT `FK_SCE_USER_MASTER` FOREIGN KEY (`UserId`) REFERENCES `user_master` (`UserId`),
-  CONSTRAINT `FK_SCH_BUS_MASTER` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_BUS_SC` (`BusId`),
+  CONSTRAINT `FK_BUS_SC` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`),
+  CONSTRAINT `FK_ROUTER_MASTER` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*Data for the table `schedule_departure` */
+/*Data for the table `schedule_master` */
+
+insert  into `schedule_master`(`ScheduleId`,`BusId`,`RouteId`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`) values 
+(1,1,1,'2019-04-30','12:30:00',NULL,NULL,2,1);
 
 /*Table structure for table `seat_master` */
 
@@ -414,7 +440,7 @@ DROP TABLE IF EXISTS `seat_master`;
 
 CREATE TABLE `seat_master` (
   `SeatId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `SeatLayoutId` bigint(20) NOT NULL,
+  `BusLayoutId` bigint(20) NOT NULL,
   `RowName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `ColumnName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Width` decimal(10,0) NOT NULL DEFAULT '0',
@@ -431,8 +457,8 @@ CREATE TABLE `seat_master` (
   `ModifiedBy` varchar(100) DEFAULT NULL,
   `DateModified` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`SeatId`),
-  KEY `FK_LAYOUT` (`SeatLayoutId`),
-  CONSTRAINT `FK_LAYOUT` FOREIGN KEY (`SeatLayoutId`) REFERENCES `bus_layout` (`LayoutId`)
+  KEY `FK_LAYOUT` (`BusLayoutId`),
+  CONSTRAINT `FK_LAYOUT` FOREIGN KEY (`BusLayoutId`) REFERENCES `bus_layout_master` (`LayoutId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `seat_master` */
