@@ -18,6 +18,7 @@ import com.digital.model.vo.AmenitiesVo;
 import com.digital.service.AmenityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.GlobalConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +51,7 @@ public class AmenityController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Amenity Added Successfully");
 		Long row = amenityService.addAmenity(amenitiesVo);
 		if (row == null) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Amenity not Registered Successfully");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.OK);

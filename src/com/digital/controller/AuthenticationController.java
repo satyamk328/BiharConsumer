@@ -75,8 +75,7 @@ public class AuthenticationController {
 		} else {
 			Long userId = authService.addUser(user);
 			if (userId == null) {
-				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-						"User not Registered Successfully");
+				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 				return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			user.setUserId(userId);
@@ -131,8 +130,7 @@ public class AuthenticationController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
 		int i = authService.resetPassword(userId, pass);
 		if (i == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.OK);
@@ -144,8 +142,7 @@ public class AuthenticationController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Logout Successfully");
 		int i = authService.logOut(userId, ip);
 		if (i == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(true, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.OK);

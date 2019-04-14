@@ -16,6 +16,7 @@ import com.digital.model.Wallet;
 import com.digital.service.WalletService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class WalletController {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Wallet Updated Successfully");
 		int row = walletService.updateWallet(addedAmount, userId);
 		if (row == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.OK);

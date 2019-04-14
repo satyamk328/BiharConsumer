@@ -17,6 +17,7 @@ import com.digital.model.TopCities;
 import com.digital.service.SearchCityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,11 +65,11 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@PostMapping("/")
-	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required=true) TopCities busStop) {
+	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required = true) TopCities busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		long integer = cityService.save(busStop);
 		if (integer == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),"Top Cities not Registered Successfully");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(integer, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(integer, status), HttpStatus.OK);
@@ -107,7 +108,7 @@ public class CityController {
 		TopCities topCities = cityService.getCityById(cityId);
 		return new ResponseEntity<>(new RestResponse<>(topCities, status), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Delete by City id", notes = "This API is used to delete by city id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
 			@ApiResponse(code = 400, message = "There is at least one invalid parameter"),
