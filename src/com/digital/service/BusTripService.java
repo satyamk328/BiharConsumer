@@ -33,7 +33,7 @@ public class BusTripService {
 	@Cacheable("routesDetails")
 	public TripDetails searchBusRoutDetails(String source, String destination, String date) {
 		TripDetails busDetailsObject = new TripDetails();
-		List<BusRouteDetails> filterRoutes = busBookingDao.searchTriBySrcDescAndDate(source, destination, date);
+		List<BusRouteDetails> filterRoutes = busBookingDao.searchTripBySrcDescAndDate(source, destination, date);
 		for(BusRouteDetails route : filterRoutes) {
 			route.setBoardingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[0]));
 			route.setDroppingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[1]));

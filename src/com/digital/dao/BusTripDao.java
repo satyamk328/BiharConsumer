@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -55,8 +57,7 @@ public class BusTripDao {
 	private String selectBusTypeQuery;
 	@Value("${select_bus_cancellation}")
 	private String selectBusCancellationPolicyQuery;
-	
-	
+
 	@Value("${select_businfomation_detail}")
 	private String selectBusInfoQuery;
 	@Value("${insert_customer_ticket}")
@@ -70,15 +71,20 @@ public class BusTripDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private DataUtils dataUtils;
+	private NamedParameterJdbcTemplate jdbcTemplateObject;
 	
+	@Autowired
+	private DataUtils dataUtils;
+
 	@Transactional(readOnly = true)
-	public List<BusRouteDetails> searchTriBySrcDescAndDate(String source, String destination, String date) {
+	public List<BusRouteDetails> searchTripBySrcDescAndDate(String source, String destination, String date) {
 		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
-		return jdbcTemplate.query(
-				selectSearchTripBySrcAndDescDateQuery, new Object[] { "%" + source.toLowerCase() + "%",
-						"%" + destination.toLowerCase() + "%", dataUtils.convertFormat(date) },
-				new BusTripDetailsExtrator());
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("source", "%" + source.toLowerCase() + "%");
+		parameters.addValue("destination", "%" + destination.toLowerCase() + "%");
+		parameters.addValue("arrivaldate", dataUtils.convertFormat(date));
+
+		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters, new BusTripDetailsExtrator());
 	}
 
 	@Transactional(readOnly = true)
@@ -117,10 +123,6 @@ public class BusTripDao {
 					}
 				});
 	}
-
-	
-
-	
 
 	@Transactional(readOnly = true)
 	public List<BusDetails> getBusDetails(String source, String destination) {
@@ -176,7 +178,6 @@ public class BusTripDao {
 		return jdbcTemplate.query(selectCustomerBookTicketQuery, new Object[] { uid.toLowerCase(), limit },
 				new CustomerMapperExtrator());
 	}
-
 
 	public Map<String, String> scheduleDeparture(// BusDAO bus
 	) {
