@@ -11,10 +11,7 @@ public class BookingDao {
 
 	@Value("${select_user_history}")
 	private String selectAllUserQuery;
-	@Value("${select_user_history}")
-	private String selectAllUserQuery;
 	
-	public int cancelTicket() {
-		
-	}
+	
+	
 }
