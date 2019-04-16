@@ -184,6 +184,55 @@ insert  into `bus_type`(`TypeId`,`BusType`) values
 (3,'Articulated_buses'),
 (4,'Low-floor_buses');
 
+/*Table structure for table `cancellation_master` */
+
+DROP TABLE IF EXISTS `cancellation_master`;
+
+CREATE TABLE `cancellation_master` (
+  `TicketId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CustId` bigint(20) NOT NULL,
+  `OperatorId` bigint(20) NOT NULL,
+  `BusId` bigint(20) DEFAULT NULL,
+  `RouteId` bigint(20) DEFAULT NULL,
+  `PNR` varchar(200) DEFAULT NULL,
+  `DBTripId` varchar(200) DEFAULT NULL,
+  `TripId` varchar(200) DEFAULT NULL,
+  `TravelName` varchar(200) DEFAULT NULL,
+  `BusType` varchar(200) DEFAULT NULL,
+  `IsAc` tinyint(1) DEFAULT '0',
+  `IsSleeper` tinyint(1) DEFAULT '0',
+  `IsSeater` tinyint(1) DEFAULT '0',
+  `BoadingPoint` varchar(200) DEFAULT NULL,
+  `DroppingPoint` varchar(200) DEFAULT NULL,
+  `DepartureDate` date DEFAULT NULL,
+  `DepartureTime` time DEFAULT NULL,
+  `ArrivalDate` date DEFAULT NULL,
+  `ArrivalTime` time DEFAULT NULL,
+  `SeatType` varchar(200) DEFAULT NULL,
+  `SeatNumber` varchar(200) DEFAULT NULL,
+  `SeatName` varchar(200) DEFAULT NULL,
+  `IsLowerBerth` tinyint(1) DEFAULT NULL,
+  `TotalFare` decimal(10,0) DEFAULT NULL,
+  `ChartStatus` varchar(200) DEFAULT NULL,
+  `CustName` varchar(200) DEFAULT NULL,
+  `Age` bigint(20) DEFAULT NULL,
+  `Email` varchar(200) DEFAULT NULL,
+  `Gender` varchar(50) DEFAULT NULL,
+  `PhoneNumber` bigint(20) DEFAULT NULL,
+  `IdType` varchar(200) DEFAULT NULL,
+  `IdNumber` varchar(200) DEFAULT NULL,
+  `IsLicence` tinyint(1) DEFAULT '0',
+  KEY `TicketId` (`TicketId`),
+  KEY `FK_CANCELL_USER` (`CustId`),
+  KEY `FK_CANCELL_BUS` (`BusId`),
+  KEY `FK_CANCELL_USER_OP` (`OperatorId`),
+  CONSTRAINT `FK_CANCELL_BUS` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`),
+  CONSTRAINT `FK_CANCELL_USER` FOREIGN KEY (`CustId`) REFERENCES `user_master` (`UserId`),
+  CONSTRAINT `FK_CANCELL_USER_OP` FOREIGN KEY (`OperatorId`) REFERENCES `user_master` (`UserId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `cancellation_master` */
+
 /*Table structure for table `central_logs` */
 
 DROP TABLE IF EXISTS `central_logs`;
@@ -432,7 +481,7 @@ CREATE TABLE `schedule_master` (
 /*Data for the table `schedule_master` */
 
 insert  into `schedule_master`(`ScheduleId`,`BusId`,`RouteId`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`) values 
-(1,1,1,'2019-04-30','12:30:00',NULL,NULL,2,1);
+(1,1,1,'2019-04-30','12:30:00','2019-05-01','09:30:00',2,1);
 
 /*Table structure for table `seat_master` */
 
@@ -462,6 +511,57 @@ CREATE TABLE `seat_master` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `seat_master` */
+
+/*Table structure for table `ticket_master` */
+
+DROP TABLE IF EXISTS `ticket_master`;
+
+CREATE TABLE `ticket_master` (
+  `TicketId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CustId` bigint(20) NOT NULL,
+  `OperatorId` bigint(20) NOT NULL,
+  `BusId` bigint(20) DEFAULT NULL,
+  `RouteId` bigint(20) DEFAULT NULL,
+  `PNR` varchar(200) DEFAULT NULL,
+  `DBTripId` varchar(200) DEFAULT NULL,
+  `TripId` varchar(200) DEFAULT NULL,
+  `TravelName` varchar(200) DEFAULT NULL,
+  `BusType` varchar(200) DEFAULT NULL,
+  `IsAc` tinyint(1) DEFAULT '0',
+  `IsSleeper` tinyint(1) DEFAULT '0',
+  `IsSeater` tinyint(1) DEFAULT '0',
+  `BoadingPoint` varchar(200) DEFAULT NULL,
+  `DroppingPoint` varchar(200) DEFAULT NULL,
+  `DepartureDate` date DEFAULT NULL,
+  `DepartureTime` time DEFAULT NULL,
+  `ArrivalDate` date DEFAULT NULL,
+  `ArrivalTime` time DEFAULT NULL,
+  `SeatType` varchar(200) DEFAULT NULL,
+  `SeatNumber` varchar(200) DEFAULT NULL,
+  `SeatName` varchar(200) DEFAULT NULL,
+  `IsLowerBerth` tinyint(1) DEFAULT NULL,
+  `TotalFare` decimal(10,0) DEFAULT NULL,
+  `ChartStatus` varchar(200) DEFAULT NULL,
+  `CustName` varchar(200) DEFAULT NULL,
+  `Age` bigint(20) DEFAULT NULL,
+  `Email` varchar(200) DEFAULT NULL,
+  `Gender` varchar(50) DEFAULT NULL,
+  `PhoneNumber` bigint(20) DEFAULT NULL,
+  `IdType` varchar(200) DEFAULT NULL,
+  `IdNumber` varchar(200) DEFAULT NULL,
+  `IsLicence` tinyint(1) DEFAULT '0',
+  KEY `BookingId` (`TicketId`),
+  KEY `FK_TICKET_USER` (`CustId`),
+  KEY `FK_TICKET_BUS` (`BusId`),
+  KEY `FK_TICKET_ROUTE` (`RouteId`),
+  KEY `FK_TICKET_US` (`OperatorId`),
+  CONSTRAINT `FK_TICKET_BUS` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`),
+  CONSTRAINT `FK_TICKET_ROUTE` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
+  CONSTRAINT `FK_TICKET_US` FOREIGN KEY (`OperatorId`) REFERENCES `user_master` (`UserId`),
+  CONSTRAINT `FK_TICKET_USER` FOREIGN KEY (`CustId`) REFERENCES `user_master` (`UserId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `ticket_master` */
 
 /*Table structure for table `user_login` */
 
