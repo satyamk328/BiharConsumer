@@ -114,9 +114,4 @@ public class WebConfig implements WebMvcConfigurer, TransactionManagementConfigu
 		configurer.setPathMatcher(matcher);
 	}
 
-	@Bean
-	public TaskScheduler taskExecutor() {
-		return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(3));
-	}
-
 }
