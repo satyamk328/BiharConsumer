@@ -120,24 +120,57 @@ CREATE TABLE `bus_cancellation_policy` (
 
 /*Data for the table `bus_cancellation_policy` */
 
+/*Table structure for table `bus_helpline_master` */
+
+DROP TABLE IF EXISTS `bus_helpline_master`;
+
+CREATE TABLE `bus_helpline_master` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `BusId` bigint(20) NOT NULL,
+  `ContactNumber` varchar(200) DEFAULT NULL,
+  `ContactPerson` varchar(200) DEFAULT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `CreatedBy` varchar(200) DEFAULT NULL,
+  `DateCreated` timestamp NULL DEFAULT NULL,
+  `ModifiedBy` varchar(200) DEFAULT NULL,
+  `DateModified` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_BUS_MASTER_HELP` (`BusId`),
+  CONSTRAINT `FK_BUS_MASTER_HELP` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `bus_helpline_master` */
+
+insert  into `bus_helpline_master`(`Id`,`BusId`,`ContactNumber`,`ContactPerson`,`Address`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
+(1,1,'72899900566','Naiyan Jee','Hero Honda Chhok Gurgaon',NULL,NULL,NULL,NULL),
+(2,1,'7290900866','Naiyan Jee','Hero Honda Chhok Gurgaon',NULL,NULL,NULL,NULL),
+(4,1,'9136581950','Naiyan Jee','Hero Honda Chhok Gurgaon',NULL,NULL,NULL,NULL),
+(5,6,'9811093825','Mukhar Jee',NULL,NULL,NULL,NULL,NULL),
+(6,6,'9599088528','Mukhar Jee',NULL,NULL,NULL,NULL,NULL),
+(7,6,'9599088529','Mukhar Jee',NULL,NULL,NULL,NULL,NULL),
+(8,6,'9599088531','Mukhar Jee',NULL,NULL,NULL,NULL,NULL),
+(9,6,'9599088532','Mukhar Jee',NULL,NULL,NULL,NULL,NULL);
+
 /*Table structure for table `bus_layout_master` */
 
 DROP TABLE IF EXISTS `bus_layout_master`;
 
 CREATE TABLE `bus_layout_master` (
   `LayoutId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `LayoutType` varchar(200) NOT NULL,
+  `Layout` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `BusType` varchar(200) NOT NULL,
   `Description` varchar(200) DEFAULT NULL,
   `IsSeater` tinyint(1) DEFAULT '0',
   `IsSleeper` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`LayoutId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `bus_layout_master` */
 
-insert  into `bus_layout_master`(`LayoutId`,`LayoutType`,`BusType`,`Description`,`IsSeater`,`IsSleeper`) values 
-(1,'1','1',NULL,0,0);
+insert  into `bus_layout_master`(`LayoutId`,`Layout`,`BusType`,`Description`,`IsSeater`,`IsSleeper`) values 
+(1,'1X1','Single-deckers',NULL,0,0),
+(2,'2X2','Double-deckers',NULL,0,0),
+(3,'2X1','Double-deckers',NULL,0,0);
 
 /*Table structure for table `bus_master` */
 
@@ -150,7 +183,6 @@ CREATE TABLE `bus_master` (
   `BusNumber` varchar(255) DEFAULT NULL,
   `TravelsName` varchar(100) DEFAULT NULL,
   `RegistationNumber` varchar(100) DEFAULT NULL,
-  `ContactNumber` varchar(200) DEFAULT NULL,
   `Color` varchar(255) DEFAULT NULL,
   `TotalSeats` decimal(10,0) DEFAULT '0',
   `IsAc` tinyint(1) NOT NULL DEFAULT '0',
@@ -159,12 +191,17 @@ CREATE TABLE `bus_master` (
   KEY `FK_LAYOUT_MASTER` (`LayoutId`),
   CONSTRAINT `FK_LAYOUT_MASTER` FOREIGN KEY (`LayoutId`) REFERENCES `bus_layout_master` (`LayoutId`),
   CONSTRAINT `FK_USER_MASTER_BUS` FOREIGN KEY (`UserId`) REFERENCES `user_master` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `bus_master` */
 
-insert  into `bus_master`(`BusId`,`UserId`,`LayoutId`,`BusNumber`,`TravelsName`,`RegistationNumber`,`ContactNumber`,`Color`,`TotalSeats`,`IsAc`) values 
-(1,2,1,NULL,'Maa Travels',NULL,'8130787891',NULL,40,0);
+insert  into `bus_master`(`BusId`,`UserId`,`LayoutId`,`BusNumber`,`TravelsName`,`RegistationNumber`,`Color`,`TotalSeats`,`IsAc`) values 
+(1,2,1,NULL,'Shri 108 Shambhu Nath Travels',NULL,NULL,40,0),
+(2,4,1,NULL,'Maa Travels',NULL,NULL,0,0),
+(3,5,1,NULL,'Mithila Travels',NULL,NULL,0,0),
+(4,7,1,NULL,'Kristhi Travels',NULL,NULL,0,0),
+(5,7,1,NULL,'Kristhi Travels',NULL,NULL,0,0),
+(6,6,1,NULL,'Chandni Travels',NULL,NULL,0,0);
 
 /*Table structure for table `bus_type` */
 
@@ -184,11 +221,11 @@ insert  into `bus_type`(`TypeId`,`BusType`) values
 (3,'Articulated_buses'),
 (4,'Low-floor_buses');
 
-/*Table structure for table `cancellation_master` */
+/*Table structure for table `cancellation_ticket_master` */
 
-DROP TABLE IF EXISTS `cancellation_master`;
+DROP TABLE IF EXISTS `cancellation_ticket_master`;
 
-CREATE TABLE `cancellation_master` (
+CREATE TABLE `cancellation_ticket_master` (
   `TicketId` bigint(20) NOT NULL AUTO_INCREMENT,
   `CustId` bigint(20) NOT NULL,
   `OperatorId` bigint(20) NOT NULL,
@@ -231,7 +268,7 @@ CREATE TABLE `cancellation_master` (
   CONSTRAINT `FK_CANCELL_USER_OP` FOREIGN KEY (`OperatorId`) REFERENCES `user_master` (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*Data for the table `cancellation_master` */
+/*Data for the table `cancellation_ticket_master` */
 
 /*Table structure for table `central_logs` */
 
@@ -265,22 +302,33 @@ CREATE TABLE `city_master` (
   `StateName` varchar(255) NOT NULL,
   `District` varchar(255) NOT NULL,
   `Country` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'INDIA',
-  `CreatedBy` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'CURRENT_USER',
+  `CreatedBy` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'CURRENT_USER()',
   `DateCreated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `ModifiedBy` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'CURRENT_USER',
+  `ModifiedBy` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'CURRENT_USER()',
   `DateModified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`CityId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `city_master` */
 
 insert  into `city_master`(`CityId`,`CityName`,`DisplayName`,`StateName`,`District`,`Country`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
-(1,'New Delhi','New Delhi','Delhi','New Delhi','INDIA',NULL,'2019-04-14 10:39:43',NULL,'2019-04-14 10:39:43'),
-(2,'Agra','Agra','Uttar Pradesh','Agra','INDIA','CURRENT_USER','2019-04-14 10:41:03','CURRENT_USER','2019-04-14 10:41:03'),
-(3,'Kanpur','Kanpur','Uttar Pradesh','Kanpur','INDIA','CURRENT_USER','2019-04-14 10:41:47','CURRENT_USER','2019-04-14 10:41:47'),
-(4,'Allahabad','Allahabad','Uttar Pradesh','Allahabad','INDIA','CURRENT_USER','2019-04-14 10:42:20','CURRENT_USER','2019-04-14 10:42:20'),
-(5,'Mughalsarai','Mughalsarai','Uttar Pradesh','Mughalsarai','INDIA','CURRENT_USER','2019-04-14 10:42:56','CURRENT_USER','2019-04-14 10:42:56'),
-(6,'Gaya','Gaya','Bihar','Gaya','INDIA','CURRENT_USER','2019-04-14 10:43:16','CURRENT_USER','2019-04-14 10:43:16');
+(1,'Gurgaon','Gurgaon','Hariyana','Hariyana','INDIA','CURRENT_USER','2019-04-19 14:06:13','CURRENT_USER','2019-04-19 14:06:13'),
+(2,'Agra','Agra','Uttar Pradesh','Agra','INDIA','CURRENT_USER','2019-04-19 14:07:20','CURRENT_USER','2019-04-19 14:07:20'),
+(9,'Lucknow','Lucknow','Uttar Pradesh','Lucknow','INDIA','CURRENT_USER','2019-04-19 14:09:04','CURRENT_USER','2019-04-19 14:09:04'),
+(10,'Gorakhpur ','Gorakhpur ','Uttar Pradesh','Gorakhpur ','INDIA','CURRENT_USER','2019-04-19 14:20:37','CURRENT_USER','2019-04-19 14:20:37'),
+(11,'Siwan','Siwan','Bihar','Siwan','INDIA','CURRENT_USER','2019-04-19 14:21:08','CURRENT_USER','2019-04-19 14:21:08'),
+(12,'Pipra Kothi','Pipra Kothi','Bihar','Pipra Kothi','INDIA','CURRENT_USER','2019-04-19 14:22:27','CURRENT_USER','2019-04-19 14:22:27'),
+(13,'Muzaffarpur','Muzaffarpur','Bihar','Muzaffarpur','INDIA','CURRENT_USER','2019-04-19 14:23:06','CURRENT_USER','2019-04-19 14:23:06'),
+(14,'Garbhanga','Garbhanga','Bihar','Garbhanga','INDIA','CURRENT_USER','2019-04-19 14:23:41','CURRENT_USER','2019-04-19 14:23:41'),
+(15,'Jhanjharpur','Jhanjharpur','Bihar','Jhanjharpur','INDIA','CURRENT_USER','2019-04-19 14:24:24','CURRENT_USER','2019-04-19 14:24:24'),
+(16,'Araria','Araria','Bihar','Araria','INDIA','CURRENT_USER','2019-04-19 14:25:03','CURRENT_USER','2019-04-19 14:25:03'),
+(17,'Khopa','Khopa','Bihar','Khopa','INDIA','CURRENT_USER','2019-04-19 14:25:38','CURRENT_USER','2019-04-19 14:25:38'),
+(18,'Phulparas','Phulparas','Bihar','Phulparas','INDIA','CURRENT_USER','2019-04-19 14:26:24','CURRENT_USER','2019-04-19 14:26:24'),
+(19,'Narahia','Narahia','Bihar','Narahia','INDIA','CURRENT_USER()','2019-04-19 14:33:09','CURRENT_USER()','2019-04-19 14:33:09'),
+(20,'Bhutha chowk','Bhutha chowk','Bihar','Bangawan','INDIA','CURRENT_USER()','2019-04-19 14:34:42','CURRENT_USER()','2019-04-19 14:34:42'),
+(21,'MOHANIA','MOHANIA','Bihar','MOHANIA','INDIA','CURRENT_USER()','2019-04-19 14:37:14','CURRENT_USER()','2019-04-19 14:37:14'),
+(22,'Supol','Supol','Bihar','Supol','INDIA','CURRENT_USER()','2019-04-19 14:41:05','CURRENT_USER()','2019-04-19 14:41:05'),
+(23,'Manipur','Manipur','Bihar','Manipur','INDIA','CURRENT_USER()','2019-04-19 14:45:55','CURRENT_USER()','2019-04-19 14:45:55');
 
 /*Table structure for table `city_stop_master` */
 
@@ -302,18 +350,9 @@ CREATE TABLE `city_stop_master` (
   KEY `CityStopId` (`CityStopId`),
   KEY `FK_CITY` (`CityId`),
   CONSTRAINT `FK_CITY` FOREIGN KEY (`CityId`) REFERENCES `city_master` (`CityId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `city_stop_master` */
-
-insert  into `city_stop_master`(`CityStopId`,`CityId`,`LocationName`,`LocationAddress`,`LandMark`,`Lat`,`Lng`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
-(1,1,'New Delhi Railway Station','New Delhi Railway Station','Metro Station',0.00,0.00,NULL,'2019-04-14 12:34:04',NULL,'2019-04-14 12:34:04'),
-(2,1,'Akshardham Mandir','Akshardham Mandir','Akshardham Mandir',0.00,0.00,NULL,'2019-04-14 12:39:11',NULL,'2019-04-14 12:39:11'),
-(3,1,'Phase 3 Fly Over Delhi','Phase 3 Fly Over Delhi','Phase III',0.00,0.00,NULL,'2019-04-14 12:40:06',NULL,'2019-04-14 12:40:06'),
-(4,2,'Bus Stand Agra','Bus Stand Agra','Bus Stand Agra',0.00,0.00,NULL,'2019-04-14 12:40:48',NULL,'2019-04-14 12:40:48'),
-(5,2,'Fly Over Agra','Fly Over Agra','Fly Over Agra',0.00,0.00,NULL,'2019-04-14 12:41:40',NULL,'2019-04-14 12:41:40'),
-(6,3,'Railway Station Kanpur','Railway Station Kanpur','Railway Station',0.00,0.00,NULL,'2019-04-14 12:42:24',NULL,'2019-04-14 12:42:24'),
-(7,3,'Bus Ada Kanpur','Bus Ada Kanpur','Bus Ada',0.00,0.00,NULL,'2019-04-14 12:49:41',NULL,'2019-04-14 12:49:41');
 
 /*Table structure for table `menu_structure_master` */
 
@@ -421,16 +460,25 @@ CREATE TABLE `route_master` (
   `ModifiedBy` varchar(100) DEFAULT NULL,
   `DateModified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`RouteId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `route_master` */
 
 insert  into `route_master`(`RouteId`,`Source`,`Destination`,`Description`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
-(1,'New Delhi','Agara',NULL,NULL,'2019-04-16 21:46:08',NULL,'2019-04-16 21:46:08'),
-(2,'Agra','Kanpur',NULL,NULL,'2019-04-16 21:46:08',NULL,'2019-04-16 21:46:08'),
-(3,'kanpur','Allahabad',NULL,NULL,'2019-04-16 22:03:19',NULL,'2019-04-16 22:03:19'),
-(4,'Allahabad','Mughasaria',NULL,NULL,'2019-04-16 22:03:51',NULL,'2019-04-16 22:03:51'),
-(5,'Mughasaria','Gaya',NULL,NULL,'2019-04-16 22:03:56',NULL,'2019-04-16 22:03:56');
+(1,'1','2',NULL,NULL,'2019-04-19 14:53:31',NULL,'2019-04-19 14:53:31'),
+(2,'2','9',NULL,NULL,'2019-04-19 14:55:10',NULL,'2019-04-19 14:55:10'),
+(3,'9','10',NULL,NULL,'2019-04-19 14:56:00',NULL,'2019-04-19 14:56:00'),
+(4,'10','11',NULL,NULL,'2019-04-19 14:56:30',NULL,'2019-04-19 14:56:30'),
+(5,'12','13',NULL,NULL,'2019-04-19 14:56:45',NULL,'2019-04-19 14:56:45'),
+(6,'13','14',NULL,NULL,'2019-04-19 14:57:03',NULL,'2019-04-19 14:57:03'),
+(7,'14','15',NULL,NULL,'2019-04-19 14:57:48',NULL,'2019-04-19 14:57:48'),
+(8,'16','17',NULL,NULL,'2019-04-19 14:58:02',NULL,'2019-04-19 14:58:02'),
+(9,'17','18',NULL,NULL,'2019-04-19 14:58:22',NULL,'2019-04-19 14:58:22'),
+(10,'18','19',NULL,NULL,'2019-04-19 14:59:42',NULL,'2019-04-19 14:59:42'),
+(11,'19','20',NULL,NULL,'2019-04-19 15:00:06',NULL,'2019-04-19 15:00:06'),
+(12,'20','21',NULL,NULL,'2019-04-19 15:00:34',NULL,'2019-04-19 15:00:34'),
+(13,'21','22',NULL,NULL,'2019-04-19 15:00:47',NULL,'2019-04-19 15:00:47'),
+(14,'22','23',NULL,NULL,'2019-04-19 15:01:06',NULL,'2019-04-19 15:01:06');
 
 /*Table structure for table `schedule_master` */
 
@@ -439,55 +487,28 @@ DROP TABLE IF EXISTS `schedule_master`;
 CREATE TABLE `schedule_master` (
   `ScheduleId` bigint(20) NOT NULL AUTO_INCREMENT,
   `BusId` bigint(20) NOT NULL,
-  `SourceCity` bigint(20) NOT NULL,
-  `DestinationCity` varchar(200) DEFAULT NULL,
+  `SourceCityId` bigint(20) NOT NULL,
+  `DestinationCityId` bigint(20) DEFAULT NULL,
   `DepartureDate` date DEFAULT NULL,
   `DepartureTime` time DEFAULT NULL,
   `ArrivalDate` date DEFAULT NULL,
   `ArrivalTime` time DEFAULT NULL,
   `SleeperFare` decimal(10,0) DEFAULT NULL,
   `SeaterFare` decimal(10,0) DEFAULT NULL,
+  `IsFixed` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`ScheduleId`),
-  KEY `FK_ROUTER_MASTER` (`SourceCity`),
   KEY `FK_BUS_SC` (`BusId`),
+  KEY `FK_BUS_DES` (`DestinationCityId`),
+  KEY `FK_CITY_SORC` (`SourceCityId`),
+  CONSTRAINT `FK_BUS_DES` FOREIGN KEY (`DestinationCityId`) REFERENCES `city_master` (`CityId`),
   CONSTRAINT `FK_BUS_SC` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`),
-  CONSTRAINT `FK_ROUTER_MASTER` FOREIGN KEY (`SourceCity`) REFERENCES `route_master` (`RouteId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FK_CITY_SORC` FOREIGN KEY (`SourceCityId`) REFERENCES `city_master` (`CityId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `schedule_master` */
 
-insert  into `schedule_master`(`ScheduleId`,`BusId`,`SourceCity`,`DestinationCity`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`) values 
-(1,1,1,NULL,'2019-04-30','23:30:00','2019-05-01','09:30:00',2,1);
-
-/*Table structure for table `schedule_route_city_stops` */
-
-DROP TABLE IF EXISTS `schedule_route_city_stops`;
-
-CREATE TABLE `schedule_route_city_stops` (
-  `ScheduleRouteId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ScheduleId` bigint(20) NOT NULL,
-  `RouteId` bigint(20) NOT NULL,
-  `StopNumber` int(11) NOT NULL,
-  `Distance` decimal(10,2) DEFAULT '0.00',
-  `Duration` decimal(10,2) DEFAULT '0.00',
-  `BaseFare` decimal(10,2) DEFAULT NULL,
-  `Time` double DEFAULT NULL,
-  `ArrivalDate` date DEFAULT NULL,
-  PRIMARY KEY (`ScheduleRouteId`),
-  KEY `FK_SCH` (`ScheduleId`),
-  KEY `FK_ROUTE` (`RouteId`),
-  CONSTRAINT `FK_ROUTE` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
-  CONSTRAINT `FK_SCH` FOREIGN KEY (`ScheduleId`) REFERENCES `schedule_master` (`ScheduleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-/*Data for the table `schedule_route_city_stops` */
-
-insert  into `schedule_route_city_stops`(`ScheduleRouteId`,`ScheduleId`,`RouteId`,`StopNumber`,`Distance`,`Duration`,`BaseFare`,`Time`,`ArrivalDate`) values 
-(1,1,1,1,0.00,0.00,NULL,NULL,NULL),
-(2,1,2,2,0.00,0.00,NULL,NULL,NULL),
-(3,1,3,3,0.00,0.00,NULL,NULL,NULL),
-(4,1,4,4,0.00,0.00,NULL,NULL,NULL),
-(5,1,5,5,0.00,0.00,NULL,NULL,NULL);
+insert  into `schedule_master`(`ScheduleId`,`BusId`,`SourceCityId`,`DestinationCityId`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`,`IsFixed`) values 
+(3,1,1,23,NULL,NULL,NULL,NULL,NULL,NULL,0);
 
 /*Table structure for table `seat_master` */
 
@@ -505,7 +526,6 @@ CREATE TABLE `seat_master` (
   `SeatNumber` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `IsAvailable` tinyint(1) NOT NULL DEFAULT '0',
   `IsLadiesSeat` tinyint(1) NOT NULL DEFAULT '0',
-  `IsMenSeat` tinyint(1) NOT NULL DEFAULT '0',
   `IsLowerBerth` tinyint(1) NOT NULL DEFAULT '0',
   `CreatedBy` varchar(100) DEFAULT NULL,
   `DateCreated` timestamp NULL DEFAULT NULL,
@@ -524,18 +544,16 @@ DROP TABLE IF EXISTS `ticket_master`;
 
 CREATE TABLE `ticket_master` (
   `TicketId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `CustId` bigint(20) NOT NULL,
+  `ScheduleId` bigint(20) DEFAULT NULL,
+  `UserId` bigint(20) NOT NULL,
   `OperatorId` bigint(20) NOT NULL,
   `BusId` bigint(20) DEFAULT NULL,
-  `RouteId` bigint(20) DEFAULT NULL,
   `PNR` varchar(200) DEFAULT NULL,
   `DBTripId` varchar(200) DEFAULT NULL,
   `TripId` varchar(200) DEFAULT NULL,
   `TravelName` varchar(200) DEFAULT NULL,
   `BusType` varchar(200) DEFAULT NULL,
   `IsAc` tinyint(1) DEFAULT '0',
-  `IsSleeper` tinyint(1) DEFAULT '0',
-  `IsSeater` tinyint(1) DEFAULT '0',
   `BoadingPoint` varchar(200) DEFAULT NULL,
   `DroppingPoint` varchar(200) DEFAULT NULL,
   `DepartureDate` date DEFAULT NULL,
@@ -548,7 +566,7 @@ CREATE TABLE `ticket_master` (
   `IsLowerBerth` tinyint(1) DEFAULT NULL,
   `TotalFare` decimal(10,0) DEFAULT NULL,
   `ChartStatus` varchar(200) DEFAULT NULL,
-  `CustName` varchar(200) DEFAULT NULL,
+  `CustomerName` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `Age` bigint(20) DEFAULT NULL,
   `Email` varchar(200) DEFAULT NULL,
   `Gender` varchar(50) DEFAULT NULL,
@@ -557,17 +575,57 @@ CREATE TABLE `ticket_master` (
   `IdNumber` varchar(200) DEFAULT NULL,
   `IsLicence` tinyint(1) DEFAULT '0',
   KEY `BookingId` (`TicketId`),
-  KEY `FK_TICKET_USER` (`CustId`),
+  KEY `FK_TICKET_USER` (`UserId`),
   KEY `FK_TICKET_BUS` (`BusId`),
-  KEY `FK_TICKET_ROUTE` (`RouteId`),
   KEY `FK_TICKET_US` (`OperatorId`),
+  KEY `FK_SCEDULE_TICK` (`ScheduleId`),
+  CONSTRAINT `FK_SCEDULE_TICK` FOREIGN KEY (`ScheduleId`) REFERENCES `schedule_master` (`ScheduleId`),
   CONSTRAINT `FK_TICKET_BUS` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`),
-  CONSTRAINT `FK_TICKET_ROUTE` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
   CONSTRAINT `FK_TICKET_US` FOREIGN KEY (`OperatorId`) REFERENCES `user_master` (`UserId`),
-  CONSTRAINT `FK_TICKET_USER` FOREIGN KEY (`CustId`) REFERENCES `user_master` (`UserId`)
+  CONSTRAINT `FK_TICKET_USER` FOREIGN KEY (`UserId`) REFERENCES `user_master` (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `ticket_master` */
+
+/*Table structure for table `trip_master` */
+
+DROP TABLE IF EXISTS `trip_master`;
+
+CREATE TABLE `trip_master` (
+  `TripId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ScheduleId` bigint(20) NOT NULL,
+  `RouteId` bigint(20) NOT NULL,
+  `StopNumber` int(11) NOT NULL,
+  `CityStops` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Distance` decimal(10,2) DEFAULT '0.00',
+  `Duration` decimal(10,2) DEFAULT '0.00',
+  `BaseFare` decimal(10,2) DEFAULT NULL,
+  `Time` double DEFAULT NULL,
+  `ArrivalDate` date DEFAULT NULL,
+  PRIMARY KEY (`TripId`),
+  KEY `FK_SCH` (`ScheduleId`),
+  KEY `FK_ROUTE` (`RouteId`),
+  CONSTRAINT `FK_ROUTE` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
+  CONSTRAINT `FK_SCH` FOREIGN KEY (`ScheduleId`) REFERENCES `schedule_master` (`ScheduleId`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `trip_master` */
+
+insert  into `trip_master`(`TripId`,`ScheduleId`,`RouteId`,`StopNumber`,`CityStops`,`Distance`,`Duration`,`BaseFare`,`Time`,`ArrivalDate`) values 
+(1,3,1,1,'1:2',0.00,0.00,NULL,NULL,NULL),
+(11,3,2,2,NULL,0.00,0.00,NULL,NULL,NULL),
+(12,3,3,3,NULL,0.00,0.00,NULL,NULL,NULL),
+(13,3,4,4,NULL,0.00,0.00,NULL,NULL,NULL),
+(14,3,5,5,NULL,0.00,0.00,NULL,NULL,NULL),
+(15,3,6,6,NULL,0.00,0.00,NULL,NULL,NULL),
+(16,3,7,7,NULL,0.00,0.00,NULL,NULL,NULL),
+(17,3,8,8,NULL,0.00,0.00,NULL,NULL,NULL),
+(18,3,9,9,NULL,0.00,0.00,NULL,NULL,NULL),
+(19,3,10,10,NULL,0.00,0.00,NULL,NULL,NULL),
+(20,3,11,11,NULL,0.00,0.00,NULL,NULL,NULL),
+(21,3,12,12,NULL,0.00,0.00,NULL,NULL,NULL),
+(22,3,13,13,NULL,0.00,0.00,NULL,NULL,NULL),
+(23,3,14,14,NULL,0.00,0.00,NULL,NULL,NULL);
 
 /*Table structure for table `user_login` */
 
@@ -618,13 +676,18 @@ CREATE TABLE `user_master` (
   PRIMARY KEY (`UserId`),
   KEY `FK_ROLE` (`RoleId`),
   CONSTRAINT `FK_ROLE` FOREIGN KEY (`RoleId`) REFERENCES `role_master` (`RoleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user_master` */
 
 insert  into `user_master`(`UserId`,`RoleId`,`Name`,`Email`,`Address`,`PhoneNumber`,`PanNumber`,`Password`,`City`,`State`,`Country`,`IsLock`,`Attempt`,`IsActive`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
 (1,1,'Satyam','satyamk328@gmail.com','New Ashok Nagar','8130787891','CBGPK4395B','123','DELHI','DELHI','INDIA',0,0,1,NULL,'2019-04-14 12:02:54',NULL,'2019-04-14 12:02:54'),
-(2,1,'Tej Narayan Shahu','www.digitalbihar.com','Sharhaul Sector 18 Gurgaon','8800359490','CFFFF23FG','123','GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-14 12:04:39',NULL,'2019-04-14 12:04:39');
+(2,1,'Tej Narayan Shahu','www.digitalbihar.com','Sharhaul Sector 18 Gurgaon','8800359490','CFFFF23FG','123','GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-14 12:04:39',NULL,'2019-04-14 12:04:39'),
+(3,2,'Naiyan Jee','naiyan@gmail.com','Hero Honda Chhok Gurgaon','7289900566',NULL,NULL,'GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-19 13:36:37',NULL,'2019-04-19 13:36:37'),
+(4,2,'Bhushan Kumar','bhushan@gmail.com','Hero Honda Chhok Gurgaon','8766224540',NULL,NULL,'GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-19 13:39:08',NULL,'2019-04-19 13:39:08'),
+(5,2,'Raghunath Travel','raghunath@gmail.com','IFCO Chok Gurgaon','9968776600',NULL,NULL,'GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-19 13:43:18',NULL,'2019-04-19 13:43:18'),
+(6,2,'Mukhtar Kumar','mukhtar@gmail.com','IFO Chok Gurgaon','9811093825',NULL,NULL,'GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-19 13:47:19',NULL,'2019-04-19 13:47:19'),
+(7,2,'Navin Visthi','navin@gmail.com','IFCO Chok GURGAON','8929350567',NULL,NULL,'GURGAON','HARIYANA','INDIA',0,0,1,NULL,'2019-04-19 13:48:52',NULL,'2019-04-19 13:48:52');
 
 /*Table structure for table `wallet_master` */
 

@@ -118,8 +118,8 @@ public class BusTripController {
 		if (!flag) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					String.format("Unable to delete the bus with bus number %s", busId));
-			new ResponseEntity<>(new RestResponse(flag, status), HttpStatus.INTERNAL_SERVER_ERROR);
+			new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(new RestResponse(flag, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.OK);
 	}
 }
