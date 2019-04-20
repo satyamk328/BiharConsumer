@@ -2,26 +2,47 @@ package com.digital.service;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import com.digital.payment.model.PaymentRefund;
+import com.digital.audit.service.RestTemplateService;
 
 @Component
 public class PaymentWrapperService {
 
-	public PaymentRefund createRefund(PaymentRefund refund) {
-		return null;
+	@Autowired
+	private RestTemplateService restTemplateService;
+
+	public void cancelpayment() {
+		
 	}
-	
-	public Boolean enablePaymentRequest(String id) {
-		return true;
+	public void confirmPayment() {
+		final HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		map.add("lastname", "");
+		map.add("00NG000000DO1wu", "");
+		map.add("00NG000000DO1wz", "");
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
+				requestHeaders);
+
+		try {
+			final ResponseEntity<String> paymentResponse = restTemplateService.getRestTemplate().postForEntity("",
+					request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
-	public Boolean disablePaymentRequest(String id) {
-		return true;
-	}
+
 	private HttpHeaders getHeaders() {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		String authToken = Base64Utils.encodeToString(("user:password").getBytes());

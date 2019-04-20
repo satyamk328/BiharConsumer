@@ -455,6 +455,9 @@ CREATE TABLE `route_master` (
   `Source` varchar(255) DEFAULT NULL,
   `Destination` varchar(255) DEFAULT NULL,
   `Description` varchar(100) DEFAULT NULL,
+  `Distance` double DEFAULT NULL,
+  `Duration` double DEFAULT NULL,
+  `BaseFare` double DEFAULT NULL,
   `CreatedBy` varchar(100) DEFAULT NULL,
   `DateCreated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedBy` varchar(100) DEFAULT NULL,
@@ -464,21 +467,21 @@ CREATE TABLE `route_master` (
 
 /*Data for the table `route_master` */
 
-insert  into `route_master`(`RouteId`,`Source`,`Destination`,`Description`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
-(1,'1','2',NULL,NULL,'2019-04-19 14:53:31',NULL,'2019-04-19 14:53:31'),
-(2,'2','9',NULL,NULL,'2019-04-19 14:55:10',NULL,'2019-04-19 14:55:10'),
-(3,'9','10',NULL,NULL,'2019-04-19 14:56:00',NULL,'2019-04-19 14:56:00'),
-(4,'10','11',NULL,NULL,'2019-04-19 14:56:30',NULL,'2019-04-19 14:56:30'),
-(5,'12','13',NULL,NULL,'2019-04-19 14:56:45',NULL,'2019-04-19 14:56:45'),
-(6,'13','14',NULL,NULL,'2019-04-19 14:57:03',NULL,'2019-04-19 14:57:03'),
-(7,'14','15',NULL,NULL,'2019-04-19 14:57:48',NULL,'2019-04-19 14:57:48'),
-(8,'16','17',NULL,NULL,'2019-04-19 14:58:02',NULL,'2019-04-19 14:58:02'),
-(9,'17','18',NULL,NULL,'2019-04-19 14:58:22',NULL,'2019-04-19 14:58:22'),
-(10,'18','19',NULL,NULL,'2019-04-19 14:59:42',NULL,'2019-04-19 14:59:42'),
-(11,'19','20',NULL,NULL,'2019-04-19 15:00:06',NULL,'2019-04-19 15:00:06'),
-(12,'20','21',NULL,NULL,'2019-04-19 15:00:34',NULL,'2019-04-19 15:00:34'),
-(13,'21','22',NULL,NULL,'2019-04-19 15:00:47',NULL,'2019-04-19 15:00:47'),
-(14,'22','23',NULL,NULL,'2019-04-19 15:01:06',NULL,'2019-04-19 15:01:06');
+insert  into `route_master`(`RouteId`,`Source`,`Destination`,`Description`,`Distance`,`Duration`,`BaseFare`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
+(1,'1','2',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:53:31',NULL,'2019-04-19 14:53:31'),
+(2,'2','9',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:55:10',NULL,'2019-04-19 14:55:10'),
+(3,'9','10',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:56:00',NULL,'2019-04-19 14:56:00'),
+(4,'10','11',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:56:30',NULL,'2019-04-19 14:56:30'),
+(5,'12','13',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:56:45',NULL,'2019-04-19 14:56:45'),
+(6,'13','14',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:57:03',NULL,'2019-04-19 14:57:03'),
+(7,'14','15',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:57:48',NULL,'2019-04-19 14:57:48'),
+(8,'16','17',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:58:02',NULL,'2019-04-19 14:58:02'),
+(9,'17','18',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:58:22',NULL,'2019-04-19 14:58:22'),
+(10,'18','19',NULL,NULL,NULL,NULL,NULL,'2019-04-19 14:59:42',NULL,'2019-04-19 14:59:42'),
+(11,'19','20',NULL,NULL,NULL,NULL,NULL,'2019-04-19 15:00:06',NULL,'2019-04-19 15:00:06'),
+(12,'20','21',NULL,NULL,NULL,NULL,NULL,'2019-04-19 15:00:34',NULL,'2019-04-19 15:00:34'),
+(13,'21','22',NULL,NULL,NULL,NULL,NULL,'2019-04-19 15:00:47',NULL,'2019-04-19 15:00:47'),
+(14,'22','23',NULL,NULL,NULL,NULL,NULL,'2019-04-19 15:01:06',NULL,'2019-04-19 15:01:06');
 
 /*Table structure for table `schedule_master` */
 
@@ -508,7 +511,7 @@ CREATE TABLE `schedule_master` (
 /*Data for the table `schedule_master` */
 
 insert  into `schedule_master`(`ScheduleId`,`BusId`,`SourceCityId`,`DestinationCityId`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`,`IsFixed`) values 
-(3,1,1,23,NULL,NULL,NULL,NULL,NULL,NULL,0);
+(3,1,1,23,'2019-04-30',NULL,NULL,NULL,NULL,NULL,0);
 
 /*Table structure for table `seat_master` */
 
@@ -519,8 +522,8 @@ CREATE TABLE `seat_master` (
   `BusLayoutId` bigint(20) NOT NULL,
   `RowName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `ColumnName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Width` decimal(10,0) NOT NULL DEFAULT '0',
-  `Length` decimal(10,0) NOT NULL DEFAULT '0',
+  `Width` bigint(20) NOT NULL DEFAULT '1',
+  `Length` bigint(20) NOT NULL DEFAULT '0',
   `SeatType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `SeatName` varchar(100) DEFAULT NULL,
   `SeatNumber` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -534,9 +537,94 @@ CREATE TABLE `seat_master` (
   PRIMARY KEY (`SeatId`),
   KEY `FK_LAYOUT` (`BusLayoutId`),
   CONSTRAINT `FK_LAYOUT` FOREIGN KEY (`BusLayoutId`) REFERENCES `bus_layout_master` (`LayoutId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `seat_master` */
+
+insert  into `seat_master`(`SeatId`,`BusLayoutId`,`RowName`,`ColumnName`,`Width`,`Length`,`SeatType`,`SeatName`,`SeatNumber`,`IsAvailable`,`IsLadiesSeat`,`IsLowerBerth`,`CreatedBy`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
+(1,2,'0','0',1,1,'SS','1','1',0,0,1,NULL,NULL,NULL,NULL),
+(3,2,'0','1',1,1,'SS','3','3',0,0,1,NULL,NULL,NULL,NULL),
+(4,2,'0','2',1,1,'SS','5','5',0,0,1,NULL,NULL,NULL,NULL),
+(5,2,'0','3',1,1,'SS','7','7',0,0,1,NULL,NULL,NULL,NULL),
+(6,2,'0','4',1,1,'SS','9','9',0,0,1,NULL,NULL,NULL,NULL),
+(7,2,'0','5',1,1,'SS','11','11',0,0,1,NULL,NULL,NULL,NULL),
+(8,2,'0','6',1,2,'SL','L1','L1',0,0,1,NULL,NULL,NULL,NULL),
+(9,2,'0','8',1,2,'SL','L3','L3',0,0,1,NULL,NULL,NULL,NULL),
+(10,2,'0','10',1,2,'SL','L5','L5',0,0,1,NULL,NULL,NULL,NULL),
+(11,2,'1','0',1,1,'SS','2','2',0,0,1,NULL,NULL,NULL,NULL),
+(12,2,'1','1',1,1,'SS','4','4',0,0,1,NULL,NULL,NULL,NULL),
+(13,2,'1','2',1,1,'SS','6','6',0,0,1,NULL,NULL,NULL,NULL),
+(14,2,'1','3',1,1,'SS','8','8',0,0,1,NULL,NULL,NULL,NULL),
+(15,2,'1','4',1,1,'SS','10','10',0,0,1,NULL,NULL,NULL,NULL),
+(16,2,'1','5',1,1,'SS','12','12',0,0,1,NULL,NULL,NULL,NULL),
+(17,2,'1','6',1,2,'SL','L2','L2',0,0,1,NULL,NULL,NULL,NULL),
+(18,2,'1','8',1,2,'SL','L4','L4',0,0,1,NULL,NULL,NULL,NULL),
+(19,2,'1','10',1,2,'SL','L6','L6',0,0,1,NULL,NULL,NULL,NULL),
+(20,2,'4','0',1,2,'SL','L7','L7',0,0,1,NULL,NULL,NULL,NULL),
+(21,2,'4','2',1,2,'SL','L8','L8',0,0,1,NULL,NULL,NULL,NULL),
+(22,2,'4','4',1,2,'SL','L9','L9',0,0,1,NULL,NULL,NULL,NULL),
+(25,2,'4','6',1,2,'SL','L10','L10',0,0,1,NULL,NULL,NULL,NULL),
+(26,2,'4','8',1,2,'SL','L11','L11',0,0,1,NULL,NULL,NULL,NULL),
+(27,2,'4','10',1,2,'SL','L12','L12',0,0,1,NULL,NULL,NULL,NULL),
+(28,2,'0','0',1,2,'SL','U1','U1',0,0,0,NULL,NULL,NULL,NULL),
+(29,2,'0','2',1,2,'SL','U3','U3',0,0,0,NULL,NULL,NULL,NULL),
+(30,2,'0','4',1,2,'SL','U5','U5',0,0,0,NULL,NULL,NULL,NULL),
+(31,2,'0','6',1,2,'SL','U7','U7',0,0,0,NULL,NULL,NULL,NULL),
+(32,2,'0','8',1,2,'SL','U9','U9',0,0,0,NULL,NULL,NULL,NULL),
+(33,2,'0','10',1,2,'SL','U11','U11',0,0,0,NULL,NULL,NULL,NULL),
+(34,2,'1','0',1,2,'SL','U2','U2',0,0,0,NULL,NULL,NULL,NULL),
+(35,2,'1','2',1,2,'SL','U4','U4',0,0,0,NULL,NULL,NULL,NULL),
+(36,2,'1','4',1,2,'SL','U6','U6',0,0,0,NULL,NULL,NULL,NULL),
+(37,2,'1','6',1,2,'SL','U8','U8',0,0,0,NULL,NULL,NULL,NULL),
+(38,2,'1','8',1,2,'SL','U10','U10',0,0,0,NULL,NULL,NULL,NULL),
+(39,2,'1','10',1,2,'SL','U12','U12',0,0,0,NULL,NULL,NULL,NULL),
+(40,2,'4','0',1,2,'SL','U13','U13',0,0,0,NULL,NULL,NULL,NULL),
+(41,2,'4','2',1,2,'SL','U14','U14',0,0,0,NULL,NULL,NULL,NULL),
+(42,2,'4','4',1,2,'SL','U15','U15',0,0,0,NULL,NULL,NULL,NULL),
+(43,2,'4','6',1,2,'SL','U16','U16',0,0,0,NULL,NULL,NULL,NULL),
+(44,2,'4','8',1,2,'SL','U17','U17',0,0,0,NULL,NULL,NULL,NULL),
+(45,2,'4','10',1,2,'SL','U18','U18',0,0,0,NULL,NULL,NULL,NULL),
+(50,1,'0','0',1,1,'SS','1','1',0,0,0,NULL,NULL,NULL,NULL),
+(51,1,'0','1',1,1,'SS','3','3',0,0,0,NULL,NULL,NULL,NULL),
+(52,1,'0','2',1,1,'SS','5','5',0,0,0,NULL,NULL,NULL,NULL),
+(53,1,'0','3',1,1,'SS','7','7',0,0,0,NULL,NULL,NULL,NULL),
+(54,1,'0','4',1,1,'SS','9','9',0,0,0,NULL,NULL,NULL,NULL),
+(55,1,'0','5',1,1,'SS','11','11',0,0,0,NULL,NULL,NULL,NULL),
+(56,1,'0','6',1,1,'SS','13','13',0,0,0,NULL,NULL,NULL,NULL),
+(57,1,'0','7',1,1,'SS','15','15',0,0,0,NULL,NULL,NULL,NULL),
+(58,1,'0','8',1,1,'SS','17','17',0,0,0,NULL,NULL,NULL,NULL),
+(59,1,'0','9',1,1,'SS','19','19',0,0,0,NULL,NULL,NULL,NULL),
+(60,1,'4','0',1,1,'SS','22','22',0,0,0,NULL,NULL,NULL,NULL),
+(61,1,'1','0',1,1,'SS','2','2',0,0,0,NULL,NULL,NULL,NULL),
+(62,1,'1','1',1,1,'SS','4','4',0,0,0,NULL,NULL,NULL,NULL),
+(63,1,'1','2',1,1,'SS','6','6',0,0,0,NULL,NULL,NULL,NULL),
+(64,1,'1','3',1,1,'SS','8','8',0,0,0,NULL,NULL,NULL,NULL),
+(65,1,'1','4',1,1,'SS','10','10',0,0,0,NULL,NULL,NULL,NULL),
+(66,1,'1','5',1,1,'SS','12','12',0,0,0,NULL,NULL,NULL,NULL),
+(67,1,'1','6',1,1,'SS','14','14',0,0,0,NULL,NULL,NULL,NULL),
+(68,1,'1','7',1,1,'SS','16','16',0,0,0,NULL,NULL,NULL,NULL),
+(69,1,'1','8',1,1,'SS','18','18',0,0,0,NULL,NULL,NULL,NULL),
+(70,1,'1','9',1,1,'SS','20','20',0,0,0,NULL,NULL,NULL,NULL),
+(71,1,'4','1',1,1,'SS','24','24',0,0,0,NULL,NULL,NULL,NULL),
+(72,1,'3','0',1,1,'SS','21','21',0,0,0,NULL,NULL,NULL,NULL),
+(73,1,'3','1',1,1,'SS','23','23',0,0,0,NULL,NULL,NULL,NULL),
+(74,1,'3','2',1,1,'SS','25','25',0,0,0,NULL,NULL,NULL,NULL),
+(75,1,'3','3',1,1,'SS','27','27',0,0,0,NULL,NULL,NULL,NULL),
+(76,1,'3','4',1,1,'SS','29','29',0,0,0,NULL,NULL,NULL,NULL),
+(77,1,'3','5',1,1,'SS','31','31',0,0,0,NULL,NULL,NULL,NULL),
+(78,1,'3','6',1,1,'SS','33','33',0,0,0,NULL,NULL,NULL,NULL),
+(79,1,'3','7',1,1,'SS','35','35',0,0,0,NULL,NULL,NULL,NULL),
+(80,1,'3','8',1,1,'SS','37','37',0,0,0,NULL,NULL,NULL,NULL),
+(81,1,'3','9',1,1,'SS','39','39',0,0,0,NULL,NULL,NULL,NULL),
+(82,1,'4','2',1,1,'SS','26','26',0,0,0,NULL,NULL,NULL,NULL),
+(83,1,'2','10',1,1,'SS','41','41',0,0,0,NULL,NULL,NULL,NULL),
+(84,1,'4','3',1,1,'SS','28','28',0,0,0,NULL,NULL,NULL,NULL),
+(85,1,'4','4',1,1,'SS','30','30',0,0,0,NULL,NULL,NULL,NULL),
+(86,1,'4','5',1,1,'SS','32','32',0,0,0,NULL,NULL,NULL,NULL),
+(87,1,'4','6',1,1,'SS','34','34',0,0,0,NULL,NULL,NULL,NULL),
+(88,1,'4','7',1,1,'SS','36','36',0,0,0,NULL,NULL,NULL,NULL),
+(89,1,'4','8',1,1,'SS','38','38',0,0,0,NULL,NULL,NULL,NULL),
+(90,1,'4','9',1,1,'SS','40','40',0,0,0,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `ticket_master` */
 
@@ -594,38 +682,39 @@ DROP TABLE IF EXISTS `trip_master`;
 CREATE TABLE `trip_master` (
   `TripId` bigint(20) NOT NULL AUTO_INCREMENT,
   `ScheduleId` bigint(20) NOT NULL,
-  `RouteId` bigint(20) NOT NULL,
-  `StopNumber` int(11) NOT NULL,
+  `CityId` bigint(20) NOT NULL,
+  `CitySequance` int(11) NOT NULL,
   `CityStops` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `Distance` decimal(10,2) DEFAULT '0.00',
-  `Duration` decimal(10,2) DEFAULT '0.00',
   `BaseFare` decimal(10,2) DEFAULT NULL,
   `Time` double DEFAULT NULL,
   `ArrivalDate` date DEFAULT NULL,
   PRIMARY KEY (`TripId`),
   KEY `FK_SCH` (`ScheduleId`),
-  KEY `FK_ROUTE` (`RouteId`),
-  CONSTRAINT `FK_ROUTE` FOREIGN KEY (`RouteId`) REFERENCES `route_master` (`RouteId`),
+  KEY `FK_CITY_TRIP` (`CityId`),
+  CONSTRAINT `FK_CITY_TRIP` FOREIGN KEY (`CityId`) REFERENCES `city_master` (`CityId`),
   CONSTRAINT `FK_SCH` FOREIGN KEY (`ScheduleId`) REFERENCES `schedule_master` (`ScheduleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `trip_master` */
 
-insert  into `trip_master`(`TripId`,`ScheduleId`,`RouteId`,`StopNumber`,`CityStops`,`Distance`,`Duration`,`BaseFare`,`Time`,`ArrivalDate`) values 
-(1,3,1,1,'1:2',0.00,0.00,NULL,NULL,NULL),
-(11,3,2,2,NULL,0.00,0.00,NULL,NULL,NULL),
-(12,3,3,3,NULL,0.00,0.00,NULL,NULL,NULL),
-(13,3,4,4,NULL,0.00,0.00,NULL,NULL,NULL),
-(14,3,5,5,NULL,0.00,0.00,NULL,NULL,NULL),
-(15,3,6,6,NULL,0.00,0.00,NULL,NULL,NULL),
-(16,3,7,7,NULL,0.00,0.00,NULL,NULL,NULL),
-(17,3,8,8,NULL,0.00,0.00,NULL,NULL,NULL),
-(18,3,9,9,NULL,0.00,0.00,NULL,NULL,NULL),
-(19,3,10,10,NULL,0.00,0.00,NULL,NULL,NULL),
-(20,3,11,11,NULL,0.00,0.00,NULL,NULL,NULL),
-(21,3,12,12,NULL,0.00,0.00,NULL,NULL,NULL),
-(22,3,13,13,NULL,0.00,0.00,NULL,NULL,NULL),
-(23,3,14,14,NULL,0.00,0.00,NULL,NULL,NULL);
+insert  into `trip_master`(`TripId`,`ScheduleId`,`CityId`,`CitySequance`,`CityStops`,`BaseFare`,`Time`,`ArrivalDate`) values 
+(1,3,1,1,NULL,NULL,NULL,NULL),
+(2,3,2,2,NULL,NULL,NULL,NULL),
+(3,3,9,3,NULL,NULL,NULL,NULL),
+(30,3,10,4,NULL,NULL,NULL,NULL),
+(31,3,11,5,NULL,NULL,NULL,NULL),
+(32,3,12,6,NULL,NULL,NULL,NULL),
+(33,3,13,7,NULL,NULL,NULL,NULL),
+(34,3,14,8,NULL,NULL,NULL,NULL),
+(35,3,15,9,NULL,NULL,NULL,NULL),
+(36,3,16,10,NULL,NULL,NULL,NULL),
+(37,3,17,11,NULL,NULL,NULL,NULL),
+(38,3,18,12,NULL,NULL,NULL,NULL),
+(39,3,19,13,NULL,NULL,NULL,NULL),
+(40,3,20,14,NULL,NULL,NULL,NULL),
+(41,3,21,15,NULL,NULL,NULL,NULL),
+(42,3,22,16,NULL,NULL,NULL,NULL),
+(44,3,23,17,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `user_login` */
 
