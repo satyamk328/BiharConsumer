@@ -31,16 +31,16 @@ public class BusTripService {
 	private DataUtils dataUtils;
 
 	@Cacheable("routesDetails")
-	public TripDetails searchBusRoutDetails(Long sourceCityId, Long destinationCityId, String date) {
+	public TripDetails searchBusScheduletDetails(Long srcCityId, Long destCityId, String date) {
 		TripDetails busDetailsObject = new TripDetails();
-		List<BusScheduleDetails> filterRoutes = busBookingDao.searchTripBySrcDescAndDate(sourceCityId, destinationCityId, date);
-		for(BusScheduleDetails route : filterRoutes) {
+		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId, date);
+		for(BusScheduleDetails route : busScheduleDetails) {
 			route.setBoardingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[0]));
 			route.setDroppingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[1]));
 		    route.setCancellationPolicy(busBookingDao.getCancellationPolicy(route.getOperatorId()));
 		    route.setAmenities(amenitiesDao.getAmenitiesByBusId(route.getOperatorId()));
 		}
-		busDetailsObject.setAvailableRoutes(filterRoutes);
+		busDetailsObject.setAvailableRoutes(busScheduleDetails);
 		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);

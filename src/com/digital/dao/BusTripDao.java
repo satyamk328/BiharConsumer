@@ -77,11 +77,11 @@ public class BusTripDao {
 	private DataUtils dataUtils;
 
 	@Transactional(readOnly = true)
-	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long sourceCityId, Long destinationCityId, String date) {
+	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {
 		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("source", sourceCityId);
-		parameters.addValue("destination", destinationCityId);
+		parameters.addValue("source", srcCityId);
+		parameters.addValue("destination", destCityId);
 		parameters.addValue("arrivaldate", dataUtils.convertFormat(date));
 
 		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters,
