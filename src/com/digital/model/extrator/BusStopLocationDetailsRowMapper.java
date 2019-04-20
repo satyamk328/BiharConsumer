@@ -7,18 +7,18 @@ import java.util.List;
 
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-import com.digital.model.BusBoadingStopingDetails;
+import com.digital.model.BusCityStopLocationsDetails;
 /**
  * @author Satyam Kumar
  *
  */
-public class BusStopLocationDetailsRowMapper implements ResultSetExtractor<List<BusBoadingStopingDetails>> {
+public class BusStopLocationDetailsRowMapper implements ResultSetExtractor<List<BusCityStopLocationsDetails>> {
 
 	@Override
-	public List<BusBoadingStopingDetails> extractData(ResultSet rs) throws SQLException {
-		List<BusBoadingStopingDetails> boadingStopingDetails =  new ArrayList<>();
+	public List<BusCityStopLocationsDetails> extractData(ResultSet rs) throws SQLException {
+		List<BusCityStopLocationsDetails> boadingStopingDetails =  new ArrayList<>();
 		while(rs.next()) {
-			BusBoadingStopingDetails locationDetails = new BusBoadingStopingDetails();
+			BusCityStopLocationsDetails locationDetails = new BusCityStopLocationsDetails();
 			locationDetails.setId(rs.getString("id"));
 			locationDetails.setBusid(rs.getString("tripid"));
 			locationDetails.setLocationName(rs.getString("locationname"));

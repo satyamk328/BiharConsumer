@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import com.digital.dao.AmenitiesDao;
 import com.digital.dao.BusTripDao;
 import com.digital.model.TripDetails;
-import com.digital.model.BusRouteDetails;
+import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatDetails;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
@@ -31,10 +31,10 @@ public class BusTripService {
 	private DataUtils dataUtils;
 
 	@Cacheable("routesDetails")
-	public TripDetails searchBusRoutDetails(String source, String destination, String date) {
+	public TripDetails searchBusRoutDetails(Long sourceCityId, Long destinationCityId, String date) {
 		TripDetails busDetailsObject = new TripDetails();
-		List<BusRouteDetails> filterRoutes = busBookingDao.searchTripBySrcDescAndDate(source, destination, date);
-		for(BusRouteDetails route : filterRoutes) {
+		List<BusScheduleDetails> filterRoutes = busBookingDao.searchTripBySrcDescAndDate(sourceCityId, destinationCityId, date);
+		for(BusScheduleDetails route : filterRoutes) {
 			route.setBoardingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[0]));
 			route.setDroppingLocations(busBookingDao.getBusBoadingAndStopingPointDetails(route.getTripid().split("::")[1]));
 		    route.setCancellationPolicy(busBookingDao.getCancellationPolicy(route.getOperatorId()));

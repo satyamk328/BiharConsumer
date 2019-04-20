@@ -42,12 +42,12 @@ public class BusTripController {
 
 	@GetMapping(value = "/route/{source}/{destination}/{date}")
 	public ResponseEntity<RestResponse<TripDetails>> searchBusRoutDetails(
-			@PathVariable(name = "source", required = true) String source,
-			@PathVariable(name = "destination", required = true) String destination,
+			@PathVariable(name = "source", required = true) Long sourceCityId,
+			@PathVariable(name = "destination", required = true) Long destinationCityId,
 			@PathVariable(name = "date", required = true) String date) {
-		log.info("call search searchBusRoutDetails:{},{},{}", source, destination, date);
+		log.info("call search searchBusRoutDetails:{},{},{}", sourceCityId, destinationCityId, date);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		TripDetails tripDetails = busService.searchBusRoutDetails(source, destination, date);
+		TripDetails tripDetails = busService.searchBusRoutDetails(sourceCityId, destinationCityId, date);
 		if (tripDetails.getAvailableRoutes().isEmpty())
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));

@@ -15,7 +15,7 @@ public class BusSeatDetails implements Serializable{
 
 	private static final long serialVersionUID = 8700716073667499536L;
 	private List<BusSeatBookingDetails> busSeatDetails;
-	private List<BusBoadingStopingDetails> boardingPoints;
-	private List<BusBoadingStopingDetails> droppingPoints;
+	private List<BusCityStopLocationsDetails> boardingPoints;
+	private List<BusCityStopLocationsDetails> droppingPoints;
 	
 }

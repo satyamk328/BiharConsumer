@@ -24,10 +24,10 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusBoadingStopingDetails;
+import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusDetails;
-import com.digital.model.BusRouteDetails;
+import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
 import com.digital.model.extrator.BusInformationDetailsExtractor;
@@ -72,23 +72,24 @@ public class BusTripDao {
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
-	
+
 	@Autowired
 	private DataUtils dataUtils;
 
 	@Transactional(readOnly = true)
-	public List<BusRouteDetails> searchTripBySrcDescAndDate(String source, String destination, String date) {
+	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long sourceCityId, Long destinationCityId, String date) {
 		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("source", "%" + source.toLowerCase() + "%");
-		parameters.addValue("destination", "%" + destination.toLowerCase() + "%");
+		parameters.addValue("source", sourceCityId);
+		parameters.addValue("destination", destinationCityId);
 		parameters.addValue("arrivaldate", dataUtils.convertFormat(date));
 
-		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters, new BusTripDetailsExtrator());
+		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters,
+				new BusTripDetailsExtrator());
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusBoadingStopingDetails> getBusBoadingAndStopingPointDetails(String trip) {
+	public List<BusCityStopLocationsDetails> getBusBoadingAndStopingPointDetails(String trip) {
 		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
 		return jdbcTemplate.query(selectBoadingStoppingDetailQuery, new Object[] { trip },
 				new BusStopLocationDetailsRowMapper());

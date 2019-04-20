@@ -15,7 +15,7 @@ import lombok.Setter;
 public class TripDetails implements Serializable{
 	
 	private static final long serialVersionUID = 1068912061763283486L;
-	private List<BusRouteDetails> availableRoutes = new ArrayList<>();
+	private List<BusScheduleDetails> availableRoutes = new ArrayList<>();
 	private List<String> departureTimeList = new ArrayList<>();
 	private List<String> arrivalTimeList = new ArrayList<>();
 	private List<BusAmenity> amenitiesList = new ArrayList<>();
