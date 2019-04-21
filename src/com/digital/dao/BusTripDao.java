@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,15 +25,14 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusCancellationPolicies;
+import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
 import com.digital.model.extrator.BusInformationDetailsExtractor;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
-import com.digital.model.extrator.BusStopLocationDetailsRowMapper;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.extrator.CustomerMapperExtrator;
 import com.digital.model.vo.CustomerBusTicketVO;
@@ -78,7 +78,7 @@ public class BusTripDao {
 
 	@Transactional(readOnly = true)
 	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {
-		log.debug("Running select query for searchTriBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("srcCityId", srcCityId);
 		parameters.addValue("destCityId", destCityId);
@@ -88,10 +88,14 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusCityStopLocationsDetails> getBusBoadingAndStopingPointDetails(String trip) {
+	public List<BusCityStopLocationsDetails> getBusBoadingAndStopingPointDetails(String cityId,
+			List<String> cityStopIds) {
 		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
-		return jdbcTemplate.query(selectBoadingStoppingDetailQuery, new Object[] { trip },
-				new BusStopLocationDetailsRowMapper());
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("cityId", Long.parseLong(cityId));
+		parameters.addValue("cityStopIds", cityStopIds);
+		return jdbcTemplateObject.query(selectBoadingStoppingDetailQuery, parameters,
+				new BeanPropertyRowMapper<BusCityStopLocationsDetails>(BusCityStopLocationsDetails.class));
 	}
 
 	@Transactional(readOnly = true)
@@ -109,19 +113,11 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusCancellationPolicies> getCancellationPolicy(Long operatorId) {
+	public List<BusCancellationPolicies> getCancellationPolicy(Long busId) {
 		log.debug("Running insert query for getCancellationPolicy {}", selectBusCancellationPolicyQuery);
-		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { operatorId },
-				new RowMapper<BusCancellationPolicies>() {
-					public BusCancellationPolicies mapRow(ResultSet rs, int rowNum) throws SQLException {
-						BusCancellationPolicies busCancellation = new BusCancellationPolicies();
-						busCancellation.setRuleId(rs.getString("policyid"));
-						busCancellation.setBusid(rs.getString("busid"));
-						busCancellation.setDepartureheading(rs.getString("departureheading"));
-						busCancellation.setPolicyheading(rs.getString("policyheading"));
-						return busCancellation;
-					}
-				});
+		
+		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { busId },
+				new BeanPropertyRowMapper<BusCancellationPolicies>(BusCancellationPolicies.class));
 	}
 
 	@Transactional(readOnly = true)

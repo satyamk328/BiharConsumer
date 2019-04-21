@@ -25,13 +25,13 @@ public class BusScheduleDetails implements Serializable {
 	private List<BusRating> rating = new ArrayList<>();
 	private boolean inclTaxes = true;
 	private String classType;
+	
 	private Long operatorId;  
 	private String providerId;  
 	private String travelsName;
 	private String busType;
-	private String routeId;
 	private double duration;
-	private int travelDurationDays;
+	private int travelDurationDays = 1;
 	private boolean idProofRequired = false;
 	private boolean isAc = false;
 	private boolean isSleeper = false;
@@ -41,13 +41,19 @@ public class BusScheduleDetails implements Serializable {
 	private double totalSeats;
 	private double availableSeats;
 	private double distance; 
-	private String arrivalDate;
-	private String arrivalTime;
+	private String seatType; 
+	
+	private Long scheduleId;
+	private Long busId;
+	private Double sleeperFare;
+	private Double seaterFare;
+	private String srcCity; 
+	private String destCity;
+	private String srcStops; 
+	private String destStops;
 	private String departureDate;
 	private String departureTime;
-	private String seatType; 
-	private String source; 
-	private String destination;
-	private String tripid;
-	
+	private String arrivalDate;
+	private String arrivalTime;
+	private int isFixedFare;
 }

@@ -13,14 +13,11 @@ import lombok.Setter;
 public class BusCityStopLocationsDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String id;
+	private Long cityStopId;
+	private Long cityId;
 	private String locationName;
 	private String locationAddress;
+	private String landMark;
 	private double lat;
 	private double lng;
-	private String busid;
-	private String date;
-	private String time;
-	private String contactNumber;
-	
 }

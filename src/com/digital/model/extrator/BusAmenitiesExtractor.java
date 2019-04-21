@@ -15,7 +15,7 @@ import com.digital.model.BusAmenity;
 public class BusAmenitiesExtractor implements ResultSetExtractor<List<BusAmenity>> {
 
 	@Override
-	public List<BusAmenity> extractData(ResultSet rs) throws SQLException {
+	public List<BusAmenity> extractData(ResultSet rs) throws SQLException {/*
 		List<BusAmenity> amenitiesList = new ArrayList<>();
 		while (rs.next()) {
 			BusAmenity busAmenities = new BusAmenity();
@@ -26,6 +26,8 @@ public class BusAmenitiesExtractor implements ResultSetExtractor<List<BusAmenity
 			amenitiesList.add(busAmenities);
 		}
 		return amenitiesList;
+	*/
+	return null;	
 	}
 
 }

@@ -15,7 +15,7 @@ import com.digital.model.BusCityStopLocationsDetails;
 public class BusStopLocationDetailsRowMapper implements ResultSetExtractor<List<BusCityStopLocationsDetails>> {
 
 	@Override
-	public List<BusCityStopLocationsDetails> extractData(ResultSet rs) throws SQLException {
+	public List<BusCityStopLocationsDetails> extractData(ResultSet rs) throws SQLException {/*
 		List<BusCityStopLocationsDetails> boadingStopingDetails =  new ArrayList<>();
 		while(rs.next()) {
 			BusCityStopLocationsDetails locationDetails = new BusCityStopLocationsDetails();
@@ -31,5 +31,7 @@ public class BusStopLocationDetailsRowMapper implements ResultSetExtractor<List<
 			boadingStopingDetails.add(locationDetails);
 		}
 		return boadingStopingDetails;
+	*/
+	return null;
 	}
 }

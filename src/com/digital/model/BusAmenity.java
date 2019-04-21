@@ -17,7 +17,7 @@ public class BusAmenity implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7081507500727075917L;
-	private String id;
+	private String amenityId;
 	private String name;
 	private String label;
 	private String icon;
