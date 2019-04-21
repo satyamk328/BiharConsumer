@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,13 @@ import com.smattme.MysqlExportService;
  */
 @Component
 public class SchedulerService {
+
+	@Value("${jdbc.username}")
+	private String mysqlUserName;
+	@Value("${jdbc.password}")
+	private String mysqlPassword;
+	@Value("${jdbc.driverClassName}")
+	private String mysqlDriverName;
 
 	@Scheduled(fixedRate = 10000) // for every 5 second
 	public void run2() {
@@ -34,15 +42,16 @@ public class SchedulerService {
 		System.out.println("I am called by Spring scheduler run1 " + new Date());
 	}
 
+
 	public void Backupdbtosql() {
 		Properties properties = new Properties();
 		properties.setProperty(MysqlExportService.DB_NAME, "digitalbihar");
-		properties.setProperty(MysqlExportService.DB_USERNAME, "root");
-		properties.setProperty(MysqlExportService.DB_PASSWORD, "mysql");
-		properties.setProperty(MysqlExportService.JDBC_DRIVER_NAME, "com.mysql.jdbc.Driver");
+		properties.setProperty(MysqlExportService.DB_USERNAME, mysqlUserName);
+		properties.setProperty(MysqlExportService.DB_PASSWORD, mysqlPassword);
+		properties.setProperty(MysqlExportService.JDBC_DRIVER_NAME, mysqlDriverName);
 		properties.setProperty(MysqlExportService.PRESERVE_GENERATED_ZIP, "true");
 
-		//set the outputs temp dir
+		// set the outputs temp dir
 		properties.setProperty(MysqlExportService.TEMP_DIR, new File("external").getPath());
 
 		MysqlExportService mysqlExportService = new MysqlExportService(properties);
@@ -50,7 +59,6 @@ public class SchedulerService {
 		try {
 			mysqlExportService.export();
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
