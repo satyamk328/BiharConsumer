@@ -25,6 +25,8 @@ public class SchedulerService {
 	private String mysqlPassword;
 	@Value("${jdbc.driverClassName}")
 	private String mysqlDriverName;
+	@Value("${backup.driver.path}")
+	private String backUpDrirectory;
 
 	@Scheduled(fixedRate = 10000) // for every 5 second
 	public void run2() {
@@ -42,7 +44,6 @@ public class SchedulerService {
 		System.out.println("I am called by Spring scheduler run1 " + new Date());
 	}
 
-
 	public void Backupdbtosql() {
 		Properties properties = new Properties();
 		properties.setProperty(MysqlExportService.DB_NAME, "digitalbihar");
@@ -52,7 +53,7 @@ public class SchedulerService {
 		properties.setProperty(MysqlExportService.PRESERVE_GENERATED_ZIP, "true");
 
 		// set the outputs temp dir
-		properties.setProperty(MysqlExportService.TEMP_DIR, new File("external").getPath());
+		properties.setProperty(MysqlExportService.TEMP_DIR, new File(backUpDrirectory).getPath());
 
 		MysqlExportService mysqlExportService = new MysqlExportService(properties);
 		mysqlExportService.clearTempFiles(false);
