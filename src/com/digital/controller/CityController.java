@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.TopCities;
-import com.digital.service.SearchCityService;
+import com.digital.model.City;
+import com.digital.service.CityService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.utils.GlobalConstants;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CityController {
 
 	@Autowired
-	private SearchCityService cityService;
+	private CityService cityService;
 
 	@ApiOperation(value = "Get All City", notes = "This API is used to get all citiess")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Request fulfilled/processed successfully"),
@@ -48,9 +48,9 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@GetMapping("/")
-	public ResponseEntity<RestResponse<List<TopCities>>> getAllCities() {
+	public ResponseEntity<RestResponse<List<City>>> getAllCities() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = cityService.getAllCities();
+		List<City> searchStations = cityService.getAllCities();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse<>(searchStations, status), HttpStatus.OK);
 	}
@@ -65,7 +65,7 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@PostMapping("/")
-	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required = true) TopCities busStop) {
+	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required = true) City busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		long integer = cityService.save(busStop);
 		if (integer == 0) {
@@ -85,10 +85,10 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@GetMapping("/{stationName}")
-	public ResponseEntity<RestResponse<List<TopCities>>> searchStation(
+	public ResponseEntity<RestResponse<List<City>>> searchStation(
 			@PathVariable(name = "stationName", required = true) String stationName) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<TopCities> searchStations = cityService.getCityByName(stationName);
+		List<City> searchStations = cityService.getCityByName(stationName);
 		return new ResponseEntity<>(new RestResponse<>(searchStations, status), HttpStatus.OK);
 	}
 
@@ -102,10 +102,10 @@ public class CityController {
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
 	@GetMapping("/{cityId}")
-	public ResponseEntity<RestResponse<TopCities>> getCityById(
+	public ResponseEntity<RestResponse<City>> getCityById(
 			@PathVariable(name = "cityId", required = true) long cityId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records fetch Successfully");
-		TopCities topCities = cityService.getCityById(cityId);
+		City topCities = cityService.getCityById(cityId);
 		return new ResponseEntity<>(new RestResponse<>(topCities, status), HttpStatus.OK);
 	}
 
