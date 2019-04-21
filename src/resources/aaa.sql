@@ -21,7 +21,7 @@ USE `digitalbihar`;
 DROP TABLE IF EXISTS `amenity_mapping`;
 
 CREATE TABLE `amenity_mapping` (
-  `AmenityMappingId` bigint(20) NOT NULL,
+  `AmenityMappingId` bigint(20) NOT NULL AUTO_INCREMENT,
   `BusId` bigint(20) NOT NULL,
   `AmenityId` bigint(20) NOT NULL,
   PRIMARY KEY (`AmenityMappingId`),
@@ -29,9 +29,15 @@ CREATE TABLE `amenity_mapping` (
   KEY `FK_AM` (`AmenityId`),
   CONSTRAINT `FK_AM` FOREIGN KEY (`AmenityId`) REFERENCES `amenity_master` (`AmenityId`),
   CONSTRAINT `FK_BUS_MAS` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `amenity_mapping` */
+
+insert  into `amenity_mapping`(`AmenityMappingId`,`BusId`,`AmenityId`) values 
+(1,1,1),
+(2,1,2),
+(3,1,3),
+(4,1,6);
 
 /*Table structure for table `amenity_master` */
 
@@ -116,9 +122,14 @@ CREATE TABLE `bus_cancellation_policy` (
   PRIMARY KEY (`PolicyId`),
   KEY `FK_BUS_CANCE` (`BusId`),
   CONSTRAINT `FK_BUS_CANCE` FOREIGN KEY (`BusId`) REFERENCES `bus_master` (`BusId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `bus_cancellation_policy` */
+
+insert  into `bus_cancellation_policy`(`PolicyId`,`BusId`,`DepartureHeading`,`PolicyHeading`,`CreatedDate`,`DateCreated`,`ModifiedBy`,`DateModified`) values 
+(1,1,'Between 0 Hrs. to 12 Hrs.','0%',NULL,NULL,NULL,NULL),
+(2,1,'Between 12 Hrs. to 24 Hrs.','50%',NULL,NULL,NULL,NULL),
+(3,1,'Before 24 Hrs.','90%',NULL,NULL,NULL,NULL);
 
 /*Table structure for table `bus_helpline_master` */
 
@@ -511,7 +522,7 @@ CREATE TABLE `schedule_master` (
 /*Data for the table `schedule_master` */
 
 insert  into `schedule_master`(`ScheduleId`,`BusId`,`SourceCityId`,`DestinationCityId`,`DepartureDate`,`DepartureTime`,`ArrivalDate`,`ArrivalTime`,`SleeperFare`,`SeaterFare`,`IsFixed`) values 
-(3,1,1,23,'2019-04-30',NULL,NULL,NULL,NULL,NULL,0);
+(3,1,1,23,'2019-04-30','12:30:00','2019-05-01',NULL,1250,1000,1);
 
 /*Table structure for table `seat_master` */
 
@@ -698,23 +709,23 @@ CREATE TABLE `trip_master` (
 /*Data for the table `trip_master` */
 
 insert  into `trip_master`(`TripId`,`ScheduleId`,`CityId`,`CitySequance`,`CityStops`,`BaseFare`,`Time`,`ArrivalDate`) values 
-(1,3,1,1,NULL,NULL,NULL,NULL),
-(2,3,2,2,NULL,NULL,NULL,NULL),
-(3,3,9,3,NULL,NULL,NULL,NULL),
-(30,3,10,4,NULL,NULL,NULL,NULL),
-(31,3,11,5,NULL,NULL,NULL,NULL),
-(32,3,12,6,NULL,NULL,NULL,NULL),
-(33,3,13,7,NULL,NULL,NULL,NULL),
-(34,3,14,8,NULL,NULL,NULL,NULL),
-(35,3,15,9,NULL,NULL,NULL,NULL),
-(36,3,16,10,NULL,NULL,NULL,NULL),
-(37,3,17,11,NULL,NULL,NULL,NULL),
-(38,3,18,12,NULL,NULL,NULL,NULL),
-(39,3,19,13,NULL,NULL,NULL,NULL),
-(40,3,20,14,NULL,NULL,NULL,NULL),
-(41,3,21,15,NULL,NULL,NULL,NULL),
-(42,3,22,16,NULL,NULL,NULL,NULL),
-(44,3,23,17,NULL,NULL,NULL,NULL);
+(1,3,1,1,NULL,NULL,NULL,'2019-04-30'),
+(2,3,2,2,NULL,NULL,NULL,'2019-04-30'),
+(3,3,9,3,NULL,NULL,NULL,'2019-04-30'),
+(30,3,10,4,NULL,NULL,NULL,'2019-04-30'),
+(31,3,11,5,NULL,NULL,NULL,'2019-04-30'),
+(32,3,12,6,NULL,NULL,NULL,'2019-04-30'),
+(33,3,13,7,NULL,NULL,NULL,'2019-04-30'),
+(34,3,14,8,NULL,NULL,NULL,'2019-04-30'),
+(35,3,15,9,NULL,NULL,NULL,'2019-05-01'),
+(36,3,16,10,NULL,NULL,NULL,'2019-05-01'),
+(37,3,17,11,NULL,NULL,NULL,'2019-05-01'),
+(38,3,18,12,NULL,NULL,NULL,'2019-05-01'),
+(39,3,19,13,NULL,NULL,NULL,'2019-05-01'),
+(40,3,20,14,NULL,NULL,NULL,'2019-05-01'),
+(41,3,21,15,NULL,NULL,NULL,'2019-05-01'),
+(42,3,22,16,NULL,NULL,NULL,'2019-05-01'),
+(44,3,23,17,NULL,NULL,NULL,'2019-05-01');
 
 /*Table structure for table `user_login` */
 
