@@ -17,6 +17,8 @@ public class BusInformationDetailsExtractor implements ResultSetExtractor<List<B
 
 	@Override
 	public List<BusDetails> extractData(ResultSet rs) throws SQLException {
+		return null;
+		/*
 		List<BusDetails> busDetails = new ArrayList<>();
 		while (rs.next()) {
 			BusDetails busDetail = new BusDetails();
@@ -34,6 +36,6 @@ public class BusInformationDetailsExtractor implements ResultSetExtractor<List<B
 			busDetails.add(busDetail);
 		}
 		return busDetails;
-	}
+	*/}
 
 }

@@ -31,6 +31,9 @@ import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
+import com.digital.model.RoutedCities;
+import com.digital.model.SeatDetails;
+import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusInformationDetailsExtractor;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
@@ -67,6 +70,19 @@ public class BusTripDao {
 	@Value("${select_customer_book_ticket}")
 	private String selectCustomerBookTicketQuery;
 
+	/////
+	@Value("${select_Bus_Details_By_BusId}")
+	private String selectBusDetailsByBusId;
+
+	@Value("${select_SeatDetails_By_LayoutId}")
+	private String selectSeatDetailsByLayoutId;
+
+	@Value("${select_TicketDetails_By_ScheduleAndBusId}")
+	private String selectTicketDetailsByScheduleAndBusId;
+
+	@Value("${select_TripCities_BySrcDescCities}")
+	private String selectTripCitiesBySrcDescCities;
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -83,8 +99,10 @@ public class BusTripDao {
 		parameters.addValue("srcCityId", srcCityId);
 		parameters.addValue("destCityId", destCityId);
 		parameters.addValue("arrivalDate", dataUtils.convertFormat(date));
+
 		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters,
 				new BusTripDetailsExtrator());
+
 	}
 
 	@Transactional(readOnly = true)
@@ -115,7 +133,7 @@ public class BusTripDao {
 	@Transactional(readOnly = true)
 	public List<BusCancellationPolicies> getCancellationPolicy(Long busId) {
 		log.debug("Running insert query for getCancellationPolicy {}", selectBusCancellationPolicyQuery);
-		
+
 		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { busId },
 				new BeanPropertyRowMapper<BusCancellationPolicies>(BusCancellationPolicies.class));
 	}
@@ -203,5 +221,54 @@ public class BusTripDao {
 		log.debug("Running delete query for deleteScheduleDeparture: {}", selectCustomerBookTicketQuery);
 		int i = jdbcTemplate.update("DELETE FROM schedule_departure " + "WHERE bus_id = ?", busId);
 		return i > 0 ? true : false;
+	}
+
+	/////////////////////////////
+
+	@Transactional(readOnly = true)
+	public BusDetails getBusDetailsByBusId(Long busId) {
+		log.debug("Running select query for getBusDetailsByBusId: {}", selectBusDetailsByBusId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("busId", busId);
+		List<BusDetails> busDetails = null;
+		busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,
+				new BeanPropertyRowMapper<BusDetails>(BusDetails.class));
+
+		return busDetails != null && !busDetails.isEmpty() ? busDetails.get(0) : new BusDetails();
+	}
+
+	@Transactional(readOnly = true)
+	public List<SeatDetails> getSeatDetailsByLayoutId(Long layoutId) {
+		log.debug("Running select query for getSeatDetailsByLayoutId: {}", selectSeatDetailsByLayoutId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("layoutId", layoutId);
+
+		return jdbcTemplateObject.query(selectSeatDetailsByLayoutId, parameters,
+				new BeanPropertyRowMapper<SeatDetails>(SeatDetails.class));
+	}
+
+	@Transactional(readOnly = true)
+	public List<TicketDetails> getTicketDetailsByScheduleAndBusId(Long scheduleId, Long busId) {
+		log.debug("Running select query for getTicketDetailsByScheduleAndBusId: {}",
+				selectTicketDetailsByScheduleAndBusId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("busId", busId);
+
+		return jdbcTemplateObject.query(selectTicketDetailsByScheduleAndBusId, parameters,
+				new BeanPropertyRowMapper<TicketDetails>(TicketDetails.class));
+	}
+
+	@Transactional(readOnly = true)
+	public List<RoutedCities> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
+			Integer destCitySequance) {
+		log.debug("Running select query for getTripCitiesBySrcDescCities: {}", selectTripCitiesBySrcDescCities);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("srcCitySequance", srcCitySequance);
+		parameters.addValue("destCitySequance", destCitySequance);
+
+		return jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
+				new BeanPropertyRowMapper<RoutedCities>(RoutedCities.class));
 	}
 }

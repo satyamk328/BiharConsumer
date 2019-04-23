@@ -21,7 +21,6 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusSchedu
 		List<BusScheduleDetails> busScheduleDetails = new ArrayList<>();
 		while (rs.next()) {
 			BusScheduleDetails busRoutDetails = new BusScheduleDetails();
-			busRoutDetails.setInclTaxes(true);
 			busRoutDetails.setClassType("Normal");
 			busRoutDetails.setScheduleId(rs.getLong("scheduleId"));
 			busRoutDetails.setBusId(rs.getLong("busId"));
@@ -30,7 +29,10 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusSchedu
 			busRoutDetails.setIsFixedFare(rs.getInt("isFixedFare"));
 			busRoutDetails.setSrcCity(rs.getString("srcCity"));
 			busRoutDetails.setDestCity(rs.getString("destCity"));
-			busRoutDetails.setDestCity(rs.getString("destCity"));
+			
+			busRoutDetails.setSrcCitySequance(rs.getInt("srcCitySequance"));
+			busRoutDetails.setDestCitySequance(rs.getInt("destCitySequance"));
+			
 			busRoutDetails.setSrcStops(rs.getString("srcStops"));
 			busRoutDetails.setDestStops(rs.getString("destStops"));
 

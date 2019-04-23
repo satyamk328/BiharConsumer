@@ -13,12 +13,17 @@ import com.digital.dao.BusTripDao;
 import com.digital.model.BusAmenity;
 import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
+import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatDetails;
+import com.digital.model.RoutedCities;
+import com.digital.model.SeatDetails;
+import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
+
 /**
  * @author Satyam Kumar
  *
@@ -28,50 +33,93 @@ public class BusTripService {
 
 	@Autowired
 	private BusTripDao busBookingDao;
-	
+
 	@Autowired
 	private AmenitiesDao amenitiesDao;
-	
+
 	@Autowired
 	private DataUtils dataUtils;
 
-	//@Cacheable("routesDetails")
 	public TripDetails searchBusScheduletDetails(Long srcCityId, Long destCityId, String date) {
 		TripDetails busDetailsObject = new TripDetails();
-		
-		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId, date);
-		
-		for(BusScheduleDetails route : busScheduleDetails) {
-			route.setBoardingLocations(route.getSrcStops() != null ? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSrcCity(), Arrays.asList(route.getSrcStops().split("::"))):new ArrayList<BusCityStopLocationsDetails>());
-			route.setDroppingLocations(route.getDestStops() != null ? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestCity(), Arrays.asList(route.getDestStops().split("::"))):new ArrayList<BusCityStopLocationsDetails>());
-		    route.setCancellationPolicy(route.getBusId() != null ?busBookingDao.getCancellationPolicy(route.getBusId()) : new ArrayList<BusCancellationPolicies>());
-		    route.setAmenities(route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId()) : new ArrayList<BusAmenity>());
+
+		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
+				date);
+
+		for (BusScheduleDetails route : busScheduleDetails) {
+			route.setBoardingLocations(route.getSrcStops() != null
+					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSrcCity(),
+							Arrays.asList(route.getSrcStops().split("::")))
+					: new ArrayList<BusCityStopLocationsDetails>());
+			route.setDroppingLocations(route.getDestStops() != null
+					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestCity(),
+							Arrays.asList(route.getDestStops().split("::")))
+					: new ArrayList<BusCityStopLocationsDetails>());
+			route.setCancellationPolicy(route.getBusId() != null ? busBookingDao.getCancellationPolicy(route.getBusId())
+					: new ArrayList<BusCancellationPolicies>());
+			route.setAmenities(route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId())
+					: new ArrayList<BusAmenity>());
+
+			route.setBusDetails(
+					route.getBusId() != null ? busBookingDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
+
+			// TODO validation of null data.
+			route.getBusDetails()
+					.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId()));
+
+			List<TicketDetails> ticketDetails = busBookingDao.getTicketDetailsByScheduleAndBusId(route.getScheduleId(),
+					route.getBusId());
+
+			// TODO null validations
+			// Calculate seat details
+			int bookedSeat = 0;
+			List<RoutedCities> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
+					route.getSrcCitySequance(), route.getDestCitySequance());
+			X: for (SeatDetails seat : route.getBusDetails().getSeatDetails()) {
+				for (TicketDetails ticketDetail : ticketDetails) {
+					if (seat.getSeatId() == ticketDetail.getSeatId()) {
+						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+						for (RoutedCities routedCity : routedCities) {
+							if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
+								seat.setIsBooked(1);
+								bookedSeat++;
+								continue X;
+							}
+						}
+					}
+				}
+			}
+			route.setTotalSeats(route.getBusDetails().getSeatDetails().size());
+			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);
 		}
-		
+
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
 		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);
 		busDetailsObject.setDepartureTimeList(timeList);
+
 		return busDetailsObject;
 	}
-	
+
 	@Cacheable("tripsDetails")
 	public BusSeatDetails getSeatAvailability(SearchTripVO tripVO) {
 		return null;
 		/*
-		BusSeatDetails availability = new BusSeatDetails();
-		availability.setBusSeatDetails(busBookingDao.getSeatsDetails(tripVO));
-		availability.setBoardingPoints(busBookingDao.getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[0]));
-		availability.setDroppingPoints(busBookingDao.getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[1]));
-		return availability;
-	*/}
-	
-	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO){
+		 * BusSeatDetails availability = new BusSeatDetails();
+		 * availability.setBusSeatDetails(busBookingDao.getSeatsDetails(tripVO));
+		 * availability.setBoardingPoints(busBookingDao.
+		 * getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[0]));
+		 * availability.setDroppingPoints(busBookingDao.
+		 * getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[1]));
+		 * return availability;
+		 */}
+
+	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
 		return busBookingDao.bookedBusTicket(busVO);
 	}
-	
-	public List<CustomerBusTicketVO> getHistoryBusTicket(String uid, int limit){
+
+	public List<CustomerBusTicketVO> getHistoryBusTicket(String uid, int limit) {
 		return busBookingDao.getHistoryBusTicket(uid, limit);
 	}
 
