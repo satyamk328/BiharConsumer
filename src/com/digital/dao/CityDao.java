@@ -15,10 +15,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusCancellationPolicies;
 import com.digital.model.City;
 import com.digital.model.CityStop;
-import com.digital.model.extrator.TopCityRowMapper;
+import com.digital.model.extrator.CityRowMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +54,7 @@ public class CityDao {
 	@Transactional(readOnly = true)
 	public List<City> getAllCities() {
 		log.debug("Running insert query for getAllStation {}", selectAllCityQuery);
-		return jdbcTemplateObject.query(selectAllCityQuery, new TopCityRowMapper());
+		return jdbcTemplateObject.query(selectAllCityQuery, new CityRowMapper());
 	}
 
 	@Transactional
@@ -63,7 +62,7 @@ public class CityDao {
 		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityName", cityName.toLowerCase());
-		return jdbcTemplateObject.query(selectSearchTopCityQuery, parameters, new TopCityRowMapper());
+		return jdbcTemplateObject.query(selectSearchTopCityQuery, parameters, new CityRowMapper());
 	}
 
 	@Transactional
@@ -71,7 +70,7 @@ public class CityDao {
 		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityByIdQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
-		return jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new TopCityRowMapper());
+		return jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new CityRowMapper());
 	}
 
 	@Transactional
@@ -124,6 +123,7 @@ public class CityDao {
 			}
 		});
 	}
+	
 	@Transactional
 	public long addCityStop(CityStop cityStop) {
 		log.debug("Running insert query for addCityStop {}", insertCityStopQuery);
@@ -132,6 +132,7 @@ public class CityDao {
 		jdbcTemplateObject.update(insertCityStopQuery, parameters, holder);
 		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
+	
 	@Transactional
 	public int deleteCityStop(Long cityId) {
 		log.debug("Running insert query for deleteCityStop {}", deleteCityStopQuery);

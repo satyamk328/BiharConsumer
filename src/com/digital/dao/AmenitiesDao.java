@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.model.BusAmenity;
-import com.digital.model.extrator.BusAmenitiesExtractor;
 import com.digital.model.vo.AmenitiesVo;
 
 import lombok.extern.slf4j.Slf4j;

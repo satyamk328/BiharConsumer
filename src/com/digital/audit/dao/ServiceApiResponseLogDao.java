@@ -19,7 +19,6 @@ public class ServiceApiResponseLogDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-
     @Value("${service_api_response_log.insert.entry}")
     private String insertApiAuditLogSql;
 

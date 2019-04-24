@@ -1,5 +1,7 @@
 package com.digital.audit.model;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +12,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServiceApiAuditLog {
-	private Long Id;
+	private Long logId;
 	private String apiName;
-	private java.util.Date startTime;
-	private java.util.Date endTime;
+	private Date startTime;
+	private Date endTime;
 	private Long durationMilliSeconds;
 	private String requestHttpMethod;
 	private String requestUrl;
@@ -22,5 +24,6 @@ public class ServiceApiAuditLog {
 	private String responseBody;
 	private String requestHeader;
 	private String responseHeader;
+	private String channelType;
 	
 }

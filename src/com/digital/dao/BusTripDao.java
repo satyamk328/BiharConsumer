@@ -5,11 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -193,29 +188,7 @@ public class BusTripDao {
 				new CustomerMapperExtrator());
 	}
 
-	public Map<String, String> scheduleDeparture(// BusDAO bus
-	) {
-		String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
-
-		return null;
-	}
-
-	public Map<String, String> editScheduleDeparture(// BusDAO busObj, BusDAO oldBusObj
-	) {
-		return null;
-	}
-
-	private List<String> getCityIds(String fromCity, String toCity) {
-		List<String> cityIds = new ArrayList<String>();
-		String queryForCityIds = "SELECT from_city_id, to_city_id FROM (SELECT cityid as from_city_id FROM top_cities WHERE cityname = ?) as fc, (SELECT cityid as to_city_id FROM top_cities WHERe cityname = ?) as tc";
-		SqlRowSet cityIdsRowSet = jdbcTemplate.queryForRowSet(queryForCityIds, fromCity, toCity);
-
-		while (cityIdsRowSet.next()) {
-			cityIds.add(cityIdsRowSet.getString("from_city_id"));
-			cityIds.add(cityIdsRowSet.getString("to_city_id"));
-		}
-		return cityIds;
-	}
+	
 
 	public boolean deleteScheduleDeparture(String busId) {
 		log.debug("Running delete query for deleteScheduleDeparture: {}", selectCustomerBookTicketQuery);

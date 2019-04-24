@@ -11,10 +11,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CentralizedLogs {
+	
+	private Long logId;
 	private String appName;
 	private String logLevel;
 	private Date logTimeStamp;
 	private String logMessage;
+	private String channelType;
 
 	@JsonDeserialize(using = DateTimeDeserializer.class)
 	public void setLogTimeStamp(final Date logTimeStamp) {

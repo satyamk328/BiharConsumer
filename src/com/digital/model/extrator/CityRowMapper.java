@@ -11,7 +11,7 @@ import com.digital.model.City;
  * @author Satyam Kumar
  *
  */
-public class TopCityRowMapper implements RowMapper<City> {
+public class CityRowMapper implements RowMapper<City> {
 
 	@Override
 	public City mapRow(ResultSet rs, int rowNum) throws SQLException {
