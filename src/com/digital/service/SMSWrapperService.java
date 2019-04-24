@@ -67,15 +67,15 @@ public class SMSWrapperService {
 				SMSResponse smsResponse = response.getBody();
 				return smsResponse;
 			} else {
-				log.error("Failed to fetch card record for PhoneNumber={} , Http Status={}", numbers,
+				log.error("Failed to sms service for PhoneNumber={} , Http Status={}", numbers,
 						response != null ? response.getStatusCode() : "ResponseIsNull");
-				dbLoggingHandler.logError("Failed to fetch card record for PhoneNumber=" + numbers + ", Http Status="
+				dbLoggingHandler.logError("Failed to sms service for PhoneNumber=" + numbers + ", Http Status="
 						+ (response != null ? response.getStatusCode() : "ResponseIsNull"));
 			}
 		} catch (Exception ex) {
-			log.error("Failed to get response while fetch card vault token for PhoneNumber={}, Exp Msg={}", numbers,
+			log.error("Failed to get response while sms service for PhoneNumber={}, Exp Msg={}", numbers,
 					ex.getMessage(), ex);
-			dbLoggingHandler.logError("Failed to get response while fetch card vault token for PhoneNumber=" + numbers
+			dbLoggingHandler.logError("Failed to get response while sms service for PhoneNumber=" + numbers
 					+ ", Exp Msg=" + ex.getMessage());
 		}
 		return null;
