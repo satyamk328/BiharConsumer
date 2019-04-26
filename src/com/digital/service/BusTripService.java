@@ -46,7 +46,7 @@ public class BusTripService {
 		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
 				date);
 
-		for (BusScheduleDetails route : busScheduleDetails) {
+		busScheduleDetails.forEach(route -> {
 			route.setBoardingLocations(route.getSrcStops() != null
 					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSrcCity(),
 							Arrays.asList(route.getSrcStops().split("::")))
@@ -91,7 +91,7 @@ public class BusTripService {
 			}
 			route.setTotalSeats(route.getBusDetails().getSeatDetails().size());
 			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);
-		}
+		});
 
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
 		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
