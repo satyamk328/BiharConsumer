@@ -26,15 +26,17 @@ import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
-import com.digital.model.RoutedCities;
+import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusInformationDetailsExtractor;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.extrator.CustomerMapperExtrator;
+import com.digital.model.vo.BookTicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
+import com.digital.model.vo.SeatDataToBook;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +79,12 @@ public class BusTripDao {
 
 	@Value("${select_TripCities_BySrcDescCities}")
 	private String selectTripCitiesBySrcDescCities;
+
+	@Value("${select_TripCitySequence_ByCityId}")
+	private String selectTripCitySequenceByCityId;
+
+	@Value("${insert_ticket_master}")
+	private String insertTicketMaster;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -151,6 +159,32 @@ public class BusTripDao {
 	}
 
 	@Transactional
+	public synchronized int bookTickets(BookTicketVO bookTicketVO) {
+
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
+		// TODO null validation
+		// TODO check if any sheet is already booked from list
+		for (SeatDataToBook seatData : bookTicketVO.getSeatDataToBook()) {
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
+			parameters.addValue("userId", bookTicketVO.getUserId());
+			parameters.addValue("busId", bookTicketVO.getBusId());
+			parameters.addValue("tripId", bookTicketVO.getTripId());
+			parameters.addValue("busType", bookTicketVO.getBusType());
+			parameters.addValue("isAc", bookTicketVO.getIsAC());
+			
+			parameters.addValue("seatType", seatData.getSeatType());
+			parameters.addValue("seatNumber", seatData.getSeatNumber());
+			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
+			parameters.addValue("totalFare", seatData.getTotalFare());
+			parameters.addValue("seatId", seatData.getSeatId());
+			jdbcTemplateObject.update(insertTicketMaster, parameters);
+		}
+		return 1;
+
+	}
+
+	@Transactional
 	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
 		log.debug("Running insert query for bookedBusTicket: {}", insertCustomerBookTicketQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
@@ -159,7 +193,7 @@ public class BusTripDao {
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				PreparedStatement ps = connection.prepareStatement(insertCustomerBookTicketQuery,
 						Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, busVO.getUserid());
+				ps.setString(1, busVO.getUserId());
 				ps.setString(2, busVO.getBusname());
 				ps.setString(3, busVO.getBusnumber());
 				ps.setString(4, busVO.getSeatnumber());
@@ -187,8 +221,6 @@ public class BusTripDao {
 		return jdbcTemplate.query(selectCustomerBookTicketQuery, new Object[] { uid.toLowerCase(), limit },
 				new CustomerMapperExtrator());
 	}
-
-	
 
 	public boolean deleteScheduleDeparture(String busId) {
 		log.debug("Running delete query for deleteScheduleDeparture: {}", selectCustomerBookTicketQuery);
@@ -233,7 +265,7 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<RoutedCities> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
+	public List<RoutedCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
 			Integer destCitySequance) {
 		log.debug("Running select query for getTripCitiesBySrcDescCities: {}", selectTripCitiesBySrcDescCities);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -242,6 +274,17 @@ public class BusTripDao {
 		parameters.addValue("destCitySequance", destCitySequance);
 
 		return jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
-				new BeanPropertyRowMapper<RoutedCities>(RoutedCities.class));
+				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
+	}
+
+	@Transactional(readOnly = true)
+	public List<RoutedCity> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
+		log.debug("Running select query for getTripCitiySequanceByCityId: {}", selectTripCitySequenceByCityId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("cityId", cityId);
+
+		return jdbcTemplateObject.query(selectTripCitySequenceByCityId, parameters,
+				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
 	}
 }

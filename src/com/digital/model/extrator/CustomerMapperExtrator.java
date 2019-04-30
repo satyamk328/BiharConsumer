@@ -20,7 +20,7 @@ public class CustomerMapperExtrator implements ResultSetExtractor<List<CustomerB
 		while (rs.next()) {
 			CustomerBusTicketVO customerBusTicketVO = new CustomerBusTicketVO();
 			customerBusTicketVO.setBookingid(rs.getString("bookingid"));
-			customerBusTicketVO.setUserid(rs.getString("userid"));
+			customerBusTicketVO.setUserId(rs.getString("userid"));
 			customerBusTicketVO.setBusname(rs.getString("busname"));
 			customerBusTicketVO.setBusnumber(rs.getString("busnumber"));
 			customerBusTicketVO.setSrccityname(rs.getString("srccityname"));

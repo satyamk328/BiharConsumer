@@ -29,8 +29,8 @@ public class BusScheduleDetails implements Serializable {
 	private Double seaterFare;
 	private String srcCity; 
 	private String destCity;
-	private int srcCitySequance;
-	private int destCitySequance;
+	private Integer srcCitySequance;
+	private Integer destCitySequance;
 	private String srcStops; 
 	private String destStops;
 	private String departureDate;

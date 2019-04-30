@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusSeatDetails;
 import com.digital.model.TripDetails;
+import com.digital.model.vo.BookTicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.service.BusTripService;
@@ -67,6 +68,20 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(busSeatDetailsAvailability, status), HttpStatus.OK);
 	}
 
+	
+	@PostMapping(value = "/bookTickets")
+	public ResponseEntity<RestResponse<Object>> bookTickets(
+			@RequestBody(required = true) BookTicketVO bookTicketVO) {
+		log.info("call search bookedBusTicket:{}", bookTicketVO);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
+		int bStatus = busService.bookTickets(bookTicketVO);
+		if (bStatus != 1) {
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are no seats available in this bus. Please select a different bus.");
+		}
+		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/bookedBusTicket")
 	public ResponseEntity<RestResponse<Object>> bookedBusTicket(
 			@RequestBody(required = true) CustomerBusTicketVO busTicketVO) {
