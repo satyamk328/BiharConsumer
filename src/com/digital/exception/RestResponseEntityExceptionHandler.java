@@ -33,9 +33,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.digital.audit.service.DBLoggingHandler;
-import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.user.service.MailService;
 import com.digital.utils.GlobalConstants;
 
 import lombok.extern.slf4j.Slf4j;

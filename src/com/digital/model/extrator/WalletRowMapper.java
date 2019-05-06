@@ -2,9 +2,10 @@ package com.digital.model.extrator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.springframework.jdbc.core.RowMapper;
 
-import com.digital.model.Wallet;
+import com.digital.user.model.Wallet;
 /**
  * @author Satyam Kumar
  *

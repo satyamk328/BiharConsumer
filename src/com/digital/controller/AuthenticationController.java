@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.Login;
-import com.digital.model.User;
-import com.digital.service.AuthenticationService;
-import com.digital.service.MailService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.user.model.Login;
+import com.digital.user.model.User;
+import com.digital.user.service.AuthenticationService;
+import com.digital.user.service.MailService;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;

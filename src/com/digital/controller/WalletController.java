@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.digital.model.Wallet;
-import com.digital.service.WalletService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.user.model.Wallet;
+import com.digital.user.service.WalletService;
 import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;

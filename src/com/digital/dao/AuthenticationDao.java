@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.enums.PrevilageType;
-import com.digital.model.Login;
-import com.digital.model.User;
-import com.digital.model.UserRole;
 import com.digital.model.extrator.UserRowMapper;
+import com.digital.user.model.Login;
+import com.digital.user.model.User;
+import com.digital.user.model.UserRole;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 
