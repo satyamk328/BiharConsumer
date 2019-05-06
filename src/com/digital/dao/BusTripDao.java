@@ -29,7 +29,6 @@ import com.digital.model.BusType;
 import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
-import com.digital.model.extrator.BusInformationDetailsExtractor;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.extrator.CustomerMapperExtrator;
@@ -141,12 +140,6 @@ public class BusTripDao {
 				new BeanPropertyRowMapper<BusCancellationPolicies>(BusCancellationPolicies.class));
 	}
 
-	@Transactional(readOnly = true)
-	public List<BusDetails> getBusDetails(String source, String destination) {
-		log.debug("Running insert query for getBusDetails {}", selectBusInfoQuery);
-		return jdbcTemplate.query(selectBusInfoQuery, new Object[] { "%" + source + "%", "%" + destination + "%" },
-				new BusInformationDetailsExtractor());
-	}
 
 	@Transactional(readOnly = true)
 	public List<BusSeatBookingDetails> getSeatsDetails(SearchTripVO tripVO) {

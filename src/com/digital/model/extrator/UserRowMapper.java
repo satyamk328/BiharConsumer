@@ -28,10 +28,10 @@ public class UserRowMapper implements RowMapper<User> {
 		user.setLock(rs.getBoolean("IsLock"));
 		user.setActive(rs.getBoolean("IsActive"));
 		user.setAttempt(rs.getInt("Attempt"));
-		/*user.setCreatedBy(rs.getString("CreatedBy"));
+		user.setCreatedBy(rs.getString("CreatedBy"));
 		user.setDateCreated(rs.getDate("DateCreated"));
 		user.setModifiedBy(rs.getString("ModifiedBy"));
-		user.setDateModified(rs.getDate("DateModified"));*/
+		user.setDateModified(rs.getDate("DateModified"));
 		return user;
 	}
 
