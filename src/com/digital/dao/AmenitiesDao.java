@@ -26,6 +26,8 @@ public class AmenitiesDao {
 	private String selectAllAminitiesQuery;
 	@Value("${select_filter_aminities}")
 	private String selectFilterAminitiesQuery;
+	@Value("${select_aminities_by_busid}")
+	private String selectAminitiesByBusIdQuery;
 	@Value("${insert_aminities_query}")
 	private String insertAmenitiesQuery;
 	@Value("${delete_aminities_query}")
@@ -56,6 +58,16 @@ public class AmenitiesDao {
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(amenitiesVo);
 		jdbcTemplateObject.update(insertAmenitiesQuery, parameters, holder);
 		return (holder.getKey() == null) ? null : holder.getKey().longValue();
+	}
+	
+	@Transactional(readOnly=true)
+	public List<BusAmenity> validateAmenityByIdandBusId(Long amenityId,Long busId) {
+		log.debug("Running select query for getAmenityByName {}", selectAminitiesByBusIdQuery);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("amenityId", amenityId);
+		parameters.addValue("busId", busId);
+		return jdbcTemplateObject.query(selectAminitiesByBusIdQuery, parameters,
+				new BeanPropertyRowMapper<BusAmenity>(BusAmenity.class));
 	}
 
 	@Transactional

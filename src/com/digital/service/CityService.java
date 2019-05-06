@@ -34,7 +34,7 @@ public class CityService {
 		return cityDao.getCityByName(cityName);
 	}
 
-	public long save(City city) {
+	public Long save(City city) {
 		log.info("call addStationName [{}]", city);
 		List<City> cities = cityDao.getCityByName(city.getDisplayName());
 		if (cities == null || cities.isEmpty()) {

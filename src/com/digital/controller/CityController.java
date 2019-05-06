@@ -67,7 +67,7 @@ public class CityController {
 	@PostMapping("/")
 	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required = true) City busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
-		long integer = cityService.save(busStop);
+		Long integer = cityService.save(busStop);
 		if (integer == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(integer, status), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -47,16 +47,23 @@ public class AmenityController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required=true) AmenitiesVo amenitiesVo) {
+	public ResponseEntity<RestResponse<Object>> addSearchStation(
+			@RequestBody(required = true) AmenitiesVo amenitiesVo) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Amenity Added Successfully");
-		Long row = amenityService.addAmenity(amenitiesVo);
-		if (row == null) {
+		Long row = null;
+		if (amenityService.validateAmenity(amenitiesVo.getAmenitiesId(), amenitiesVo.getBusId())) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
-			return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new RestResponse<>(false, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		} else {
+			row = amenityService.addAmenity(amenitiesVo);
+			if (row == null) {
+				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
+				return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 		return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{amenityId}/{busId}")
 	public ResponseEntity<RestResponse<Object>> deleteCity(
 			@PathVariable(name = "amenityId", required = true) Long amenityId,
