@@ -28,7 +28,7 @@ public class HttpAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         final PrintWriter writer = response.getWriter();
 
-        RestStatus status = new RestStatus<>(HttpStatus.UNAUTHORIZED.toString(),
+        RestStatus<?> status = new RestStatus<>(HttpStatus.UNAUTHORIZED.toString(),
 				"Your Session has expired. Please log in again");
         
         final RestResponse<String> responseObj = new RestResponse<String>(null,status);
