@@ -28,7 +28,7 @@ public class CityService {
 		return cityDao.getAllCities();
 	}
 
-	// @Cacheable(value="topAllCityByCity", key="#cityName")
+	@Cacheable(value = "topAllCityByCity", key = "#cityName")
 	public List<City> getCityByName(String cityName) {
 		log.info("call searchStationByStationName {}", cityName);
 		return cityDao.getCityByName(cityName);

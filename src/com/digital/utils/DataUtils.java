@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;

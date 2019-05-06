@@ -12,12 +12,12 @@ import lombok.Setter;
 public class RestResponse<T> {
     
     T data;
-    RestStatus status;
+    RestStatus<?> status;
 
 	public RestResponse() {
 	}
 
-    public RestResponse(final T data, final RestStatus status) {
+    public RestResponse(final T data, final RestStatus<?> status) {
         this.data = data;
         this.status = status;
     }
