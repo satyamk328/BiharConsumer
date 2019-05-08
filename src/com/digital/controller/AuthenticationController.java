@@ -63,7 +63,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/")
-	public ResponseEntity<RestResponse<Object>> registration(@RequestBody(required = true) User user) {
+	public ResponseEntity<RestResponse<Object>> addUser(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
 		if (authService.loginauthentication(user.getEmail()) != null) {

@@ -16,6 +16,7 @@ public class User extends BaseModel implements Serializable {
 
 	private static final long serialVersionUID = 8773592091012906066L;
 	private Long userId;
+	private Long roleId;
 	private String name;
 	private String email;
 	private String address;
