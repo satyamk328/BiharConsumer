@@ -85,18 +85,10 @@ public class AuthenticationDao {
 	public Long addUser(User user) {
 		log.debug("Running insert query for addUser {}", insertUserDetailQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
+		user.setRoleId(3L);
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(user);
 		jdbcTemplateObject.update(insertUserDetailQuery, parameters, holder);
 		Long userId = (holder.getKey() == null) ? null : holder.getKey().longValue();
-		
-		UserRole role = new UserRole();
-		role.setRoleName(PrevilageType.CUSTOMER.name());
-		role.setUserId(userId);
-		
-		BeanPropertySqlParameterSource parameters1 = new BeanPropertySqlParameterSource(role);
-		log.debug("Running insert query for addUser {}", insertUserModuleQuery);
-		KeyHolder holder1 = new GeneratedKeyHolder();
-		jdbcTemplateObject.update(insertUserModuleQuery, parameters1, holder1);
 		return userId;
 	}
 
