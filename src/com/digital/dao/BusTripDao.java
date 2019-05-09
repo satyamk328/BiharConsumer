@@ -50,6 +50,10 @@ public class BusTripDao {
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
+	
+	@Value("${select_TripBy_SchId_BusId_SrcCtyId_DescCtyId}")
+	private String selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId;
+	
 	@Value("${select_boadingstopping_details}")
 	private String selectBoadingStoppingDetailQuery;
 	@Value("${select_bustype}")
@@ -108,6 +112,21 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
+	public BusScheduleDetails scheduledBusDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("busId", busId);
+		parameters.addValue("srcCityId", srcCityId);
+		parameters.addValue("destCityId", destCityId);
+
+		List<BusScheduleDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId, parameters,
+				new BusTripDetailsExtrator());
+
+		return list != null && !list.isEmpty() ? list.get(0) : null;
+	}
+
+	@Transactional(readOnly = true)
 	public List<BusCityStopLocationsDetails> getBusBoadingAndStopingPointDetails(String cityId,
 			List<String> cityStopIds) {
 		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
@@ -140,7 +159,6 @@ public class BusTripDao {
 				new BeanPropertyRowMapper<BusCancellationPolicies>(BusCancellationPolicies.class));
 	}
 
-
 	@Transactional(readOnly = true)
 	public List<BusSeatBookingDetails> getSeatsDetails(SearchTripVO tripVO) {
 		log.debug("Running select query for getSeatsDetails: {}", selectBusSeatDetailsQuery);
@@ -165,7 +183,7 @@ public class BusTripDao {
 			parameters.addValue("tripId", bookTicketVO.getTripId());
 			parameters.addValue("busType", bookTicketVO.getBusType());
 			parameters.addValue("isAc", bookTicketVO.getIsAC());
-			
+
 			parameters.addValue("seatType", seatData.getSeatType());
 			parameters.addValue("seatNumber", seatData.getSeatNumber());
 			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());

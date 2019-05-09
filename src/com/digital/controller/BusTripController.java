@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.BookTicketVO;
@@ -48,8 +49,23 @@ public class BusTripController {
 			@PathVariable(name = "date", required = true) String date) {
 		log.info("call search searchBusScheduletDetails:{},{},{}", srcCityId, destCityId, date);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		TripDetails tripDetails = busService.searchBusScheduletDetails(srcCityId, destCityId, date);
+		TripDetails tripDetails = busService.searchBusScheduleDetails(srcCityId, destCityId, date);
 		if (tripDetails.getAvailableRoutes().isEmpty())
+			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
+					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
+		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/route/{scheduleId}/{busId}/{source}/{destination}")
+	public ResponseEntity<RestResponse<BusScheduleDetails>> scheduledBusSheetDetails(
+			@PathVariable(name = "scheduleId", required = true) Long scheduleId,
+			@PathVariable(name = "busId", required = true) Long busId,
+			@PathVariable(name = "source", required = true) Long srcCityId,
+			@PathVariable(name = "destination", required = true) Long destCityId) {
+		log.info("call search busSheetDetails:{},{},{},{}", scheduleId, busId, srcCityId, destCityId);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
+		BusScheduleDetails tripDetails = busService.scheduledBusSheetDetails(scheduleId, busId, srcCityId, destCityId);
+		if (tripDetails == null)
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
 		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
@@ -68,10 +84,8 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(busSeatDetailsAvailability, status), HttpStatus.OK);
 	}
 
-	
 	@PostMapping(value = "/bookTickets")
-	public ResponseEntity<RestResponse<Object>> bookTickets(
-			@RequestBody(required = true) BookTicketVO bookTicketVO) {
+	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) BookTicketVO bookTicketVO) {
 		log.info("call search bookedBusTicket:{}", bookTicketVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
 		int bStatus = busService.bookTickets(bookTicketVO);
@@ -81,7 +95,7 @@ public class BusTripController {
 		}
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/bookedBusTicket")
 	public ResponseEntity<RestResponse<Object>> bookedBusTicket(
 			@RequestBody(required = true) CustomerBusTicketVO busTicketVO) {
@@ -107,7 +121,6 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVOs, status), HttpStatus.OK);
 	}
 
-	
 	@PostMapping(value = "/scheduleDeparture")
 	public ResponseEntity<RestResponse<Map<String, String>>> scheduleDeparture(@RequestBody Object bus) {
 

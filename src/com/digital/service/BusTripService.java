@@ -41,7 +41,7 @@ public class BusTripService {
 	@Autowired
 	private DataUtils dataUtils;
 
-	public TripDetails searchBusScheduletDetails(Long srcCityId, Long destCityId, String date) {
+	public TripDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
 		TripDetails busDetailsObject = new TripDetails();
 
 		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
@@ -52,19 +52,22 @@ public class BusTripService {
 					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSrcCity(),
 							Arrays.asList(route.getSrcStops().split("::")))
 					: new ArrayList<BusCityStopLocationsDetails>());
+
 			route.setDroppingLocations(route.getDestStops() != null
 					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestCity(),
 							Arrays.asList(route.getDestStops().split("::")))
 					: new ArrayList<BusCityStopLocationsDetails>());
+
 			route.setCancellationPolicy(route.getBusId() != null ? busBookingDao.getCancellationPolicy(route.getBusId())
 					: new ArrayList<BusCancellationPolicies>());
+
 			route.setAmenities(route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId())
 					: new ArrayList<BusAmenity>());
 
 			route.setBusDetails(
 					route.getBusId() != null ? busBookingDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
 
-			// TODO validation of null data.
+			/////////////////////////////////
 			route.getBusDetails()
 					.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId()));
 
@@ -93,7 +96,7 @@ public class BusTripService {
 			route.setTotalSeats(route.getBusDetails().getSeatDetails().size());
 			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);
 		});
-
+		///////////////////////////////
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
 		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
@@ -101,6 +104,63 @@ public class BusTripService {
 		busDetailsObject.setDepartureTimeList(timeList);
 
 		return busDetailsObject;
+	}
+
+	public BusScheduleDetails scheduledBusSheetDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
+
+		// TODO DB Query also
+		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(scheduleId, busId, srcCityId, destCityId);
+
+		busDetails.setBoardingLocations(busDetails.getSrcStops() != null
+				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getSrcCity(),
+						Arrays.asList(busDetails.getSrcStops().split("::")))
+				: new ArrayList<BusCityStopLocationsDetails>());
+
+		busDetails.setDroppingLocations(busDetails.getDestStops() != null
+				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getDestCity(),
+						Arrays.asList(busDetails.getDestStops().split("::")))
+				: new ArrayList<BusCityStopLocationsDetails>());
+
+		busDetails.setCancellationPolicy(
+				busDetails.getBusId() != null ? busBookingDao.getCancellationPolicy(busDetails.getBusId())
+						: new ArrayList<BusCancellationPolicies>());
+
+		busDetails.setAmenities(busDetails.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(busDetails.getBusId())
+				: new ArrayList<BusAmenity>());
+
+		busDetails
+				.setBusDetails(busDetails.getBusId() != null ? busBookingDao.getBusDetailsByBusId(busDetails.getBusId())
+						: new BusDetails());
+		// TODO validation of null data.
+		busDetails.getBusDetails()
+				.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId()));
+
+		List<TicketDetails> ticketDetails = busBookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
+				busDetails.getBusId());
+
+		// TODO null validations
+		// Calculate seat details
+		int bookedSeat = 0;
+		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
+				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
+		X: for (SeatDetails seat : busDetails.getBusDetails().getSeatDetails()) {
+			for (TicketDetails ticketDetail : ticketDetails) {
+				if (seat.getSeatId() == ticketDetail.getSeatId()) {
+					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+					for (RoutedCity routedCity : routedCities) {
+						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
+							seat.setIsBooked(1);
+							bookedSeat++;
+							continue X;
+						}
+					}
+				}
+			}
+		}
+		busDetails.setTotalSeats(busDetails.getBusDetails().getSeatDetails().size());
+		busDetails.setAvailableSeats(busDetails.getBusDetails().getSeatDetails().size() - bookedSeat);
+
+		return busDetails;
 	}
 
 	@Cacheable("tripsDetails")
@@ -119,23 +179,23 @@ public class BusTripService {
 	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
 		return busBookingDao.bookedBusTicket(busVO);
 	}
-	
+
 	public int bookTickets(BookTicketVO bookTicketVO) {
-		//Logic to generate tripId
+		// Logic to generate tripId
 		List<RoutedCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getSrcCityId());
 		List<RoutedCity> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getDestCityId());
 		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
 				srcCitySeq.get(0).getCitySequance(), destCitySeq.get(0).getCitySequance());
-		
+
 		String tripId = "";
-		for(RoutedCity routedCity: routedCities) {
+		for (RoutedCity routedCity : routedCities) {
 			tripId = tripId + routedCity.getCityId() + "::";
 		}
-		tripId = tripId.substring(0, tripId.length()-2);
+		tripId = tripId.substring(0, tripId.length() - 2);
 		bookTicketVO.setTripId(tripId);
-		
+
 		return busBookingDao.bookTickets(bookTicketVO);
 	}
 
