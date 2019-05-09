@@ -38,9 +38,6 @@ public class AuthenticationDao {
 	@Value("${insert_user_detail}")
 	private String insertUserDetailQuery;
 	
-	@Value("${insert_user_module}")
-	private String insertUserModuleQuery;
-	
 	@Value("${insert_user_login_detail}")
 	private String insertUserLoginQuery;
 	
