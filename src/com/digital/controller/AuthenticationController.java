@@ -106,9 +106,9 @@ public class AuthenticationController {
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/changePassword")
+	@GetMapping(value = "/changePassword/{userId}")
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
-			@RequestParam(name = "userId", required = true) Long userId) {
+			@PathVariable(name = "userId", required = true) Long userId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
 		User user = authService.getUserDetailById(userId);
 		if (user == null) {

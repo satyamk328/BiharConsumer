@@ -32,6 +32,6 @@ public class CommonUtil {
 
 	
 	public static void main(String[] args) throws Exception {
-		// System.out.println(encrypt("123"));
+		System.out.println(encrypt("123"));
 	}
 }

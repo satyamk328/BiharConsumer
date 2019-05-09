@@ -29,7 +29,7 @@ public class AmenitiesDao {
 	@Value("${select_aminities_by_busid}")
 	private String selectAminitiesByBusIdQuery;
 	@Value("${insert_aminities_query}")
-	private String insertAmenitiesQuery;
+	private String insertAmenitiesMappingQuery;
 	@Value("${delete_aminities_query}")
 	private String deleteAmenitiesQuery;
 
@@ -53,10 +53,10 @@ public class AmenitiesDao {
 
 	@Transactional
 	public long addAmenities(AmenitiesVo amenitiesVo) {
-		log.debug("Running insert query for addAmenities {}", insertAmenitiesQuery);
+		log.debug("Running insert query for addAmenities {}", insertAmenitiesMappingQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(amenitiesVo);
-		jdbcTemplateObject.update(insertAmenitiesQuery, parameters, holder);
+		jdbcTemplateObject.update(insertAmenitiesMappingQuery, parameters, holder);
 		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
 	
