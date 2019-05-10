@@ -1,7 +1,6 @@
 package com.digital.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,18 +9,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusScheduleDetails;
-import com.digital.model.BusSeatDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.BookTicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
-import com.digital.model.vo.SearchTripVO;
 import com.digital.service.BusTripService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
@@ -56,7 +52,7 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/route/{scheduleId}/{busId}/{source}/{destination}")
+	@GetMapping(value = "/trip/{scheduleId}/{busId}/{source}/{destination}")
 	public ResponseEntity<RestResponse<BusScheduleDetails>> scheduledBusSheetDetails(
 			@PathVariable(name = "scheduleId", required = true) Long scheduleId,
 			@PathVariable(name = "busId", required = true) Long busId,
@@ -69,19 +65,6 @@ public class BusTripController {
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
 		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
-	}
-
-	@PostMapping(value = "/trip")
-	public ResponseEntity<RestResponse<BusSeatDetails>> getSeatAvailability(
-			@RequestBody(required = true) SearchTripVO tripVO) {
-		log.info("call search getSeatAvailability:{} ", tripVO);
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		BusSeatDetails busSeatDetailsAvailability = busService.getSeatAvailability(tripVO);
-		if (busSeatDetailsAvailability.getBusSeatDetails() == null) {
-			status = new RestStatus<>(HttpStatus.OK.toString(),
-					"There are no seats available in this bus. Please select a different bus.");
-		}
-		return new ResponseEntity<>(new RestResponse<>(busSeatDetailsAvailability, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/bookTickets")
@@ -119,23 +102,6 @@ public class BusTripController {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no seats available in this bus. Please select a different bus.");
 		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVOs, status), HttpStatus.OK);
-	}
-
-	@PostMapping(value = "/scheduleDeparture")
-	public ResponseEntity<RestResponse<Map<String, String>>> scheduleDeparture(@RequestBody Object bus) {
-
-		// Map<String, String> statusMsg = BusControllerRepo.scheduleDeparture(bus);
-		return null;
-	}
-
-	@PutMapping(value = "/editScheduleDeparture")
-	public ResponseEntity<RestResponse<Boolean>> editScheduleDeparture(@RequestBody Map<String, Object> mapBusObj) {
-
-		// BusDAO busObj = mapBusObj.get("busObj");
-		// BusDAO oldBusObj = mapBusObj.get("oldBusObj");
-		// Map<String, String> statusMsg =
-		// BusControllerRepo.editScheduleDeparture(busObj, oldBusObj);
-		return null;
 	}
 
 	@DeleteMapping(value = "/deleteScheduleDeparture/{busId}")

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
@@ -15,14 +14,12 @@ import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
-import com.digital.model.BusSeatDetails;
 import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.BookTicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
-import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
 
 /**
@@ -163,18 +160,6 @@ public class BusTripService {
 		return busDetails;
 	}
 
-	@Cacheable("tripsDetails")
-	public BusSeatDetails getSeatAvailability(SearchTripVO tripVO) {
-		return null;
-		/*
-		 * BusSeatDetails availability = new BusSeatDetails();
-		 * availability.setBusSeatDetails(busBookingDao.getSeatsDetails(tripVO));
-		 * availability.setBoardingPoints(busBookingDao.
-		 * getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[0]));
-		 * availability.setDroppingPoints(busBookingDao.
-		 * getBusBoadingAndStopingPointDetails(tripVO.getTripId().split("::")[1]));
-		 * return availability;
-		 */}
 
 	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
 		return busBookingDao.bookedBusTicket(busVO);
