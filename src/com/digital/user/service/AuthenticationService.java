@@ -66,8 +66,8 @@ public class AuthenticationService {
 	}
 
 	
-	public void addLoginDetail(Login login) {
-		authenticationDao.auditing(login);
+	public Long addLoginDetail(Login login) {
+		return authenticationDao.auditing(login);
 	}
 
 	public int logOut(Long userId, String ip) {
