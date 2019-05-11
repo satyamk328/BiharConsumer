@@ -18,6 +18,7 @@ public class BusCityStopLocationsDetails implements Serializable {
 	private String locationName;
 	private String locationAddress;
 	private String landMark;
+	private String contactNumber;
 	private double lat;
 	private double lng;
 }

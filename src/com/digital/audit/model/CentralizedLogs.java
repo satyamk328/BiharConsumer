@@ -1,5 +1,6 @@
 package com.digital.audit.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.digital.utils.DateTimeDeserializer;
@@ -10,8 +11,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CentralizedLogs {
+public class CentralizedLogs implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private Long logId;
 	private String appName;
 	private String logLevel;

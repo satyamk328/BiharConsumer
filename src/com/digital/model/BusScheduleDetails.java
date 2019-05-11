@@ -15,13 +15,19 @@ import lombok.Setter;
 public class BusScheduleDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private List<BusCityStopLocationsDetails> boardingLocations = new ArrayList<>();
+	private List<BusCityStopLocationsDetails> droppingLocations = new ArrayList<>();
+	private List<BusCancellationPolicies> cancellationPolicy = new ArrayList<>();
+	private List<BusAmenity> amenities = new ArrayList<>();
+	private BusDetails busDetails;
+	private List<Double> fares;
+	
 	private boolean idProofRequired = false;
 	private boolean isAc = false;
 		
 	private boolean isRefundable= false;
 	private double totalSeats;
 	private double availableSeats;
-	
 	
 	private Long scheduleId;
 	private Long busId;
@@ -39,14 +45,8 @@ public class BusScheduleDetails implements Serializable {
 	private String arrivalTime;
 	private int isFixedFare;
 	
-	private BusDetails busDetails;
-	private List<BusCityStopLocationsDetails> boardingLocations = new ArrayList<>();
-	private List<BusCityStopLocationsDetails> droppingLocations = new ArrayList<>();
-	private List<BusCancellationPolicies> cancellationPolicy = new ArrayList<>();
-	private List<BusAmenity> amenities = new ArrayList<>();
-	
-	private BusRating busRating;
-	private BusType busType;
+	private Double rating = 2.5;
+	private String busType;
 	private String classType;
 	private double duration;
 	private int travelDurationDays = 1;

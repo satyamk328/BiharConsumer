@@ -250,7 +250,7 @@ public class BusTripDao {
 		busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,
 				new BeanPropertyRowMapper<BusDetails>(BusDetails.class));
 
-		return busDetails != null && !busDetails.isEmpty() ? busDetails.get(0) : new BusDetails();
+		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusDetails();
 	}
 
 	@Transactional(readOnly = true)

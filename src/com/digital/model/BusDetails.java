@@ -26,8 +26,6 @@ public class BusDetails implements Serializable{
 	private Double totalSeats;
 	private int isAc;
 	
-	
-	
 	private String layout;
 	private String busType;
 	private String layOutDescription;

@@ -84,7 +84,7 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/{stationName}")
+	@GetMapping("/search/{stationName}")
 	public ResponseEntity<RestResponse<List<City>>> searchStation(
 			@PathVariable(name = "stationName", required = true) String stationName) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");

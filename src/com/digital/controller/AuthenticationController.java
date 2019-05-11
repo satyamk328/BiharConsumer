@@ -84,9 +84,10 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/serviceLoginAuth")
-	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestBody(required = true) User user) {
+	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestParam(name = "userName", required = true) String userName,
+			@RequestParam(name = "password", required = true) String password) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
-		user = authService.loginauthentication(user.getEmail());
+		User user = authService.loginauthentication(userName);
 		if (user == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,7 +97,7 @@ public class AuthenticationController {
 					"Your account has been lock. Please contact system administrator!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if (!user.getPassword().equals(CommonUtil.encrypt(user.getPassword()))) {
+		if (!user.getPassword().equals(CommonUtil.encrypt(password))) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
