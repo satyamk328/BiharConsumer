@@ -57,7 +57,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	protected ResponseEntity<Object> handleEntityNotFound(javax.persistence.EntityNotFoundException ex) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.NOT_FOUND.value()), ex.getLocalizedMessage()));
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -68,7 +68,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		if (ex.getCause() instanceof ConstraintViolationException) {
 			RestResponse<String> response = new RestResponse<>(null,
 					new RestStatus<>(String.valueOf(HttpStatus.CONFLICT.value()), "Database error"));
@@ -83,7 +83,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	protected ResponseEntity<Object> mailException(MailException ex, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +93,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replace("EEROR_VALUES", ex.toString()));
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
 						"Internal Server Error while performing Operation"));
@@ -105,7 +105,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
@@ -116,7 +116,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		StringBuilder builder = new StringBuilder();
 		builder.append(ex.getContentType());
 		builder.append(" media type is not supported. Supported media types are ");
@@ -132,7 +132,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -143,7 +143,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -154,7 +154,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		String error = ex.getParameterName() + " parameter is missing";
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), error));
@@ -166,7 +166,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -177,7 +177,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -188,7 +188,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
 						String.format("The parameter '%s' of value '%s' could not be converted to type '%s'",
@@ -201,7 +201,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		String error = "Unable to parse JSON request";
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), error));
@@ -213,7 +213,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		String error = "Error writing JSON output";
 		RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), error));
@@ -225,7 +225,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		List<String> errors = new ArrayList<>();
 		for (FieldError error : ex.getBindingResult().getFieldErrors()) {
 			errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -244,7 +244,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -255,7 +255,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -266,7 +266,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpStatus status, WebRequest request) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.NOT_FOUND.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -277,7 +277,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest webRequest) {
 		log.error(ex.getMessage());
 		loggingHandler.handleException(ex);
-		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.getMessage()));
+		emailService.sendEmail(GlobalConstants.ERROR_HEADER, GlobalConstants.ERROR_EMAIL, GlobalConstants.ERROR_BODY.replaceAll("EEROR_VALUES", ex.toString()));
 		final RestResponse<String> response = new RestResponse<>(null,
 				new RestStatus<>(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
