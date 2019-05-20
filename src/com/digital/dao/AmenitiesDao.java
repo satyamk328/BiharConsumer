@@ -52,7 +52,7 @@ public class AmenitiesDao {
 	}
 
 	@Transactional
-	public long addAmenities(AmenitiesVo amenitiesVo) {
+	public long mapAmenity(AmenitiesVo amenitiesVo) {
 		log.debug("Running insert query for addAmenities {}", insertAmenitiesMappingQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(amenitiesVo);
@@ -71,7 +71,7 @@ public class AmenitiesDao {
 	}
 
 	@Transactional
-	public int deleteAmenities(Long amenityId, Long busId) {
+	public int deleteMappingAmenity(Long amenityId, Long busId) {
 		log.debug("Running insert query for deleteCity {}", deleteAmenitiesQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("amenityId", amenityId);

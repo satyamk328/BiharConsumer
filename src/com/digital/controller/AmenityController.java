@@ -39,7 +39,7 @@ public class AmenityController {
 	}
 
 	@GetMapping("/{busId}")
-	public ResponseEntity<RestResponse<List<BusAmenity>>> searchStation(
+	public ResponseEntity<RestResponse<List<BusAmenity>>> getAmenityByBusId(
 			@PathVariable(name = "busId", required = true) Long busId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<BusAmenity> busAmenities = amenityService.getAmenityByBusId(busId);
@@ -47,7 +47,7 @@ public class AmenityController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<RestResponse<Object>> addSearchStation(
+	public ResponseEntity<RestResponse<Object>> mapAmenity(
 			@RequestBody(required = true) AmenitiesVo amenitiesVo) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Amenity Added Successfully");
 		Long row = null;
@@ -55,7 +55,7 @@ public class AmenityController {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(false, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
-			row = amenityService.addAmenity(amenitiesVo);
+			row = amenityService.mapAmenity(amenitiesVo);
 			if (row == null) {
 				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 				return new ResponseEntity<>(new RestResponse<>(row, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,11 +65,11 @@ public class AmenityController {
 	}
 
 	@DeleteMapping("/{amenityId}/{busId}")
-	public ResponseEntity<RestResponse<Object>> deleteCity(
+	public ResponseEntity<RestResponse<Object>> deleteMappingAmenity(
 			@PathVariable(name = "amenityId", required = true) Long amenityId,
 			@PathVariable(name = "busId", required = true) Long busId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Records deleted Successfully");
-		int delete = amenityService.deleteAmenity(amenityId, busId);
+		int delete = amenityService.deleteMappingAmenity(amenityId, busId);
 		return new ResponseEntity<>(new RestResponse<>(delete, status), HttpStatus.OK);
 	}
 
