@@ -39,8 +39,10 @@ public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationService authService;
+
 	@Autowired
 	private MailService emailService;
+
 	@Autowired
 	private DataUtils dataUtils;
 
@@ -84,7 +86,8 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(value = "/serviceLoginAuth")
-	public ResponseEntity<RestResponse<Object>> loginAuthentication(@RequestParam(name = "userName", required = true) String userName,
+	public ResponseEntity<RestResponse<Object>> loginAuthentication(
+			@RequestParam(name = "userName", required = true) String userName,
 			@RequestParam(name = "password", required = true) String password) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
 		User user = authService.loginauthentication(userName);
