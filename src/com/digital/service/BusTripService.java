@@ -46,12 +46,12 @@ public class BusTripService {
 
 		busScheduleDetails.forEach(route -> {
 			route.setBoardingLocations(route.getSrcStops() != null
-					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSrcCity(),
+					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSourceId(),
 							Arrays.asList(route.getSrcStops().split("::")))
 					: new ArrayList<BusCityStopLocationsDetails>());
 
 			route.setDroppingLocations(route.getDestStops() != null
-					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestCity(),
+					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestinationId(),
 							Arrays.asList(route.getDestStops().split("::")))
 					: new ArrayList<BusCityStopLocationsDetails>());
 
@@ -109,12 +109,12 @@ public class BusTripService {
 		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(scheduleId, busId, srcCityId, destCityId);
 
 		busDetails.setBoardingLocations(busDetails.getSrcStops() != null
-				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getSrcCity(),
+				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getSourceId(),
 						Arrays.asList(busDetails.getSrcStops().split("::")))
 				: new ArrayList<BusCityStopLocationsDetails>());
 
 		busDetails.setDroppingLocations(busDetails.getDestStops() != null
-				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getDestCity(),
+				? busBookingDao.getBusBoadingAndStopingPointDetails(busDetails.getDestinationId(),
 						Arrays.asList(busDetails.getDestStops().split("::")))
 				: new ArrayList<BusCityStopLocationsDetails>());
 

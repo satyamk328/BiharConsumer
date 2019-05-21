@@ -23,8 +23,10 @@ public class BusScheduleDetails implements Serializable {
 	private BusDetails busDetails;
 	private List<Double> fares;
 	
-	private boolean idProofRequired = false;
-	private boolean isAc = false;
+	private Boolean idProofRequired = false;
+	private Boolean isAc = false;
+	private Boolean isSeater;
+	private Boolean isSleeper;
 		
 	private boolean isRefundable= false;
 	private double totalSeats;
@@ -34,8 +36,10 @@ public class BusScheduleDetails implements Serializable {
 	private Long busId;
 	private Double sleeperFare;
 	private Double seaterFare;
-	private String srcCity; 
-	private String destCity;
+	private String srcCityName; 
+	private String destCityName;
+	private String destinationId;
+	private String sourceId;
 	private Integer srcCitySequance;
 	private Integer destCitySequance;
 	private String srcStops; 
@@ -49,6 +53,7 @@ public class BusScheduleDetails implements Serializable {
 	private Double rating = 2.5;
 	private String busType;
 	private String classType;
+	private String seatType;
 	private double duration;
 	private int travelDurationDays = 1;
 	

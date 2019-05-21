@@ -27,8 +27,8 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusSchedu
 			busRoutDetails.setSleeperFare(rs.getDouble("sleeperFare"));
 			busRoutDetails.setSeaterFare(rs.getDouble("seaterFare"));
 			busRoutDetails.setIsFixedFare(rs.getInt("isFixedFare"));
-			busRoutDetails.setSrcCity(rs.getString("srcCity"));
-			busRoutDetails.setDestCity(rs.getString("destCity"));
+			busRoutDetails.setSourceId(rs.getString("srcCity"));
+			busRoutDetails.setDestinationId(rs.getString("destCity"));
 			
 			busRoutDetails.setSrcCitySequance(rs.getInt("srcCitySequance"));
 			busRoutDetails.setDestCitySequance(rs.getInt("destCitySequance"));

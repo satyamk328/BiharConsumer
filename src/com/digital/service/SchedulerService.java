@@ -28,7 +28,7 @@ public class SchedulerService {
 	@Value("${backup.driver.path}")
 	private String backUpDrirectory;
 
-	@Scheduled(fixedRate = 10000) // for every 5 second
+	@Scheduled(fixedRate = 10000*60) // for every 1 Hrs
 	public void run2() {
 		Backupdbtosql();
 		System.out.println("I am called by Spring scheduler " + new Date());
