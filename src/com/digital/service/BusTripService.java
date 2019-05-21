@@ -18,7 +18,7 @@ import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
-import com.digital.model.vo.BookTicketVO;
+import com.digital.model.vo.TicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.utils.DataUtils;
 
@@ -165,7 +165,7 @@ public class BusTripService {
 		return busBookingDao.bookedBusTicket(busVO);
 	}
 
-	public int bookTickets(BookTicketVO bookTicketVO) {
+	public int bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId
 		List<RoutedCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getSrcCityId());
@@ -182,6 +182,10 @@ public class BusTripService {
 		bookTicketVO.setTripId(tripId);
 
 		return busBookingDao.bookTickets(bookTicketVO);
+	}
+	
+	public int cancelTickets(TicketVO bookTicketVO) {
+		return busBookingDao.cancelTickets(bookTicketVO);
 	}
 
 	public List<CustomerBusTicketVO> getHistoryBusTicket(String uid, int limit) {

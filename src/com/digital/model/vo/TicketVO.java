@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class BookTicketVO {
+public class TicketVO {
 
 	private Long scheduleId;
 	private Long userId;
@@ -26,5 +26,5 @@ public class BookTicketVO {
 	private Integer isAC;
 	
 	
-	private List<SeatDataToBook> seatDataToBook;
+	private List<SeatDataToOperate> seatDataToOperate;
 }

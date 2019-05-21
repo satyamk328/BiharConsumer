@@ -32,10 +32,10 @@ import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.extrator.CustomerMapperExtrator;
-import com.digital.model.vo.BookTicketVO;
+import com.digital.model.vo.TicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
-import com.digital.model.vo.SeatDataToBook;
+import com.digital.model.vo.SeatDataToOperate;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,10 +50,10 @@ public class BusTripDao {
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
-	
+
 	@Value("${select_TripBy_SchId_BusId_SrcCtyId_DescCtyId}")
 	private String selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId;
-	
+
 	@Value("${select_boadingstopping_details}")
 	private String selectBoadingStoppingDetailQuery;
 	@Value("${select_bustype}")
@@ -89,6 +89,13 @@ public class BusTripDao {
 	@Value("${insert_ticket_master}")
 	private String insertTicketMaster;
 
+	/////////////
+	@Value("${insert_cancel_ticket_master_from_ticket_master}")
+	private String insertCancelTicketMasterFromTicketMaster;
+
+	@Value("${delete_ticket_master_by_scheduleId_busId_seatId}")
+	private String deleteTicketMasterByScheduleIdBusIdSeatId;
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -113,15 +120,16 @@ public class BusTripDao {
 
 	@Transactional(readOnly = true)
 	public BusScheduleDetails scheduledBusDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
-		log.debug("Running select query for searchTripBySrcDescAndDate: {}", selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId);
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}",
+				selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
 		parameters.addValue("busId", busId);
 		parameters.addValue("srcCityId", srcCityId);
 		parameters.addValue("destCityId", destCityId);
 
-		List<BusScheduleDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId, parameters,
-				new BusTripDetailsExtrator());
+		List<BusScheduleDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId,
+				parameters, new BusTripDetailsExtrator());
 
 		return list != null && !list.isEmpty() ? list.get(0) : null;
 	}
@@ -170,12 +178,12 @@ public class BusTripDao {
 	}
 
 	@Transactional
-	public synchronized int bookTickets(BookTicketVO bookTicketVO) {
+	public synchronized int bookTickets(TicketVO bookTicketVO) {
 
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
 		// TODO null validation
 		// TODO check if any sheet is already booked from list
-		for (SeatDataToBook seatData : bookTicketVO.getSeatDataToBook()) {
+		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
 			MapSqlParameterSource parameters = new MapSqlParameterSource();
 			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
 			parameters.addValue("userId", bookTicketVO.getUserId());
@@ -190,6 +198,32 @@ public class BusTripDao {
 			parameters.addValue("totalFare", seatData.getTotalFare());
 			parameters.addValue("seatId", seatData.getSeatId());
 			jdbcTemplateObject.update(insertTicketMaster, parameters);
+		}
+		return 1;
+
+	}
+
+	@Transactional
+	public int cancelTickets(TicketVO bookTicketVO) {
+
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertCancelTicketMasterFromTicketMaster);
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", deleteTicketMasterByScheduleIdBusIdSeatId);
+		// TODO null validation
+		// TODO Logic to check cancellation policies
+		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
+			parameters.addValue("busId", bookTicketVO.getBusId());
+
+			parameters.addValue("seatId", seatData.getSeatId());
+
+			try {
+				jdbcTemplateObject.update(insertCancelTicketMasterFromTicketMaster, parameters);
+				jdbcTemplateObject.update(deleteTicketMasterByScheduleIdBusIdSeatId, parameters);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 		return 1;
 

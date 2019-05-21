@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SeatDataToBook {
+public class SeatDataToOperate {
 	private String seatType;
 	private String seatNumber;
 	private Integer isLowerBerth;

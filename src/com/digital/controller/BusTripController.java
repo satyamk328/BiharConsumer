@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.TripDetails;
-import com.digital.model.vo.BookTicketVO;
+import com.digital.model.vo.TicketVO;
 import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.service.BusTripService;
 import com.digital.spring.model.RestResponse;
@@ -68,7 +68,7 @@ public class BusTripController {
 	}
 
 	@PostMapping(value = "/bookTickets")
-	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) BookTicketVO bookTicketVO) {
+	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) TicketVO bookTicketVO) {
 		log.info("call search bookedBusTicket:{}", bookTicketVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
 		int bStatus = busService.bookTickets(bookTicketVO);
@@ -115,5 +115,17 @@ public class BusTripController {
 			new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/cancelTickets")
+	public ResponseEntity<RestResponse<Object>> cancelTickets(@RequestBody(required = true) TicketVO cancelTickets) {
+		log.info("call search bookedBusTicket:{}", cancelTickets);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket Cancelled Successfully");
+		int bStatus = busService.cancelTickets(cancelTickets);
+		if (bStatus != 1) {
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are some issues to cancell ticket please call ADMIN +");
+		}
+		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
 	}
 }
