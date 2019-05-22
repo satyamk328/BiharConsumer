@@ -1,9 +1,12 @@
 package com.digital.enums;
-/**
- * @author Satyam Kumar
- *
- */
-public enum PrevilageType {
-	ADMIN, CUSTOMER, RETAILER
-}
 
+public enum PrevilageType {
+	ADMIN(1), CUSTOMER(3), RETAILER(2);
+
+	public int key;
+
+	PrevilageType(int key) {
+		this.key = key;
+	}
+
+}
