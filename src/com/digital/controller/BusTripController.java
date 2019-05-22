@@ -1,23 +1,18 @@
 package com.digital.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.TicketVO;
-import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.service.BusTripService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
@@ -77,44 +72,6 @@ public class BusTripController {
 					"There are no seats available in this bus. Please select a different bus.");
 		}
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
-	}
-
-	@PostMapping(value = "/bookedBusTicket")
-	public ResponseEntity<RestResponse<Object>> bookedBusTicket(
-			@RequestBody(required = true) CustomerBusTicketVO busTicketVO) {
-		log.info("call search bookedBusTicket:{}", busTicketVO);
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
-		CustomerBusTicketVO customerBusTicketVO = busService.bookedBusTicket(busTicketVO);
-		if (customerBusTicketVO != null)
-			status = new RestStatus<>(HttpStatus.OK.toString(),
-					"There are no seats available in this bus. Please select a different bus.");
-		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVO, status), HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/getTicketHistory/{uid}")
-	public ResponseEntity<RestResponse<List<CustomerBusTicketVO>>> getBusTicketHistory(
-			@PathVariable(name = "uid", required = true) String uid,
-			@RequestParam(name = "limit", required = false, defaultValue = "5") int limit) {
-		log.info("call search getBusTicketHistory:{}", uid);
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
-		List<CustomerBusTicketVO> customerBusTicketVOs = busService.getHistoryBusTicket(uid, limit);
-		if (customerBusTicketVOs != null)
-			status = new RestStatus<>(HttpStatus.OK.toString(),
-					"There are no seats available in this bus. Please select a different bus.");
-		return new ResponseEntity<>(new RestResponse<>(customerBusTicketVOs, status), HttpStatus.OK);
-	}
-
-	@DeleteMapping(value = "/deleteScheduleDeparture/{busId}")
-	public ResponseEntity<RestResponse<Boolean>> deleteScheduleDeparture(@PathVariable(required = true) String busId) {
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(),
-				String.format("The bus with the number %s has been deleted", busId));
-		boolean flag = busService.deleteScheduleDeparture(busId);
-		if (!flag) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					String.format("Unable to delete the bus with bus number %s", busId));
-			new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<>(new RestResponse<>(flag, status), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/cancelTickets")

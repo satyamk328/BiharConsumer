@@ -10,13 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.TicketVO;
 import com.digital.service.BookingService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
@@ -41,14 +38,6 @@ public class BookingController {
 		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/")
-	public ResponseEntity<RestResponse<Object>> bookTicket(@RequestBody(required = true) TicketVO ticketVO) {
-		log.info("call print {},{}");
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Generated pdf ticket Successfully");
-		// TODO PDF code
-		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
-	}
-	
 	@GetMapping(value = "print/{mobileNumber}/{ticketNumber}")
 	public ResponseEntity<RestResponse<Object>> getTicketInfo(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,

@@ -19,7 +19,6 @@ import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.TicketVO;
-import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.utils.DataUtils;
 
 /**
@@ -65,14 +64,14 @@ public class BusTripService {
 					route.getBusId() != null ? busBookingDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
 
 			/////////////////////////////////
-			route.getBusDetails()
+			/*route.getBusDetails()
 					.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId()));
 
 			List<TicketDetails> ticketDetails = busBookingDao.getTicketDetailsByScheduleAndBusId(route.getScheduleId(),
 					route.getBusId());
 
-			// TODO null validations
-			// Calculate seat details
+			TODO null validations
+			Calculate seat details
 			int bookedSeat = 0;
 			List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
 					route.getSrcCitySequance(), route.getDestCitySequance());
@@ -91,7 +90,7 @@ public class BusTripService {
 				}
 			}
 			route.setTotalSeats(route.getBusDetails().getSeatDetails().size());
-			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);
+			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);*/
 		});
 		///////////////////////////////
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
@@ -160,11 +159,6 @@ public class BusTripService {
 		return busDetails;
 	}
 
-
-	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
-		return busBookingDao.bookedBusTicket(busVO);
-	}
-
 	public int bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId
 		List<RoutedCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
@@ -188,11 +182,4 @@ public class BusTripService {
 		return busBookingDao.cancelTickets(bookTicketVO);
 	}
 
-	public List<CustomerBusTicketVO> getHistoryBusTicket(String uid, int limit) {
-		return busBookingDao.getHistoryBusTicket(uid, limit);
-	}
-
-	public boolean deleteScheduleDeparture(String busId) {
-		return busBookingDao.deleteScheduleDeparture(busId);
-	}
 }

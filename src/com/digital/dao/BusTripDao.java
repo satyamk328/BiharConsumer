@@ -229,49 +229,9 @@ public class BusTripDao {
 
 	}
 
-	@Transactional
-	public CustomerBusTicketVO bookedBusTicket(CustomerBusTicketVO busVO) {
-		log.debug("Running insert query for bookedBusTicket: {}", insertCustomerBookTicketQuery);
-		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(insertCustomerBookTicketQuery,
-						Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, busVO.getUserId());
-				ps.setString(2, busVO.getBusname());
-				ps.setString(3, busVO.getBusnumber());
-				ps.setString(4, busVO.getSeatnumber());
-				ps.setString(5, busVO.getSrccityname());
-				ps.setString(6, busVO.getDestcityname());
-				ps.setString(7, busVO.getArrivaldatetime());
-				ps.setString(8, busVO.getDeparturedatetime());
-				ps.setString(9, busVO.getSeattype());
-				ps.setDouble(10, busVO.getTotalfare());
-				ps.setString(11, busVO.getCustomername());
-				ps.setInt(12, busVO.getAge());
-				ps.setString(13, busVO.getEmail());
-				ps.setString(13, busVO.getPhonenumber());
-				ps.setString(15, busVO.getIdtype());
-				ps.setString(16, busVO.getIdnumber());
-				ps.setBoolean(17, busVO.isIslicence());
-				return ps;
-			}
-		}, holder);
-		return (CustomerBusTicketVO) holder.getKeys();
-	}
+	
 
-	public List<CustomerBusTicketVO> getHistoryBusTicket(String uid, int limit) {
-		log.debug("Running insert query for getHistoryBusTicket: {}", selectCustomerBookTicketQuery);
-		return jdbcTemplate.query(selectCustomerBookTicketQuery, new Object[] { uid.toLowerCase(), limit },
-				new CustomerMapperExtrator());
-	}
 
-	public boolean deleteScheduleDeparture(String busId) {
-		log.debug("Running delete query for deleteScheduleDeparture: {}", selectCustomerBookTicketQuery);
-		int i = jdbcTemplate.update("DELETE FROM schedule_departure " + "WHERE bus_id = ?", busId);
-		return i > 0 ? true : false;
-	}
 
 	/////////////////////////////
 
