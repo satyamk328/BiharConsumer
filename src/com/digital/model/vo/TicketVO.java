@@ -23,6 +23,7 @@ public class TicketVO {
 	
 	private String tripId;
 	private String busType;
+	private String travelName;
 	private Integer isAC;
 	
 	
