@@ -1,22 +1,16 @@
 package com.digital.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +20,14 @@ import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
-import com.digital.model.RoutedCity;
+import com.digital.model.RouteCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
-import com.digital.model.extrator.CustomerMapperExtrator;
-import com.digital.model.vo.TicketVO;
-import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.SeatDataToOperate;
+import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -192,6 +184,7 @@ public class BusTripDao {
 			parameters.addValue("busType", bookTicketVO.getBusType());
 			parameters.addValue("isAc", bookTicketVO.getIsAC());
 
+			parameters.addValue("PNR", dataUtils.getPNRNumber(String.valueOf(bookTicketVO.getUserId()), 0L, 0L, 0L));
 			parameters.addValue("seatType", seatData.getSeatType());
 			parameters.addValue("seatNumber", seatData.getSeatNumber());
 			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
@@ -270,7 +263,7 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<RoutedCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
+	public List<RouteCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
 			Integer destCitySequance) {
 		log.debug("Running select query for getTripCitiesBySrcDescCities: {}", selectTripCitiesBySrcDescCities);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -279,17 +272,17 @@ public class BusTripDao {
 		parameters.addValue("destCitySequance", destCitySequance);
 
 		return jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
-				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
+				new BeanPropertyRowMapper<RouteCity>(RouteCity.class));
 	}
 
 	@Transactional(readOnly = true)
-	public List<RoutedCity> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
+	public List<RouteCity> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
 		log.debug("Running select query for getTripCitiySequanceByCityId: {}", selectTripCitySequenceByCityId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
 		parameters.addValue("cityId", cityId);
 
 		return jdbcTemplateObject.query(selectTripCitySequenceByCityId, parameters,
-				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
+				new BeanPropertyRowMapper<RouteCity>(RouteCity.class));
 	}
 }

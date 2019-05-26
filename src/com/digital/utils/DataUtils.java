@@ -3,6 +3,7 @@ package com.digital.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +41,18 @@ public class DataUtils {
 		else
 			return false;
 	}
-	
+
+	public String getPNRNumber(String name, Long sourceId, Long destId, Long bookCount) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(sourceId);
+		builder.append(destId);
+		builder.append(bookCount);
+		LocalDate date = LocalDate.now();
+		builder.append(date.getDayOfMonth());
+		builder.append(date.getMonth());
+		builder.append(date.getYear());
+		return builder.toString();
+	}
 
 	public Map<String, String> validIdCardTypes() {
 		Map<String, String> idTypes = new HashMap<>();
@@ -65,7 +77,7 @@ public class DataUtils {
 		busTypes.add("After 6 pm");
 		return busTypes;
 	}
-	
+
 	public List<String> getBusType() {
 		List<String> busTypes = new ArrayList<>();
 		busTypes.add("AC");
@@ -74,7 +86,7 @@ public class DataUtils {
 		busTypes.add("Sleeper");
 		return busTypes;
 	}
-	
+
 	public String parseBusDate(String str) {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = null;
@@ -86,7 +98,7 @@ public class DataUtils {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return simpleDateFormat.format(date);
 	}
-	
+
 	public Date convertStringToDateFormat(String date, String format) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat(format);
@@ -102,7 +114,7 @@ public class DataUtils {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(dateValues);
 	}
-	
+
 	public String formatDateToString(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -110,8 +122,8 @@ public class DataUtils {
 	}
 
 	public static void main(String[] args) {
-		String str = "1::2::3::4";
-		System.out.println(str.split("::")[2]);
+		LocalDate date = LocalDate.now();
+		System.out.println(date.getDayOfMonth());
 	}
 
 	public String getGenerateOTP() {
