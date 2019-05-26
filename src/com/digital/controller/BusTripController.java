@@ -55,7 +55,7 @@ public class BusTripController {
 			@PathVariable(name = "destination", required = true) Long destCityId) {
 		log.info("call search busSheetDetails:{},{},{},{}", scheduleId, busId, srcCityId, destCityId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		BusScheduleDetails tripDetails = busService.scheduledBusSheetDetails(scheduleId, busId, srcCityId, destCityId);
+		BusScheduleDetails tripDetails = busService.scheduledBusSeatDetails(scheduleId, busId, srcCityId, destCityId);
 		if (tripDetails == null)
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));

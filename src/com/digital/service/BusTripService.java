@@ -81,7 +81,7 @@ public class BusTripService {
 		return busDetailsObject;
 	}
 
-	public BusScheduleDetails scheduledBusSheetDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
+	public BusScheduleDetails scheduledBusSeatDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
 
 		// TODO DB Query also
 		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(scheduleId, busId, srcCityId, destCityId);
@@ -121,7 +121,7 @@ public class BusTripService {
 					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
 					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
-							seat.setIsBooked(1);
+							seat.setIsBooked(true);
 							bookedSeat++;
 							continue X;
 						}
