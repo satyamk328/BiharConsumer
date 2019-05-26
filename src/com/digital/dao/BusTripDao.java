@@ -1,22 +1,16 @@
 package com.digital.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +25,9 @@ import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
-import com.digital.model.extrator.CustomerMapperExtrator;
-import com.digital.model.vo.TicketVO;
-import com.digital.model.vo.CustomerBusTicketVO;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.SeatDataToOperate;
+import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
