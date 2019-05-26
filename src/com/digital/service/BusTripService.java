@@ -14,7 +14,6 @@ import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
-import com.digital.model.RouteCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
