@@ -46,7 +46,7 @@ public class AuthenticationController {
 	@Autowired
 	private DataUtils dataUtils;
 
-	@GetMapping(value = "/")
+	@GetMapping(value = "")
 	public ResponseEntity<RestResponse<Object>> getAllUser(
 			@PathVariable(name = "userId", required = true) Long userId) {
 		log.info("call getUserDetail {}", userId);
@@ -64,7 +64,7 @@ public class AuthenticationController {
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/")
+	@PostMapping(value = "")
 	public ResponseEntity<RestResponse<Object>> addUser(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");

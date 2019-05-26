@@ -30,7 +30,7 @@ public class AmenityController {
 	@Autowired
 	private AmenityService amenityService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity<RestResponse<List<Amenity>>> getAllAmenity() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<Amenity> busAmenities = amenityService.getAllAmenity();
@@ -46,7 +46,7 @@ public class AmenityController {
 		return new ResponseEntity<>(new RestResponse<>(busAmenities, status), HttpStatus.OK);
 	}
 
-	@PostMapping("/")
+	@PostMapping("")
 	public ResponseEntity<RestResponse<Object>> mapAmenity(
 			@RequestBody(required = true) AmenitiesVo amenitiesVo) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Amenity Added Successfully");

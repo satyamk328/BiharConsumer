@@ -47,7 +47,7 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity<RestResponse<List<City>>> getAllCities() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
 		List<City> searchStations = cityService.getAllCities();
@@ -64,7 +64,7 @@ public class CityController {
 			@ApiResponse(code = 500, message = "General exceptions "),
 			@ApiResponse(code = 504, message = "Gateway timeout error"),
 			@ApiResponse(code = 503, message = "Digital Bihar Service is not available") })
-	@PostMapping("/")
+	@PostMapping("")
 	public ResponseEntity<RestResponse<Object>> addSearchStation(@RequestBody(required = true) City busStop) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Top Cities Station Added Successfully");
 		Long integer = cityService.save(busStop);

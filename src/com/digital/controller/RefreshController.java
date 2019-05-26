@@ -21,7 +21,7 @@ public class RefreshController {
 	@Autowired
 	private ObjectCache objectCache;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity<RestResponse<Object>> evictCache() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
 		log.debug("Application cache clear Successfully");
