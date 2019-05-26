@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -48,6 +49,9 @@ public class CityDao {
 	@Value("${delete_cityStop_bycityId}")
 	private String deleteCityStopQuery;
 
+	@Value("${select_boadingstopping_details}")
+	private String selectBoadingStoppingDetailQuery;
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
@@ -66,11 +70,12 @@ public class CityDao {
 	}
 
 	@Transactional
-	public List<City> getCityById(Long cityId) {
+	public City getCityById(Long cityId) {
 		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityByIdQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
-		return jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new CityRowMapper());
+		List<City> cities = jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new CityRowMapper());
+		return cities != null ? cities.get(0) : new City();
 	}
 
 	@Transactional
@@ -123,7 +128,17 @@ public class CityDao {
 			}
 		});
 	}
-	
+
+	@Transactional(readOnly = true)
+	public List<CityStop> getCityStopDetails(Long cityId, List<String> cityStopIds) {
+		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("cityId", cityId);
+		parameters.addValue("cityStopIds", cityStopIds);
+		return jdbcTemplateObject.query(selectBoadingStoppingDetailQuery, parameters,
+				new BeanPropertyRowMapper<>(CityStop.class));
+	}
+
 	@Transactional
 	public long addCityStop(CityStop cityStop) {
 		log.debug("Running insert query for addCityStop {}", insertCityStopQuery);
@@ -132,7 +147,7 @@ public class CityDao {
 		jdbcTemplateObject.update(insertCityStopQuery, parameters, holder);
 		return (holder.getKey() == null) ? null : holder.getKey().longValue();
 	}
-	
+
 	@Transactional
 	public int deleteCityStop(Long cityId) {
 		log.debug("Running insert query for deleteCityStop {}", deleteCityStopQuery);

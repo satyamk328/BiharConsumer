@@ -3,6 +3,7 @@ package com.digital.model.extrator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -26,9 +27,10 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusSchedu
 			busRoutDetails.setBusId(rs.getLong("busId"));
 			busRoutDetails.setSleeperFare(rs.getDouble("sleeperFare"));
 			busRoutDetails.setSeaterFare(rs.getDouble("seaterFare"));
+			busRoutDetails.setFares(Arrays.asList(rs.getDouble("seaterFare"), rs.getDouble("sleeperFare")));
 			busRoutDetails.setIsFixedFare(rs.getInt("isFixedFare"));
-			busRoutDetails.setSourceId(rs.getString("srcCity"));
-			busRoutDetails.setDestinationId(rs.getString("destCity"));
+			busRoutDetails.setSourceId(rs.getLong("srcCityId"));
+			busRoutDetails.setDestinationId(rs.getLong("destCityId"));
 			
 			busRoutDetails.setSrcCitySequance(rs.getInt("srcCitySequance"));
 			busRoutDetails.setDestCitySequance(rs.getInt("destCitySequance"));

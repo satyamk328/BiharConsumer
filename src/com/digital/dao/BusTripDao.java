@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusCancellationPolicies;
-import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
@@ -38,8 +36,7 @@ public class BusTripDao {
 	@Value("${select_TripBy_SchId_BusId_SrcCtyId_DescCtyId}")
 	private String selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId;
 
-	@Value("${select_boadingstopping_details}")
-	private String selectBoadingStoppingDetailQuery;
+	
 
 	@Value("${select_businfomation_detail}")
 	private String selectBusInfoQuery;
@@ -111,16 +108,6 @@ public class BusTripDao {
 		return list != null && !list.isEmpty() ? list.get(0) : null;
 	}
 
-	@Transactional(readOnly = true)
-	public List<BusCityStopLocationsDetails> getBusBoadingAndStopingPointDetails(String cityId,
-			List<String> cityStopIds) {
-		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("cityId", Long.parseLong(cityId));
-		parameters.addValue("cityStopIds", cityStopIds);
-		return jdbcTemplateObject.query(selectBoadingStoppingDetailQuery, parameters,
-				new BeanPropertyRowMapper<BusCityStopLocationsDetails>(BusCityStopLocationsDetails.class));
-	}
 
 	@Transactional
 	public synchronized int bookTickets(TicketVO bookTicketVO) {

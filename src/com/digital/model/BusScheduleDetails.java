@@ -16,9 +16,9 @@ public class BusScheduleDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<BusAmenity> amenities = new ArrayList<>();
-	private List<BusCityStopLocationsDetails> boardingLocations = new ArrayList<>();
-	private List<BusCityStopLocationsDetails> droppingLocations = new ArrayList<>();
-	private List<BusCancellationPolicies> cancellationPolicy = new ArrayList<>();
+	private List<CityStop> boardingLocations = new ArrayList<>();
+	private List<CityStop> droppingLocations = new ArrayList<>();
+	private List<CancelPolicies> cancellationPolicy = new ArrayList<>();
 	
 	private BusDetails busDetails;
 	private List<Double> fares;
@@ -38,8 +38,8 @@ public class BusScheduleDetails implements Serializable {
 	private Double seaterFare;
 	private String srcCityName; 
 	private String destCityName;
-	private String destinationId;
-	private String sourceId;
+	private Long destinationId;
+	private Long sourceId;
 	private Integer srcCitySequance;
 	private Integer destCitySequance;
 	private String srcStops; 

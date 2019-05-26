@@ -44,7 +44,7 @@ public class CityService {
 	}
 
 	public City getCityById(Long cityId) {
-		return cityDao.getCityById(cityId).get(0);
+		return cityDao.getCityById(cityId);
 	}
 
 	public int delete(Long cityId) {
