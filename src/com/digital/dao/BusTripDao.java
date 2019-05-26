@@ -11,10 +11,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
-import com.digital.model.extrator.BusDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
@@ -26,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Satyam Kumar
  *
  */
-@Repository("busRoutDao")
+@Repository("busTripDao")
 @Slf4j
 public class BusTripDao {
 
