@@ -13,7 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusAmenity;
+import com.digital.model.Amenity;
 import com.digital.model.vo.AmenitiesVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,18 +37,18 @@ public class AmenitiesDao {
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
 	@Transactional(readOnly = true)
-	public List<BusAmenity> getAllAmenities() {
+	public List<Amenity> getAllAmenities() {
 		log.debug("Running insert query for getAllAmenities {}", selectAllAminitiesQuery);
-		return jdbcTemplateObject.query(selectAllAminitiesQuery, new BeanPropertyRowMapper<BusAmenity>(BusAmenity.class));
+		return jdbcTemplateObject.query(selectAllAminitiesQuery, new BeanPropertyRowMapper<Amenity>(Amenity.class));
 	}
 
 	@Transactional(readOnly = true)
-	public List<BusAmenity> getAmenitiesByBusId(Long busId) {
+	public List<Amenity> getAmenitiesByBusId(Long busId) {
 		log.debug("Running insert query for getBusAmenitiesByBusId {}", selectFilterAminitiesQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("busId", busId);
 		return jdbcTemplateObject.query(selectFilterAminitiesQuery, parameters,
-				new BeanPropertyRowMapper<BusAmenity>(BusAmenity.class));
+				new BeanPropertyRowMapper<Amenity>(Amenity.class));
 	}
 
 	@Transactional
@@ -61,13 +61,13 @@ public class AmenitiesDao {
 	}
 	
 	@Transactional(readOnly=true)
-	public List<BusAmenity> validateAmenityByIdandBusId(Long amenityId,Long busId) {
+	public List<Amenity> validateAmenityByIdandBusId(Long amenityId,Long busId) {
 		log.debug("Running select query for getAmenityByName {}", selectAminitiesByBusIdQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("amenityId", amenityId);
 		parameters.addValue("busId", busId);
 		return jdbcTemplateObject.query(selectAminitiesByBusIdQuery, parameters,
-				new BeanPropertyRowMapper<BusAmenity>(BusAmenity.class));
+				new BeanPropertyRowMapper<Amenity>(Amenity.class));
 	}
 
 	@Transactional

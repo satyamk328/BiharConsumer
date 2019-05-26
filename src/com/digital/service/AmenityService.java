@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
-import com.digital.model.BusAmenity;
+import com.digital.model.Amenity;
 import com.digital.model.vo.AmenitiesVo;
 
 @Service
@@ -15,11 +15,11 @@ public class AmenityService {
 	@Autowired
 	private AmenitiesDao amenitiesDao;
 
-	public List<BusAmenity> getAllAmenity() {
+	public List<Amenity> getAllAmenity() {
 		return amenitiesDao.getAllAmenities();
 	}
 
-	public List<BusAmenity> getAmenityByBusId(Long busId) {
+	public List<Amenity> getAmenityByBusId(Long busId) {
 		return amenitiesDao.getAmenitiesByBusId(busId);
 	}
 
@@ -28,7 +28,7 @@ public class AmenityService {
 	}
 
 	public boolean validateAmenity(Long aId,Long busId) {
-		List<BusAmenity> amenities = amenitiesDao.validateAmenityByIdandBusId(aId, busId);
+		List<Amenity> amenities = amenitiesDao.validateAmenityByIdandBusId(aId, busId);
 		return amenities != null && !amenities.isEmpty() ? true : false;
 	}
 

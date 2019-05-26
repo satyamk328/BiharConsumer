@@ -11,7 +11,7 @@ import com.digital.dao.AmenitiesDao;
 import com.digital.dao.BusTripDao;
 import com.digital.dao.CancelPolicyDao;
 import com.digital.dao.CityDao;
-import com.digital.model.BusAmenity;
+import com.digital.model.Amenity;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.CancelPolicies;
@@ -98,7 +98,7 @@ public class BusTripService {
 						: new ArrayList<CancelPolicies>());
 
 		busDetails.setAmenities(busDetails.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(busDetails.getBusId())
-				: new ArrayList<BusAmenity>());
+				: new ArrayList<Amenity>());
 
 		busDetails
 				.setBusDetails(busDetails.getBusId() != null ? busBookingDao.getBusDetailsByBusId(busDetails.getBusId())

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.BusAmenity;
+import com.digital.model.Amenity;
 import com.digital.model.vo.AmenitiesVo;
 import com.digital.service.AmenityService;
 import com.digital.spring.model.RestResponse;
@@ -31,18 +31,18 @@ public class AmenityController {
 	private AmenityService amenityService;
 
 	@GetMapping("/")
-	public ResponseEntity<RestResponse<List<BusAmenity>>> getAllAmenity() {
+	public ResponseEntity<RestResponse<List<Amenity>>> getAllAmenity() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<BusAmenity> busAmenities = amenityService.getAllAmenity();
+		List<Amenity> busAmenities = amenityService.getAllAmenity();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse<>(busAmenities, status), HttpStatus.OK);
 	}
 
 	@GetMapping("/{busId}")
-	public ResponseEntity<RestResponse<List<BusAmenity>>> getAmenityByBusId(
+	public ResponseEntity<RestResponse<List<Amenity>>> getAmenityByBusId(
 			@PathVariable(name = "busId", required = true) Long busId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<BusAmenity> busAmenities = amenityService.getAmenityByBusId(busId);
+		List<Amenity> busAmenities = amenityService.getAmenityByBusId(busId);
 		return new ResponseEntity<>(new RestResponse<>(busAmenities, status), HttpStatus.OK);
 	}
 

@@ -15,7 +15,7 @@ import lombok.Setter;
 public class BusScheduleDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private List<BusAmenity> amenities = new ArrayList<>();
+	private List<Amenity> amenities = new ArrayList<>();
 	private List<CityStop> boardingLocations = new ArrayList<>();
 	private List<CityStop> droppingLocations = new ArrayList<>();
 	private List<CancelPolicies> cancellationPolicy = new ArrayList<>();

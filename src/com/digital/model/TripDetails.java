@@ -18,7 +18,7 @@ public class TripDetails implements Serializable{
 	private List<BusScheduleDetails> availableRoutes = new ArrayList<>();
 	private List<String> departureTimeList = new ArrayList<>();
 	private List<String> arrivalTimeList = new ArrayList<>();
-	private List<BusAmenity> amenitiesList = new ArrayList<>();
+	private List<Amenity> amenitiesList = new ArrayList<>();
 	private List<String> busOperators = new ArrayList<>();
 	
 }
