@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.TripDetails;
+import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.TicketVO;
 import com.digital.service.BusTripService;
 import com.digital.spring.model.RestResponse;
@@ -47,15 +48,11 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/trip/{scheduleId}/{busId}/{source}/{destination}")
-	public ResponseEntity<RestResponse<BusScheduleDetails>> scheduledBusSheetDetails(
-			@PathVariable(name = "scheduleId", required = true) Long scheduleId,
-			@PathVariable(name = "busId", required = true) Long busId,
-			@PathVariable(name = "source", required = true) Long srcCityId,
-			@PathVariable(name = "destination", required = true) Long destCityId) {
-		log.info("call search busSheetDetails:{},{},{},{}", scheduleId, busId, srcCityId, destCityId);
+	@GetMapping(value = "/trip")
+	public ResponseEntity<RestResponse<BusScheduleDetails>> scheduledBusSheetDetails(@RequestBody(required=true) SearchTripVO tripVO) {
+		log.info("call search busSheetDetails:{},{},{},{}", tripVO.getScheduleId(), tripVO.getBusId(), tripVO.getSourceId(), tripVO.getDestinationId());
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		BusScheduleDetails tripDetails = busService.scheduledBusSeatDetails(scheduleId, busId, srcCityId, destCityId);
+		BusScheduleDetails tripDetails = busService.scheduledBusSeatDetails(tripVO);
 		if (tripDetails == null)
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));

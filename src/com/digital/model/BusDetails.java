@@ -24,6 +24,7 @@ public class BusDetails implements Serializable{
 	private String registationNumber;
 	private String color;
 	private Long totalSeats;
+	private Long availableSeats;
 	
 	private Boolean isAc = false;
 	private Boolean isSeater;

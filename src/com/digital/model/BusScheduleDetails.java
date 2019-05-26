@@ -20,7 +20,7 @@ public class BusScheduleDetails implements Serializable {
 	private List<CityStop> droppingLocations = new ArrayList<>();
 	private List<CancelPolicies> cancellationPolicy = new ArrayList<>();
 	
-	private BusDetails busDetails;
+	private BusDetails busDetails = new BusDetails();
 	private List<Double> fares;
 	
 	private Boolean idProofRequired = false;

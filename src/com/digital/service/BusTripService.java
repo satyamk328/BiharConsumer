@@ -19,6 +19,7 @@ import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
+import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
 
@@ -81,10 +82,10 @@ public class BusTripService {
 		return busDetailsObject;
 	}
 
-	public BusScheduleDetails scheduledBusSeatDetails(Long scheduleId, Long busId, Long srcCityId, Long destCityId) {
+	public BusScheduleDetails scheduledBusSeatDetails(SearchTripVO tripVO) {
 
 		// TODO DB Query also
-		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(scheduleId, busId, srcCityId, destCityId);
+		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(), tripVO.getSourceId(), tripVO.getDestinationId());
 
 		busDetails.setBoardingLocations(busDetails.getSrcStops() != null ? cityDao.getCityStopDetails(
 				busDetails.getSourceId(), Arrays.asList(busDetails.getSrcStops().split("::"))) : new ArrayList<>());
