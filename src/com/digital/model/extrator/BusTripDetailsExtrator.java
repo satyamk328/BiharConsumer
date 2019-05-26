@@ -31,21 +31,19 @@ public class BusTripDetailsExtrator implements ResultSetExtractor<List<BusSchedu
 			busRoutDetails.setIsFixedFare(rs.getInt("isFixedFare"));
 			busRoutDetails.setSourceId(rs.getLong("srcCityId"));
 			busRoutDetails.setDestinationId(rs.getLong("destCityId"));
-			
+
 			busRoutDetails.setSrcCitySequance(rs.getInt("srcCitySequance"));
 			busRoutDetails.setDestCitySequance(rs.getInt("destCitySequance"));
-			
+
 			busRoutDetails.setSrcStops(rs.getString("srcStops"));
 			busRoutDetails.setDestStops(rs.getString("destStops"));
 
 			busRoutDetails.setDepartureDate(
 					rs.getDate("departureDate") != null ? rs.getDate("departureDate").toString() : "");
-			busRoutDetails.setDepartureTime(
-					rs.getTime("departureTime") != null ? rs.getDate("departureTime").toString() : "");
-			busRoutDetails.setArrivalDate(
-					rs.getDate("arrivalDate") != null ? rs.getDate("arrivalDate").toString() : "");
-			busRoutDetails.setArrivalTime(
-					rs.getTime("arrivalTime") != null ? rs.getDate("arrivalTime").toString() : "");
+			busRoutDetails.setDepartureTime(rs.getString("departureTime"));
+			busRoutDetails
+					.setArrivalDate(rs.getDate("arrivalDate") != null ? rs.getDate("arrivalDate").toString() : "");
+			busRoutDetails.setArrivalTime(rs.getString("arrivalTime"));
 
 			busScheduleDetails.add(busRoutDetails);
 		}
