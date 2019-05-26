@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.BusScheduleDetails;
+import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.TicketVO;
@@ -48,15 +48,15 @@ public class BusTripController {
 		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/trip")
-	public ResponseEntity<RestResponse<BusScheduleDetails>> scheduledBusSheetDetails(@RequestBody(required=true) SearchTripVO tripVO) {
+	@PostMapping(value = "/trip")
+	public ResponseEntity<RestResponse<ScheduleSeatDetails>> scheduledBusSheetDetails(@RequestBody(required=true) SearchTripVO tripVO) {
 		log.info("call search busSheetDetails:{},{},{},{}", tripVO.getScheduleId(), tripVO.getBusId(), tripVO.getSourceId(), tripVO.getDestinationId());
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		BusScheduleDetails tripDetails = busService.scheduledBusSeatDetails(tripVO);
-		if (tripDetails == null)
+		ScheduleSeatDetails scheduleSeatDetails = busService.scheduledBusSeatDetails(tripVO);
+		if (scheduleSeatDetails == null)
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));
-		return new ResponseEntity<>(new RestResponse<>(tripDetails, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(scheduleSeatDetails, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/bookTickets")

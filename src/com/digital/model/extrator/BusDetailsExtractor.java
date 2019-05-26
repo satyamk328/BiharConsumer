@@ -9,12 +9,12 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.digital.model.BusDetails;
 
-public class BusDetailsExtractor implements ResultSetExtractor<List<BusDetails>>{
+public class BusDetailsExtractor implements ResultSetExtractor<List<BusDetails>> {
 
 	@Override
 	public List<BusDetails> extractData(ResultSet rs) throws SQLException {
 		List<BusDetails> busDetails = new ArrayList<>();
-		
+
 		while (rs.next()) {
 			BusDetails busDetail = new BusDetails();
 			busDetail.setBusId(rs.getLong("BusId"));
@@ -23,20 +23,21 @@ public class BusDetailsExtractor implements ResultSetExtractor<List<BusDetails>>
 			busDetail.setBusNumber(rs.getString("busNumber"));
 			busDetail.setTravelsName(rs.getString("travelsName"));
 			busDetail.setColor(rs.getString("color"));
-			busDetail.setTotalSeats(rs.getLong("totalSeats"));
 			busDetail.setIsAc(rs.getBoolean("IsAc"));
 			busDetail.setIsSeater(rs.getBoolean("IsSeater"));
 			busDetail.setIsSleeper(rs.getBoolean("IsSleeper"));
 			busDetail.setLayout(rs.getString("Layout"));
 			busDetail.setLayOutDescription(rs.getString("layOutDescription"));
-			String seatType = (rs.getBoolean("IsSeater") ? "Seater " : "").concat(rs.getBoolean("IsSleeper") ? "Sleeper " : "");
+			String seat = rs.getBoolean("IsSeater") ? "Seater/" : "";
+			String sl = rs.getBoolean("IsSleeper") ? "Sleeper " : "";
+			String seatType = sl.equals("") ? seat.substring(0, seat.length() - 1) : seat.concat(sl);
 			busDetail.setSeatType(seatType);
-			String busType = (rs.getBoolean("IsAc") ? "A/C " : "NON AC ").concat(rs.getBoolean("IsSeater") ? "Seater " : " ").concat(rs.getBoolean("IsSleeper") ? "Sleeper " : " ").concat(rs.getString("Layout"));
+			String busType = (rs.getBoolean("IsAc") ? "A/C " : "NON AC ")
+					.concat(seatType).concat(rs.getString("Layout"));
 			busDetail.setBusType(busType);
 			busDetails.add(busDetail);
 		}
 		return busDetails;
 	}
-
 
 }

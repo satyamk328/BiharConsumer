@@ -22,12 +22,12 @@ public class SeatDetails implements Serializable{
 	private String seatType;
 	private String seatNumber;
 	private String seatName;
-	private Boolean isAvailable;
-	private Boolean isLadiesSeat;
-	private Boolean isLowerBerth;
-	private Boolean isReservedForLadies;
+	private Boolean isAvailable = false;
+	private Boolean isLadiesSeat= false;
+	private Boolean isLowerBerth= false;
+	private Boolean isReservedForLadies= false;
 	private Double fare;
 	private Double serviceTaxPercent;
-	private Boolean isBooked;
+	private Boolean isBooked = false;
 	
 }

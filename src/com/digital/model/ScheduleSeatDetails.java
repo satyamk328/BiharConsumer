@@ -21,4 +21,5 @@ public class ScheduleSeatDetails implements Serializable {
 	private List<SeatDetails> upperSeatDetails = new ArrayList<SeatDetails>();
 	private List<CityStop> boardingPoints = new ArrayList<>();
 	private List<CityStop> droppingPoints = new ArrayList<>();
+	private int maxSeatsAllowed =5;
 }

@@ -22,13 +22,12 @@ public class BusScheduleDetails implements Serializable {
 	
 	private BusDetails busDetails = new BusDetails();
 	private List<Double> fares;
-	
+	private int totalSeats;
+	private int availableSeats;
 	private Boolean idProofRequired = false;
 	
 		
 	private boolean isRefundable= false;
-	private double totalSeats;
-	private double availableSeats;
 	
 	private Long scheduleId;
 	private Long busId;

@@ -1,5 +1,6 @@
 package com.digital.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
-import com.digital.model.SeatDetails;
-import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.vo.SeatDataToOperate;
@@ -49,14 +48,10 @@ public class BusTripDao {
 	private String selectCustomerBookTicketQuery;
 
 	/////
-	@Value("${select_Bus_Details_By_BusId}")
-	private String selectBusDetailsByBusId;
 
-	@Value("${select_SeatDetails_By_LayoutId}")
-	private String selectSeatDetailsByLayoutId;
+	
 
-	@Value("${select_TicketDetails_By_ScheduleAndBusId}")
-	private String selectTicketDetailsByScheduleAndBusId;
+	
 
 	@Value("${select_TripCities_BySrcDescCities}")
 	private String selectTripCitiesBySrcDescCities;
@@ -106,7 +101,7 @@ public class BusTripDao {
 		List<BusScheduleDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId,
 				parameters, new BusTripDetailsExtrator());
 
-		return list != null && !list.isEmpty() ? list.get(0) : null;
+		return (list != null && !list.isEmpty()) ? list.get(0) : new BusScheduleDetails();
 	}
 
 
@@ -164,36 +159,11 @@ public class BusTripDao {
 	}
 
 	
-	@Transactional(readOnly = true)
-	public BusDetails getBusDetailsByBusId(Long busId) {
-		log.debug("Running select query for getBusDetailsByBusId: {}", selectBusDetailsByBusId);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("busId", busId);
-		List<BusDetails> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BusDetailsExtractor());
-		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusDetails();
-	}
+	
 
-	@Transactional(readOnly = true)
-	public List<SeatDetails> getSeatDetailsByLayoutId(Long layoutId) {
-		log.debug("Running select query for getSeatDetailsByLayoutId: {}", selectSeatDetailsByLayoutId);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("layoutId", layoutId);
+	
 
-		return jdbcTemplateObject.query(selectSeatDetailsByLayoutId, parameters,
-				new BeanPropertyRowMapper<SeatDetails>(SeatDetails.class));
-	}
-
-	@Transactional(readOnly = true)
-	public List<TicketDetails> getTicketDetailsByScheduleAndBusId(Long scheduleId, Long busId) {
-		log.debug("Running select query for getTicketDetailsByScheduleAndBusId: {}",
-				selectTicketDetailsByScheduleAndBusId);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("scheduleId", scheduleId);
-		parameters.addValue("busId", busId);
-
-		return jdbcTemplateObject.query(selectTicketDetailsByScheduleAndBusId, parameters,
-				new BeanPropertyRowMapper<TicketDetails>(TicketDetails.class));
-	}
+	
 
 	@Transactional(readOnly = true)
 	public List<RoutedCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
@@ -204,8 +174,9 @@ public class BusTripDao {
 		parameters.addValue("srcCitySequance", srcCitySequance);
 		parameters.addValue("destCitySequance", destCitySequance);
 
-		return jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
-				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
+		List<RoutedCity> routedCities = jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
+				new BeanPropertyRowMapper<>(RoutedCity.class));
+		return (routedCities != null && !routedCities.isEmpty()) ? routedCities : new ArrayList<>();
 	}
 
 	@Transactional(readOnly = true)

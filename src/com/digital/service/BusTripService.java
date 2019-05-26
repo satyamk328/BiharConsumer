@@ -8,14 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
+import com.digital.dao.BookingDao;
+import com.digital.dao.BusDao;
 import com.digital.dao.BusTripDao;
 import com.digital.dao.CancelPolicyDao;
 import com.digital.dao.CityDao;
-import com.digital.model.Amenity;
+import com.digital.dao.SeatDao;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
-import com.digital.model.CancelPolicies;
 import com.digital.model.RoutedCity;
+import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
@@ -44,6 +46,15 @@ public class BusTripService {
 
 	@Autowired
 	private CityDao cityDao;
+	
+	@Autowired
+	private BookingDao bookingDao;
+	
+	@Autowired
+	private SeatDao seatDao;
+	
+	@Autowired
+	private BusDao busDao;
 
 	@Autowired
 	private DataUtils dataUtils;
@@ -69,10 +80,37 @@ public class BusTripService {
 					route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId()) : new ArrayList<>());
 
 			route.setBusDetails(
-					route.getBusId() != null ? busBookingDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
+					route.getBusId() != null ? busDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
 			// populate city name
 			route.setDestCityName(cityDao.getCityById(route.getDestinationId()).getDisplayName());
 			route.setSrcCityName(cityDao.getCityById(route.getSourceId()).getDisplayName());
+
+			List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId());
+
+			List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(route.getScheduleId(),
+					route.getBusId());
+
+			// Calculate seat details
+			int bookedSeat = 0;
+			List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
+					route.getSrcCitySequance(), route.getDestCitySequance());
+			X: for (SeatDetails seat : seatDetails) {
+				for (TicketDetails ticketDetail : ticketDetails) {
+					if (seat.getSeatId() == ticketDetail.getSeatId()) {
+						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+						for (RoutedCity routedCity : routedCities) {
+							if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
+								seat.setIsBooked(true);
+								bookedSeat++;
+								continue X;
+							}
+						}
+					}
+				}
+			}
+			route.setTotalSeats(seatDetails.size());
+			route.setAvailableSeats(seatDetails.size() - bookedSeat);
+
 		});
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
 		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
@@ -82,58 +120,43 @@ public class BusTripService {
 		return busDetailsObject;
 	}
 
-	public BusScheduleDetails scheduledBusSeatDetails(SearchTripVO tripVO) {
+	public ScheduleSeatDetails scheduledBusSeatDetails(SearchTripVO tripVO) {
 
+		ScheduleSeatDetails scheduleSeatDetails = new ScheduleSeatDetails();
 		// TODO DB Query also
-		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(), tripVO.getSourceId(), tripVO.getDestinationId());
+		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(),
+				tripVO.getSourceId(), tripVO.getDestinationId());
 
-		busDetails.setBoardingLocations(busDetails.getSrcStops() != null ? cityDao.getCityStopDetails(
+		scheduleSeatDetails.setBoardingPoints(busDetails.getSrcStops() != null ? cityDao.getCityStopDetails(
 				busDetails.getSourceId(), Arrays.asList(busDetails.getSrcStops().split("::"))) : new ArrayList<>());
 
-		busDetails.setDroppingLocations(
+		scheduleSeatDetails.setDroppingPoints(
 				busDetails.getDestStops() != null ? cityDao.getCityStopDetails(busDetails.getDestinationId(),
 						Arrays.asList(busDetails.getDestStops().split("::"))) : new ArrayList<>());
-
-		busDetails.setCancellationPolicy(
-				busDetails.getBusId() != null ? policyDao.getCancelPolicyByBusId(busDetails.getBusId())
-						: new ArrayList<CancelPolicies>());
-
-		busDetails.setAmenities(busDetails.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(busDetails.getBusId())
-				: new ArrayList<Amenity>());
-
-		busDetails
-				.setBusDetails(busDetails.getBusId() != null ? busBookingDao.getBusDetailsByBusId(busDetails.getBusId())
-						: new BusDetails());
-		// TODO validation of null data.
-		busDetails.getBusDetails()
-				.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId()));
-
-		List<TicketDetails> ticketDetails = busBookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
+		busDetails.setBusDetails(
+				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
+		
+		List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId());
+		scheduleSeatDetails.setSeatDetails(seatDetails);
+		List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
 				busDetails.getBusId());
 
-		// TODO null validations
-		// Calculate seat details
-		int bookedSeat = 0;
 		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
 				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
-		X: for (SeatDetails seat : busDetails.getBusDetails().getSeatDetails()) {
+		X: for (SeatDetails seat : seatDetails) {
 			for (TicketDetails ticketDetail : ticketDetails) {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
 					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
 					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							seat.setIsBooked(true);
-							bookedSeat++;
 							continue X;
 						}
 					}
 				}
 			}
 		}
-		busDetails.setTotalSeats(busDetails.getBusDetails().getSeatDetails().size());
-		busDetails.setAvailableSeats(busDetails.getBusDetails().getSeatDetails().size() - bookedSeat);
-
-		return busDetails;
+		return scheduleSeatDetails;
 	}
 
 	public int bookTickets(TicketVO bookTicketVO) {

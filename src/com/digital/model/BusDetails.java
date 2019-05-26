@@ -23,8 +23,6 @@ public class BusDetails implements Serializable{
 	private String travelsName;
 	private String registationNumber;
 	private String color;
-	private Long totalSeats;
-	private Long availableSeats;
 	
 	private Boolean isAc = false;
 	private Boolean isSeater;
@@ -35,7 +33,7 @@ public class BusDetails implements Serializable{
 	private String layout;
 	private String layOutDescription;
 	
-	private List<SeatDetails> seatDetails = new ArrayList<SeatDetails>();
+	/*private List<SeatDetails> seatDetails = new ArrayList<SeatDetails>();
 	private List<SeatDetails> lowerSeatDetails = new ArrayList<SeatDetails>();
-	private List<SeatDetails> upperSeatDetails = new ArrayList<SeatDetails>();
+	private List<SeatDetails> upperSeatDetails = new ArrayList<SeatDetails>();*/
 }
