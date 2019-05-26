@@ -1,14 +1,10 @@
 package com.digital.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,14 +14,10 @@ import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
-import com.digital.model.BusSeatBookingDetails;
-import com.digital.model.BusType;
 import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
-import com.digital.model.extrator.BusSeatDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
-import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
@@ -48,10 +40,6 @@ public class BusTripDao {
 
 	@Value("${select_boadingstopping_details}")
 	private String selectBoadingStoppingDetailQuery;
-	@Value("${select_bustype}")
-	private String selectBusTypeQuery;
-	@Value("${select_bus_cancellation}")
-	private String selectBusCancellationPolicyQuery;
 
 	@Value("${select_businfomation_detail}")
 	private String selectBusInfoQuery;
@@ -87,9 +75,6 @@ public class BusTripDao {
 
 	@Value("${delete_ticket_master_by_scheduleId_busId_seatId}")
 	private String deleteTicketMasterByScheduleIdBusIdSeatId;
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
@@ -135,38 +120,6 @@ public class BusTripDao {
 		parameters.addValue("cityStopIds", cityStopIds);
 		return jdbcTemplateObject.query(selectBoadingStoppingDetailQuery, parameters,
 				new BeanPropertyRowMapper<BusCityStopLocationsDetails>(BusCityStopLocationsDetails.class));
-	}
-
-	@Transactional(readOnly = true)
-	public List<BusType> getBusType() {
-		log.debug("Running insert query for getBusType {}", selectBusTypeQuery);
-		return jdbcTemplate.query(selectBusTypeQuery, new RowMapper<BusType>() {
-			public BusType mapRow(ResultSet rs, int rowNum) throws SQLException {
-				BusType busType = new BusType();
-				busType.setId(rs.getInt("id"));
-				busType.setBusType(rs.getString("bustype"));
-				return busType;
-			}
-
-		});
-	}
-
-	@Transactional(readOnly = true)
-	public List<BusCancellationPolicies> getCancellationPolicy(Long busId) {
-		log.debug("Running insert query for getCancellationPolicy {}", selectBusCancellationPolicyQuery);
-
-		return jdbcTemplate.query(selectBusCancellationPolicyQuery, new Object[] { busId },
-				new BeanPropertyRowMapper<BusCancellationPolicies>(BusCancellationPolicies.class));
-	}
-
-	@Transactional(readOnly = true)
-	public List<BusSeatBookingDetails> getSeatsDetails(SearchTripVO tripVO) {
-		log.debug("Running select query for getSeatsDetails: {}", selectBusSeatDetailsQuery);
-		Integer startStop = Integer.parseInt(tripVO.getTripId().split("::")[2]);
-		Integer endStop = Integer.parseInt(tripVO.getTripId().split("::")[3]);
-		return jdbcTemplate.query(selectBusSeatDetailsQuery,
-				new Object[] { startStop, endStop, startStop, endStop, tripVO.getOperatorId().toLowerCase() },
-				new BusSeatDetailsExtractor());
 	}
 
 	@Transactional
@@ -223,20 +176,12 @@ public class BusTripDao {
 	}
 
 	
-
-
-
-	/////////////////////////////
-
 	@Transactional(readOnly = true)
 	public BusDetails getBusDetailsByBusId(Long busId) {
 		log.debug("Running select query for getBusDetailsByBusId: {}", selectBusDetailsByBusId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("busId", busId);
-		List<BusDetails> busDetails = null;
-		busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,
-				new BeanPropertyRowMapper<BusDetails>(BusDetails.class));
-
+		List<BusDetails> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BeanPropertyRowMapper<>(BusDetails.class));
 		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusDetails();
 	}
 

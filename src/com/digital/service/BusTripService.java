@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
 import com.digital.dao.BusTripDao;
+import com.digital.dao.CancelPolicyDao;
 import com.digital.model.BusAmenity;
 import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
@@ -19,7 +20,6 @@ import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
 import com.digital.model.vo.TicketVO;
-import com.digital.utils.DataUtils;
 
 /**
  * @author Satyam Kumar
@@ -33,9 +33,9 @@ public class BusTripService {
 
 	@Autowired
 	private AmenitiesDao amenitiesDao;
-
+	
 	@Autowired
-	private DataUtils dataUtils;
+	private CancelPolicyDao policyDao;
 
 	public TripDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
 		TripDetails busDetailsObject = new TripDetails();
@@ -47,58 +47,27 @@ public class BusTripService {
 			route.setBoardingLocations(route.getSrcStops() != null
 					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getSourceId(),
 							Arrays.asList(route.getSrcStops().split("::")))
-					: new ArrayList<BusCityStopLocationsDetails>());
+					: new ArrayList<>());
 
 			route.setDroppingLocations(route.getDestStops() != null
 					? busBookingDao.getBusBoadingAndStopingPointDetails(route.getDestinationId(),
 							Arrays.asList(route.getDestStops().split("::")))
-					: new ArrayList<BusCityStopLocationsDetails>());
+					: new ArrayList<>());
 
-			route.setCancellationPolicy(route.getBusId() != null ? busBookingDao.getCancellationPolicy(route.getBusId())
-					: new ArrayList<BusCancellationPolicies>());
+			route.setCancellationPolicy(route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId())
+					: new ArrayList<>());
 
 			route.setAmenities(route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId())
-					: new ArrayList<BusAmenity>());
+					: new ArrayList<>());
 
 			route.setBusDetails(
 					route.getBusId() != null ? busBookingDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
-
-			/////////////////////////////////
-			/*route.getBusDetails()
-					.setSeatDetails(busBookingDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId()));
-
-			List<TicketDetails> ticketDetails = busBookingDao.getTicketDetailsByScheduleAndBusId(route.getScheduleId(),
-					route.getBusId());
-
-			TODO null validations
-			Calculate seat details
-			int bookedSeat = 0;
-			List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
-					route.getSrcCitySequance(), route.getDestCitySequance());
-			X: for (SeatDetails seat : route.getBusDetails().getSeatDetails()) {
-				for (TicketDetails ticketDetail : ticketDetails) {
-					if (seat.getSeatId() == ticketDetail.getSeatId()) {
-						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
-						for (RoutedCity routedCity : routedCities) {
-							if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
-								seat.setIsBooked(1);
-								bookedSeat++;
-								continue X;
-							}
-						}
-					}
-				}
-			}
-			route.setTotalSeats(route.getBusDetails().getSeatDetails().size());
-			route.setAvailableSeats(route.getBusDetails().getSeatDetails().size() - bookedSeat);*/
 		});
-		///////////////////////////////
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
-		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
+		/*busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);
-		busDetailsObject.setDepartureTimeList(timeList);
-
+		busDetailsObject.setDepartureTimeList(timeList);*/
 		return busDetailsObject;
 	}
 
@@ -118,7 +87,7 @@ public class BusTripService {
 				: new ArrayList<BusCityStopLocationsDetails>());
 
 		busDetails.setCancellationPolicy(
-				busDetails.getBusId() != null ? busBookingDao.getCancellationPolicy(busDetails.getBusId())
+				busDetails.getBusId() != null ? policyDao.getCancelPolicyByBusId(busDetails.getBusId())
 						: new ArrayList<BusCancellationPolicies>());
 
 		busDetails.setAmenities(busDetails.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(busDetails.getBusId())
