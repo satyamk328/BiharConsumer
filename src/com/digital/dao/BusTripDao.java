@@ -20,7 +20,7 @@ import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.BusSeatBookingDetails;
 import com.digital.model.BusType;
-import com.digital.model.RouteCity;
+import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.extrator.BusSeatDetailsExtractor;
@@ -263,7 +263,7 @@ public class BusTripDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<RouteCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
+	public List<RoutedCity> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
 			Integer destCitySequance) {
 		log.debug("Running select query for getTripCitiesBySrcDescCities: {}", selectTripCitiesBySrcDescCities);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -272,17 +272,17 @@ public class BusTripDao {
 		parameters.addValue("destCitySequance", destCitySequance);
 
 		return jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
-				new BeanPropertyRowMapper<RouteCity>(RouteCity.class));
+				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
 	}
 
 	@Transactional(readOnly = true)
-	public List<RouteCity> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
+	public List<RoutedCity> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
 		log.debug("Running select query for getTripCitiySequanceByCityId: {}", selectTripCitySequenceByCityId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
 		parameters.addValue("cityId", cityId);
 
 		return jdbcTemplateObject.query(selectTripCitySequenceByCityId, parameters,
-				new BeanPropertyRowMapper<RouteCity>(RouteCity.class));
+				new BeanPropertyRowMapper<RoutedCity>(RoutedCity.class));
 	}
 }

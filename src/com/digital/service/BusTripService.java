@@ -14,6 +14,7 @@ import com.digital.model.BusCancellationPolicies;
 import com.digital.model.BusCityStopLocationsDetails;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
+import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.TripDetails;
@@ -136,13 +137,13 @@ public class BusTripService {
 		// TODO null validations
 		// Calculate seat details
 		int bookedSeat = 0;
-		List<RouteCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
+		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
 				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
 		X: for (SeatDetails seat : busDetails.getBusDetails().getSeatDetails()) {
 			for (TicketDetails ticketDetail : ticketDetails) {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
 					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
-					for (RouteCity routedCity : routedCities) {
+					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							seat.setIsBooked(1);
 							bookedSeat++;
@@ -160,15 +161,15 @@ public class BusTripService {
 
 	public int bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId
-		List<RouteCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
+		List<RoutedCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getSrcCityId());
-		List<RouteCity> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
+		List<RoutedCity> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getDestCityId());
-		List<RouteCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
+		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
 				srcCitySeq.get(0).getCitySequance(), destCitySeq.get(0).getCitySequance());
 
 		String tripId = "";
-		for (RouteCity routedCity : routedCities) {
+		for (RoutedCity routedCity : routedCities) {
 			tripId = tripId + routedCity.getCityId() + "::";
 		}
 		tripId = tripId.substring(0, tripId.length() - 2);

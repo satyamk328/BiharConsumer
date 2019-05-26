@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class RouteCity {
+public class RoutedCity {
 	
 	Long cityId;
 	Integer citySequance;
