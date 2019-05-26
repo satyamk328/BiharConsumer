@@ -16,21 +16,23 @@ import lombok.Setter;
 public class BusDetails implements Serializable{
 
 	private static final long serialVersionUID = -6508045063085127065L;
-	private String busId;
-	private String ownerId;
+	private Long busId;
+	private Long ownerId;
 	private Long layoutId;
 	private String busNumber;
 	private String travelsName;
 	private String registationNumber;
 	private String color;
-	private Double totalSeats;
-	private int isAc;
+	private Long totalSeats;
+	
+	private Boolean isAc = false;
+	private Boolean isSeater;
+	private Boolean isSleeper;
+	private String busType;
+	private String seatType;
 	
 	private String layout;
-	private String busType;
 	private String layOutDescription;
-	private int isSeater;
-	private int isSleeper;
 	
 	private List<SeatDetails> seatDetails = new ArrayList<SeatDetails>();
 	private List<SeatDetails> lowerSeatDetails = new ArrayList<SeatDetails>();

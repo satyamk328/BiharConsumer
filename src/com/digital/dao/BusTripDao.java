@@ -15,6 +15,7 @@ import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
+import com.digital.model.extrator.BusDetailsExtractor;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
@@ -168,7 +169,7 @@ public class BusTripDao {
 		log.debug("Running select query for getBusDetailsByBusId: {}", selectBusDetailsByBusId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("busId", busId);
-		List<BusDetails> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BeanPropertyRowMapper<>(BusDetails.class));
+		List<BusDetails> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BusDetailsExtractor());
 		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusDetails();
 	}
 

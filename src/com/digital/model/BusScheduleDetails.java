@@ -24,9 +24,7 @@ public class BusScheduleDetails implements Serializable {
 	private List<Double> fares;
 	
 	private Boolean idProofRequired = false;
-	private Boolean isAc = false;
-	private Boolean isSeater;
-	private Boolean isSleeper;
+	
 		
 	private boolean isRefundable= false;
 	private double totalSeats;
@@ -51,9 +49,8 @@ public class BusScheduleDetails implements Serializable {
 	private int isFixedFare;
 	
 	private Double rating = 2.5;
-	private String busType;
 	private String classType;
-	private String seatType;
+	
 	private double duration;
 	private int travelDurationDays = 1;
 	
