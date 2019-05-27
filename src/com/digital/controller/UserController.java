@@ -18,7 +18,7 @@ import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.user.model.Login;
 import com.digital.user.model.User;
-import com.digital.user.service.AuthenticationService;
+import com.digital.user.service.UserService;
 import com.digital.user.service.MailService;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
@@ -35,10 +35,10 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/api/v0/auth")
 @Slf4j
-public class AuthenticationController {
+public class UserController {
 
 	@Autowired
-	private AuthenticationService authService;
+	private UserService userService;
 
 	@Autowired
 	private MailService emailService;
@@ -54,7 +54,7 @@ public class AuthenticationController {
 			@PathVariable(name = "userId", required = true) Long userId) {
 		log.info("call getUserDetail {}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		List<User> users = authService.getAllUsers();
+		List<User> users = userService.getAllUsers();
 		return new ResponseEntity<>(new RestResponse<>(users, status), HttpStatus.OK);
 	}
 
@@ -63,7 +63,7 @@ public class AuthenticationController {
 			@PathVariable(name = "userId", required = true) Long userId) {
 		log.info("call getUserDetail {}", userId);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		User user = authService.getUserDetailById(userId);
+		User user = userService.getUserDetailById(userId);
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
@@ -71,14 +71,14 @@ public class AuthenticationController {
 	public ResponseEntity<RestResponse<Object>> addUser(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
-		if (authService.loginauthentication(user.getEmail()) != null) {
+		if (userService.loginauthentication(user.getEmail()) != null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this email address already exist into system!");
-		} else if (authService.loginauthentication(String.valueOf(user.getPhoneNumber())) != null) {
+		} else if (userService.loginauthentication(String.valueOf(user.getPhoneNumber())) != null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this phone number already exist into system!");
 		} else {
-			Long userId = authService.addUser(user);
+			Long userId = userService.addUser(user);
 			if (userId == null) {
 				status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 				return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +93,7 @@ public class AuthenticationController {
 			@RequestParam(name = "userName", required = true) String userName,
 			@RequestParam(name = "password", required = true) String password) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
-		User user = authService.loginauthentication(userName);
+		User user = userService.loginauthentication(userName);
 		if (user == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -108,8 +108,8 @@ public class AuthenticationController {
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Login login = new Login();
-		authService.prepareLogin(login, user);
-		authService.addLoginDetail(login);
+		userService.prepareLogin(login, user);
+		userService.addLoginDetail(login);
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
@@ -117,7 +117,7 @@ public class AuthenticationController {
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
 			@PathVariable(name = "userId", required = true) Long userId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
-		User user = authService.getUserDetailById(userId);
+		User user = userService.getUserDetailById(userId);
 		if (user == null) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"Invalid Email/password. Please enter valid email!");
@@ -135,7 +135,7 @@ public class AuthenticationController {
 			@PathVariable(name = "userId", required = true) Long userId,
 			@RequestParam(name = "newPassword", required = true) String pass) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
-		int i = authService.resetPassword(userId, pass);
+		int i = userService.resetPassword(userId, pass);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -147,7 +147,7 @@ public class AuthenticationController {
 	public ResponseEntity<RestResponse<Object>> logOut(@PathVariable(name = "userId", required = true) Long userId,
 			@RequestParam(name = "ip", required = false, defaultValue = "127.0.0.0") String ip) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Logout Successfully");
-		int i = authService.logOut(userId, ip);
+		int i = userService.logOut(userId, ip);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(true, status), HttpStatus.INTERNAL_SERVER_ERROR);

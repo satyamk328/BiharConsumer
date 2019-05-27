@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository("userDetailsDao")
 @Slf4j
-public class AuthenticationDao {
+public class UserDao {
 
 	@Value("${select_user_history}")
 	private String selectAllUserQuery;
