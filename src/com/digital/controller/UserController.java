@@ -18,10 +18,9 @@ import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.user.model.Login;
 import com.digital.user.model.User;
-import com.digital.user.service.UserService;
 import com.digital.user.service.MailService;
+import com.digital.user.service.UserService;
 import com.digital.utils.CommonUtil;
-import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;
 
 import io.swagger.annotations.Api;
@@ -40,12 +39,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MailService emailService;
-
-	@Autowired
-	private DataUtils dataUtils;
-	
 	@Autowired
 	private CommonUtil commonUtil;
 
@@ -113,20 +106,22 @@ public class UserController {
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/changePassword/{userId}")
+	@PutMapping(value = "/update/{userId}")
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
-			@PathVariable(name = "userId", required = true) Long userId) {
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot password Successfully");
-		User user = userService.getUserDetailById(userId);
-		if (user == null) {
+			@PathVariable(name = "userId", required = true) Long userId,
+			@RequestBody(required = true) User user) {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User profile update Successfully");
+		if(userId == user.getUserId()) {
+			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(),
+					"Please enter valid UserId!");
+			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.BAD_REQUEST);
+		}
+		int i = userService.updateUser(user);
+		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-					"Invalid Email/password. Please enter valid email!");
+					"User profile cannot update. Please try again leter!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		String otp = dataUtils.getGenerateOTP();
-		emailService.sendEmail(GlobalConstants.OTP_HEADER, user.getEmail(),
-				GlobalConstants.OTP_BODY.replaceAll("USER_NAME", user.getName()).replaceAll("OTP_VALUES", otp));
-		user.setOtp(otp);
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 

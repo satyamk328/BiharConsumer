@@ -33,6 +33,10 @@ public class UserService {
 		return userDao.getUserDetailById(userId);
 	}
 	
+	public int updateUser(User user) {
+		return userDao.updateUser(user);
+	}
+	
 	// @Cacheable("authUser")
 	public User loginauthentication(String email) {
 		log.info("call authUser()");

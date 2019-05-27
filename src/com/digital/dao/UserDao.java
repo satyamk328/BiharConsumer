@@ -38,6 +38,9 @@ public class UserDao {
 	@Value("${insert_user_detail}")
 	private String insertUserDetailQuery;
 	
+	@Value("${update_user_detail}")
+	private String updateUserDetailQuery;
+	
 	@Value("${insert_user_login_detail}")
 	private String insertUserLoginQuery;
 	
@@ -91,6 +94,20 @@ public class UserDao {
 		return userId;
 	}
 
+	@Transactional
+	public int updateUser(User user) {
+		log.debug("Running insert query for updateUser {}", updateUserDetailQuery);
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", user.getUserId());
+		parameters.addValue("name", user.getName());
+		parameters.addValue("address", user.getAddress());
+		parameters.addValue("panNumber", user.getPanNumber());
+		parameters.addValue("aadharNumber", user.getAadharNumber());
+		parameters.addValue("city", user.getCity());
+		parameters.addValue("state", user.getState());
+		return jdbcTemplateObject.update(updateUserDetailQuery, parameters);
+	}
+	
 	@Transactional
 	public Long auditing(Login login) {
 		log.debug("Running insert query for auditing: {}", insertUserLoginQuery);
