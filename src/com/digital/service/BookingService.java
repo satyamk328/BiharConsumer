@@ -2,6 +2,7 @@ package com.digital.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -20,12 +21,6 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 @Service("bookingService")
 public class BookingService {
 
-	public Optional<Object> cancelledTikcet(Long phoneNumber, Long ticketNumber) {
-		
-		return null;
-	}
-
-	
 
 	public ByteArrayInputStream citiesReport() {
 
