@@ -28,13 +28,13 @@ public class TicketDetails implements Serializable{
 	private String arrivalTime;
 	private String seatNumber;
 	private String seatName;
-	private String isLowerBerth;
-	private double totalFare;
+	private Boolean isLowerBerth = false;
+	private Double totalFare;
 	private String chartStatus;
 	private String customerName;
-	private int age;
+	private Long age;
 	private String email;
 	private String gender;
-	private int phoneNumber;
+	private Long phoneNumber;
 
 }
