@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class TripDetails implements Serializable{
+public class ScheduleBusDetails implements Serializable{
 	
 	private static final long serialVersionUID = 1068912061763283486L;
 	private List<BusScheduleDetails> availableRoutes = new ArrayList<>();

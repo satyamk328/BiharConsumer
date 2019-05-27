@@ -20,7 +20,7 @@ import com.digital.model.RoutedCity;
 import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
-import com.digital.model.TripDetails;
+import com.digital.model.ScheduleBusDetails;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
@@ -59,8 +59,8 @@ public class BusTripService {
 	@Autowired
 	private DataUtils dataUtils;
 
-	public TripDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
-		TripDetails busDetailsObject = new TripDetails();
+	public ScheduleBusDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
+		ScheduleBusDetails busDetailsObject = new ScheduleBusDetails();
 		log.info("call searchBusScheduleDetails {}, {}, {}", srcCityId, destCityId, date);
 		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
 				date);
