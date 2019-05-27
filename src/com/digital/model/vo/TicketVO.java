@@ -33,6 +33,7 @@ public class TicketVO {
 	private String departureTime;
 	private Date bookingDate = new Date();
 	private Boolean isLicence = false;
-	
+	private Long phone;
+	private String email;
 	private List<SeatDataToOperate> seatDataToOperate;
 }

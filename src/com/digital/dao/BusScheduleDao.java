@@ -116,9 +116,9 @@ public class BusScheduleDao {
 			parameters.addValue("totalFare", seatData.getTotalFare());
 			parameters.addValue("customerName", seatData.getCustName());
 			parameters.addValue("age", seatData.getAge());
-			parameters.addValue("email", seatData.getEmail());
+			parameters.addValue("email", bookTicketVO.getEmail());
 			parameters.addValue("gender", seatData.getGender());
-			parameters.addValue("phoneNumber", seatData.getPhone());
+			parameters.addValue("phoneNumber", bookTicketVO.getPhone());
 			parameters.addValue("isLicence", bookTicketVO.getIsLicence());
 			parameters.addValue("bookingDate", bookTicketVO.getBookingDate());
 					 

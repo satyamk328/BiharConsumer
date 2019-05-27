@@ -14,8 +14,6 @@ public class SeatDataToOperate {
 	private Long seatId;
 	private String custName;
 	private String gender;
-	private String email;	
-	private int age;
-	private int phone;
+	private Long age;
 
 }
