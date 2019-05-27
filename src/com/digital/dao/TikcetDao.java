@@ -17,9 +17,9 @@ import com.digital.model.vo.TicketVO;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Repository("bookingDao")
+@Repository("ticketDao")
 @Slf4j
-public class BookingDao {
+public class TikcetDao {
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;

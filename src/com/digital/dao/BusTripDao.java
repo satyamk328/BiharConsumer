@@ -50,7 +50,7 @@ public class BusTripDao {
 	@Autowired
 	private DataUtils dataUtils;
 	@Autowired
-	private BookingDao bookingDao;
+	private TikcetDao bookingDao;
 
 	@Transactional(readOnly = true)
 	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {

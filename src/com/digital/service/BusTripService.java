@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
-import com.digital.dao.BookingDao;
+import com.digital.dao.TikcetDao;
 import com.digital.dao.BusDao;
 import com.digital.dao.BusTripDao;
 import com.digital.dao.CancelPolicyDao;
@@ -48,7 +48,7 @@ public class BusTripService {
 	private CityDao cityDao;
 	
 	@Autowired
-	private BookingDao bookingDao;
+	private TikcetDao bookingDao;
 	
 	@Autowired
 	private SeatDao seatDao;
