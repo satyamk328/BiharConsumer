@@ -3,6 +3,7 @@ package com.digital.user.model;
 import java.io.Serializable;
 
 import com.digital.model.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class User extends BaseModel implements Serializable {
 	private String address;
 	private Long phoneNumber;
 	private String panNumber;
+	@JsonIgnore(false)
 	private String password;
 	private String city;
 	private String state;
