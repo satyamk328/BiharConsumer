@@ -24,6 +24,9 @@ public class TicketDao {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
+	@Value("${select_TicketDetails_By_PnrAndPhone}")
+	private String selectTicketDetailsBypnrAndPhone;
+	
 	@Value("${select_TicketDetails_By_ScheduleAndBusId}")
 	private String selectTicketDetailsByScheduleAndBusId;
 
@@ -33,6 +36,16 @@ public class TicketDao {
 	@Value("${delete_ticket_master_by_scheduleId_busId_seatId}")
 	private String deleteTicketMasterByScheduleIdBusIdSeatId;
 
+	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
+		log.debug("Running select query for getTicketDetails: {}",
+				selectTicketDetailsBypnrAndPhone);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("pnr", pnr);
+		parameters.addValue("phone", phone);
+		return jdbcTemplateObject.query(selectTicketDetailsBypnrAndPhone, parameters,
+				new BeanPropertyRowMapper<>(TicketDetails.class));
+	}
+	
 	@Transactional(readOnly = true)
 	public List<TicketDetails> getTicketDetailsByScheduleAndBusId(Long scheduleId, Long busId) {
 		log.debug("Running select query for getTicketDetailsByScheduleAndBusId: {}",

@@ -7,10 +7,13 @@ import java.io.UnsupportedEncodingException;
  */
 import java.util.Base64;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Satyam Kumar
  *
  */
+@Component
 public class CommonUtil {
 
 	public String encrypt(String data) {

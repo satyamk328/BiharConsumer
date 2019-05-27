@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Satyam Kumar
  *
  */
-@Service("busTripService")
+@Service
 @Slf4j
 public class BusScheduleService {
 

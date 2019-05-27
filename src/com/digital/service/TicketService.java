@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.digital.dao.BusScheduleDao;
 import com.digital.dao.TicketDao;
 import com.digital.model.RoutedCity;
+import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -22,7 +23,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
-@Service("bookingService")
+@Service
 public class TicketService {
 
 	@Autowired
@@ -30,6 +31,10 @@ public class TicketService {
 	
 	@Autowired
 	private TicketDao tikcetDao;
+	
+	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
+		return tikcetDao.getTicketDetails(pnr, phone);
+	}
 	
 	public int bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId

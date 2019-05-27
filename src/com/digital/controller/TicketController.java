@@ -13,11 +13,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
 import com.digital.service.TicketService;
 import com.digital.spring.model.RestResponse;
@@ -33,14 +33,14 @@ public class TicketController {
 	@Autowired
 	private TicketService bookingService;
 
-	@PutMapping(value = "/{mobileNumber}/{ticketNumber}")
-	public ResponseEntity<RestResponse<List<Object>>> cancelTicket(
+	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
+	public ResponseEntity<RestResponse<List<TicketDetails>>> cancelTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
-			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
+			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Printed ticket Successfully");
-		// TODO cancel code
-		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
+		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/bookTickets")
@@ -71,7 +71,7 @@ public class TicketController {
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
+	@GetMapping(value = "/pdf/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> ticketPDF(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {

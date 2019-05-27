@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Satyam Kumar
  *
  */
-@Repository("userDetailsDao")
+@Repository("userDao")
 @Slf4j
 public class UserDao {
 
