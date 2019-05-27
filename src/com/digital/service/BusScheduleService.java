@@ -8,21 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
-import com.digital.dao.TikcetDao;
 import com.digital.dao.BusDao;
-import com.digital.dao.BusTripDao;
+import com.digital.dao.BusScheduleDao;
 import com.digital.dao.CancelPolicyDao;
 import com.digital.dao.CityDao;
 import com.digital.dao.SeatDao;
+import com.digital.dao.TicketDao;
 import com.digital.model.BusDetails;
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
+import com.digital.model.ScheduleBusDetails;
 import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
-import com.digital.model.ScheduleBusDetails;
 import com.digital.model.vo.SearchTripVO;
-import com.digital.model.vo.TicketVO;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +32,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service("busTripService")
 @Slf4j
-public class BusTripService {
+public class BusScheduleService {
 
 	@Autowired
-	private BusTripDao busBookingDao;
+	private BusScheduleDao busBookingDao;
 
 	@Autowired
 	private AmenitiesDao amenitiesDao;
@@ -48,7 +47,7 @@ public class BusTripService {
 	private CityDao cityDao;
 	
 	@Autowired
-	private TikcetDao bookingDao;
+	private TicketDao bookingDao;
 	
 	@Autowired
 	private SeatDao seatDao;
@@ -159,27 +158,6 @@ public class BusTripService {
 		return scheduleSeatDetails;
 	}
 
-	public int bookTickets(TicketVO bookTicketVO) {
-		// Logic to generate tripId
-		List<RoutedCity> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
-				bookTicketVO.getSrcCityId());
-		List<RoutedCity> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
-				bookTicketVO.getDestCityId());
-		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
-				srcCitySeq.get(0).getCitySequance(), destCitySeq.get(0).getCitySequance());
-
-		String tripId = "";
-		for (RoutedCity routedCity : routedCities) {
-			tripId = tripId + routedCity.getCityId() + "::";
-		}
-		tripId = tripId.substring(0, tripId.length() - 2);
-		bookTicketVO.setTripId(tripId);
-
-		return busBookingDao.bookTickets(bookTicketVO);
-	}
-
-	public int cancelTickets(TicketVO bookTicketVO) {
-		return bookingDao.cancelTickets(bookTicketVO);
-	}
+	
 
 }

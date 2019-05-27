@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository("busTripDao")
 @Slf4j
-public class BusTripDao {
+public class BusScheduleDao {
 
 	@Value("${select_trip_by_city}")
 	private String selectSearchTripBySrcAndDescDateQuery;
@@ -50,7 +50,7 @@ public class BusTripDao {
 	@Autowired
 	private DataUtils dataUtils;
 	@Autowired
-	private TikcetDao bookingDao;
+	private TicketDao bookingDao;
 
 	@Transactional(readOnly = true)
 	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {
