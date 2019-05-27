@@ -1,7 +1,5 @@
 package com.digital.model.vo;
 
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +9,13 @@ public class SeatDataToOperate {
 	
 	private String seatType;
 	private String seatNumber;
-	private Integer isLowerBerth;
+	private Boolean isLowerBerth;
 	private Double totalFare;
 	private Long seatId;
 	private String custName;
 	private String gender;
 	private String email;	
 	private int age;
-	private Date bookingTime = new Date();
+	private int phone;
 
 }

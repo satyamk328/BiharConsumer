@@ -3,7 +3,6 @@ package com.digital.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,18 +41,21 @@ public class DataUtils {
 			return false;
 	}
 
-	public String getPNRNumber(String name, Long sourceId, Long destId, Long bookCount) {
+	public String getPNRNumber(String name, Long sourceId, Long destId, Integer bookCount) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(sourceId);
 		builder.append(destId);
 		builder.append(bookCount);
-		LocalDate date = LocalDate.now();
-		builder.append(date.getDayOfMonth());
-		builder.append(date.getMonth());
-		builder.append(date.getYear());
+		builder.append(getDate());
 		return builder.toString();
 	}
 
+	public static String getDate() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyy");
+		Date date = new Date();
+		return simpleDateFormat.format(date);
+	}
+	
 	public Map<String, String> validIdCardTypes() {
 		Map<String, String> idTypes = new HashMap<>();
 		idTypes.put("NULL_IDCARD", "NULL_IDCARD");
@@ -122,8 +124,7 @@ public class DataUtils {
 	}
 
 	public static void main(String[] args) {
-		LocalDate date = LocalDate.now();
-		System.out.println(date.getDayOfMonth());
+		System.out.println(getDate());
 	}
 
 	public String getGenerateOTP() {

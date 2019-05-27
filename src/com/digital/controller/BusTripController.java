@@ -3,6 +3,7 @@ package com.digital.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +64,10 @@ public class BusTripController {
 	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) TicketVO bookTicketVO) {
 		log.info("call search bookedBusTicket:{}", bookTicketVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
+		if(StringUtils.isEmpty(bookTicketVO.getSeatDataToOperate())) {
+			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(), "Customer details is incurrect");
+			new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.BAD_REQUEST);
+		}
 		int bStatus = busService.bookTickets(bookTicketVO);
 		if (bStatus != 1) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),

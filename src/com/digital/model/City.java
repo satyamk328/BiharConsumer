@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class City implements Serializable{
+	
 	private static final long serialVersionUID = -2496060421142221098L;
 	private long cityId;
 	private String displayName;

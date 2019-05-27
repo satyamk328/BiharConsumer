@@ -2,13 +2,10 @@ package com.digital.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.digital.model.TicketVO;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -29,22 +26,10 @@ public class BookingService {
 	}
 
 	
-	
-	
-	
-	private List<TicketVO> create() {
-		List<TicketVO> ticketVOs = new ArrayList<>();
-		TicketVO ticketVO = new TicketVO();
-		ticketVO.setBusId(1L);
-		ticketVO.setCustId(12L);
-		ticketVO.setTicketId(1L);
-		ticketVOs.add(ticketVO);
-		return ticketVOs;
-	}
 
 	public ByteArrayInputStream citiesReport() {
 
-		List<TicketVO> ticketVOs = create();
+		//List<TicketVO> ticketVOs = create();
 		Document document = new Document(PageSize.A4.rotate(), 36, 36, 54, 36);
 		document.setMargins(2, 2, 2, 2);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();

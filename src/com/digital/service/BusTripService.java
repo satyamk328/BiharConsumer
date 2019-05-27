@@ -179,7 +179,7 @@ public class BusTripService {
 	}
 
 	public int cancelTickets(TicketVO bookTicketVO) {
-		return busBookingDao.cancelTickets(bookTicketVO);
+		return bookingDao.cancelTickets(bookTicketVO);
 	}
 
 }
