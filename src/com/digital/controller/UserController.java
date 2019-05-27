@@ -18,7 +18,6 @@ import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
 import com.digital.user.model.Login;
 import com.digital.user.model.User;
-import com.digital.user.service.MailService;
 import com.digital.user.service.UserService;
 import com.digital.utils.CommonUtil;
 import com.digital.utils.GlobalConstants;
