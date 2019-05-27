@@ -23,7 +23,7 @@ public class User extends BaseModel implements Serializable {
 	private String address;
 	private Long phoneNumber;
 	private String panNumber;
-	@JsonIgnore(false)
+	@JsonIgnore(true)
 	private String password;
 	private String city;
 	private String state;

@@ -13,7 +13,7 @@ import java.util.Base64;
  */
 public class CommonUtil {
 
-	public static String encrypt(String data) {
+	public String encrypt(String data) {
 		try {
 			return Base64.getEncoder().encodeToString(data.getBytes("utf-8"));
 		} catch (UnsupportedEncodingException e) {
@@ -21,7 +21,7 @@ public class CommonUtil {
 		return null;
 	}
 
-	public static String decrypt(String encryptedData) {
+	public String decrypt(String encryptedData) {
 		byte[] asBytes = Base64.getDecoder().decode(encryptedData);
 		try {
 			return new String(asBytes, "utf-8");
@@ -30,8 +30,7 @@ public class CommonUtil {
 		return null;
 	}
 
-	
 	public static void main(String[] args) throws Exception {
-		System.out.println(encrypt("123"));
+		//System.out.println(encrypt("123"));
 	}
 }

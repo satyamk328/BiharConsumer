@@ -58,6 +58,9 @@ public class AuthenticationDao {
 	
 	@Autowired
 	private DataUtils dataUtils;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
@@ -81,6 +84,7 @@ public class AuthenticationDao {
 		log.debug("Running insert query for addUser {}", insertUserDetailQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		user.setRoleId(3L);
+		user.setPassword(commonUtil.decrypt(user.getPassword()));
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(user);
 		jdbcTemplateObject.update(insertUserDetailQuery, parameters, holder);
 		Long userId = (holder.getKey() == null) ? null : holder.getKey().longValue();
@@ -110,7 +114,7 @@ public class AuthenticationDao {
 	public int resetPassword(Long userId, String pass) {
 		log.debug("Running reset query for resetPassword {}", resetUserPasswordQuery);
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("password", CommonUtil.decrypt(pass));
+		parameters.addValue("password", commonUtil.decrypt(pass));
 		parameters.addValue("userId", userId);
 		return jdbcTemplateObject.update(resetUserPasswordQuery, parameters);
 	}

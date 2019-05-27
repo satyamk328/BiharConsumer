@@ -45,6 +45,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private DataUtils dataUtils;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 
 	@GetMapping(value = "")
 	public ResponseEntity<RestResponse<Object>> getAllUser(
@@ -100,7 +103,7 @@ public class AuthenticationController {
 					"Your account has been lock. Please contact system administrator!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if (!user.getPassword().equals(CommonUtil.encrypt(password))) {
+		if (!user.getPassword().equals(commonUtil.encrypt(password))) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
