@@ -96,5 +96,15 @@ public class TicketController {
 	}
 
 	
-
+	@PostMapping(value = "/cancelTickets/{ticketIds}")
+	public ResponseEntity<RestResponse<Object>> cancelTickets(@PathVariable(name = "ticketIds", required = true) String ticketIds) {
+		log.info("call search cancelTickets:{}", ticketIds);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket Cancelled Successfully");
+		int bStatus = bookingService.cancelTickets(ticketIds);
+		if (bStatus != 1) {
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are some issues to cancell ticket please call ADMIN +");
+		}
+		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
+	}
 }

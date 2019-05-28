@@ -2,7 +2,9 @@ package com.digital.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,5 +117,12 @@ public class TicketService {
 		}
 
 		return new ByteArrayInputStream(out.toByteArray());
+	}
+	
+	public int cancelTickets(String ticketIds) {
+		List<String> tickets = Arrays.asList(ticketIds.split(","));
+		List<Long> ticketIdsList =  tickets.stream().map(element->Long.parseLong(element)).collect(Collectors.toList());
+		
+		return tikcetDao.cancelTickets(ticketIdsList);
 	}
 }

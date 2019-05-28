@@ -45,13 +45,13 @@ public class BusScheduleService {
 
 	@Autowired
 	private CityDao cityDao;
-	
+
 	@Autowired
 	private TicketDao bookingDao;
-	
+
 	@Autowired
 	private SeatDao seatDao;
-	
+
 	@Autowired
 	private BusDao busDao;
 
@@ -134,7 +134,7 @@ public class BusScheduleService {
 						Arrays.asList(busDetails.getDestStops().split("::"))) : new ArrayList<>());
 		busDetails.setBusDetails(
 				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
-		
+
 		List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId());
 		scheduleSeatDetails.setBusSeatDetails(seatDetails);
 		List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
@@ -149,6 +149,8 @@ public class BusScheduleService {
 					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							seat.setIsBooked(true);
+							seat.setIsReservedForLadies(
+									"Female".equalsIgnoreCase(ticketDetail.getGender()) ? true : false);
 							continue X;
 						}
 					}
@@ -157,7 +159,5 @@ public class BusScheduleService {
 		}
 		return scheduleSeatDetails;
 	}
-
-	
 
 }
