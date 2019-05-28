@@ -156,7 +156,7 @@ public class UserDao {
 	public int updateLogOutTime(Long userId, String ip) {
 		log.debug("Running insert query for addUser {}", updateLoginLogoutTimeQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("cityId", userId);
+		parameters.addValue("userId", userId);
 		parameters.addValue("clientIp", ip);
 		return jdbcTemplateObject.update(updateLoginLogoutTimeQuery, parameters);
 	}

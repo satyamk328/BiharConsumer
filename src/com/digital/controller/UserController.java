@@ -59,7 +59,7 @@ public class UserController {
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "createdUser")
+	@PostMapping(value = "/createUser")
 	public ResponseEntity<RestResponse<Object>> addUser(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
@@ -110,11 +110,12 @@ public class UserController {
 			@PathVariable(name = "userId", required = true) Long userId,
 			@RequestBody(required = true) User user) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User profile update Successfully");
-		if(userId == user.getUserId()) {
+		if(user.getUserId() == null) {
 			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(),
 					"Please enter valid UserId!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.BAD_REQUEST);
 		}
+		user.setUserId(userId);
 		int i = userService.updateUser(user);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),

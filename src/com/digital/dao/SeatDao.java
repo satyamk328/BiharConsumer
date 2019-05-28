@@ -32,7 +32,7 @@ public class SeatDao {
 		parameters.addValue("layoutId", layoutId);
 
 		List<SeatDetails> seatDetails = jdbcTemplateObject.query(selectSeatDetailsByLayoutId, parameters,
-				new BeanPropertyRowMapper<SeatDetails>(SeatDetails.class));
+				new BeanPropertyRowMapper<>(SeatDetails.class));
 		return (seatDetails != null && !seatDetails.isEmpty()) ? seatDetails : new ArrayList<>();
 	}
 

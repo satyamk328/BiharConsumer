@@ -136,7 +136,7 @@ public class BusScheduleService {
 				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
 		
 		List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId());
-		scheduleSeatDetails.setSeatDetails(seatDetails);
+		scheduleSeatDetails.setBusSeatDetails(seatDetails);
 		List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
 				busDetails.getBusId());
 
