@@ -59,7 +59,7 @@ public class UserController {
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "")
+	@PostMapping(value = "createdUser")
 	public ResponseEntity<RestResponse<Object>> addUser(@RequestBody(required = true) User user) {
 		log.info("call registration {}", user);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Registered Successfully");
