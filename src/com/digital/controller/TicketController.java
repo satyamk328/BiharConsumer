@@ -1,7 +1,9 @@
 package com.digital.controller;
 
 import java.io.ByteArrayInputStream;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.model.TicketDetails;
@@ -47,7 +50,7 @@ public class TicketController {
 	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) TicketVO bookTicketVO) {
 		log.info("call search bookedBusTicket:{}", bookTicketVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
-		if(StringUtils.isEmpty(bookTicketVO.getSeatDataToOperate())) {
+		if (StringUtils.isEmpty(bookTicketVO.getSeatDataToOperate())) {
 			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(), "Customer details is incurrect");
 			new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.BAD_REQUEST);
 		}
@@ -58,7 +61,7 @@ public class TicketController {
 		}
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/cancelTickets")
 	public ResponseEntity<RestResponse<Object>> cancelTickets(@RequestBody(required = true) TicketVO cancelTickets) {
 		log.info("call search bookedBusTicket:{}", cancelTickets);
@@ -77,7 +80,7 @@ public class TicketController {
 			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		// TODO PDF code
-        ByteArrayInputStream bis = bookingService.citiesReport();
+		ByteArrayInputStream bis = bookingService.citiesReport();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
@@ -87,24 +90,25 @@ public class TicketController {
 		headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
 		headers.add(HttpHeaders.PRAGMA, "no-cache");
 		headers.add(HttpHeaders.EXPIRES, "0");
-		
+
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=123.pdf");
-		//headers.add("Content-Disposition", "inline; filename=citiesreport.pdf");
-		
-		//headers.setContentLength(bis.);
+		// headers.add("Content-Disposition", "inline; filename=citiesreport.pdf");
+
+		// headers.setContentLength(bis.);
 		return new ResponseEntity<>(new InputStreamResource(bis), headers, HttpStatus.OK);
 	}
 
-	
-	@PostMapping(value = "/cancelTickets/{ticketIds}")
-	public ResponseEntity<RestResponse<Object>> cancelTickets(@PathVariable(name = "ticketIds", required = true) String ticketIds) {
+	@PostMapping(value = "/cancelTickets/{phoneNumber}")
+	public ResponseEntity<RestResponse<Object>> cancelTickets(
+			@PathVariable(name = "phoneNumber", required = true) Long phoneNumber,
+			@RequestParam(name = "ticketIds") String ticketIds) throws ParseException {
 		log.info("call search cancelTickets:{}", ticketIds);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket Cancelled Successfully");
-		int bStatus = bookingService.cancelTickets(ticketIds);
-		if (bStatus != 1) {
+		Map<Long, String> ticketSatatus = bookingService.cancelTickets(ticketIds, phoneNumber);
+		if (ticketSatatus != null && !ticketSatatus.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are some issues to cancell ticket please call ADMIN +");
 		}
-		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(ticketSatatus, status), HttpStatus.OK);
 	}
 }

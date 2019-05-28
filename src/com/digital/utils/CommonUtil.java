@@ -1,11 +1,14 @@
 package com.digital.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -40,12 +43,14 @@ public class CommonUtil {
 		// System.out.println(encrypt("123"));
 	}
 
-	public static TicketCancellationPolicy getPolicyToApply(List<TicketCancellationPolicy> policies, int minutesAfterBooking, int minutesBeforeStart) {
+	public static TicketCancellationPolicy getPolicyToApply(List<TicketCancellationPolicy> policies,
+			Long minutesAfterBooking, Long minutesBeforeStart) {
 		// POLOICY ORDER BY PRIORITY
 		for (TicketCancellationPolicy policy : policies) {
 			if ("AFTER_BOOK".equals(policy.getApplyTerm()) && policy.getHoursToApply() * 60 >= minutesAfterBooking) {
 				return policy;
-			} else if ("BEFORE_START".equals(policy.getApplyTerm()) && policy.getHoursToApply()*60 <= minutesBeforeStart) {
+			} else if ("BEFORE_START".equals(policy.getApplyTerm())
+					&& policy.getHoursToApply() * 60 <= minutesBeforeStart) {
 				return policy;
 			} else {
 				return policy;
@@ -53,9 +58,26 @@ public class CommonUtil {
 		}
 		return null;
 	}
-	
+
 	public static Double getRefundAmount(TicketCancellationPolicy policy, Double bookingAmount) {
 		// POLOICY ORDER BY PRIORITY
-		return (policy.getRefendPercent() * bookingAmount)/100;
+		return (policy.getRefendPercent() * bookingAmount) / 100;
+	}
+
+	public static Date dateByDateAndTimeString(String date, String time) throws ParseException {
+		String pattern = "yyyy-MM-dd HH:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		return simpleDateFormat.parse(date + " " + time);
+		// return //simpleDateFormat.parse("2019-04-30 12:30:00");
+	}
+	
+	public static Long getMinutesDiff(Date biggerDate, Date lesserDate) {
+		long diff = biggerDate.getTime() - lesserDate.getTime();
+		//long diffSeconds = diff / 1000 % 60;
+		long diffMinutes = diff / (60 * 1000) % 60;
+		long diffHours = diff / (60 * 60 * 1000) % 24;
+		long diffDays = diff / (24 * 60 * 60 * 1000);		
+		
+		return ((diffDays * 24 *60) + (diffHours * 60) + diffMinutes);
 	}
 }
