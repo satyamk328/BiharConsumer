@@ -2,6 +2,8 @@ package com.digital.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +85,7 @@ public class UserController {
 	@PostMapping(value = "/serviceLoginAuth")
 	public ResponseEntity<RestResponse<Object>> loginAuthentication(
 			@RequestParam(name = "userName", required = true) String userName,
-			@RequestParam(name = "password", required = true) String password) {
+			@RequestParam(name = "password", required = true) String password, HttpServletRequest request) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Login Successfully");
 		User user = userService.loginauthentication(userName);
 		if (user == null) {
@@ -100,6 +102,7 @@ public class UserController {
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Login login = new Login();
+		login.setSessionId(request.getSession().getId());
 		userService.prepareLogin(login, user);
 		userService.addLoginDetail(login);
 		return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.OK);
@@ -107,12 +110,10 @@ public class UserController {
 
 	@PutMapping(value = "/update/{userId}")
 	public ResponseEntity<RestResponse<Object>> getUserDetails(
-			@PathVariable(name = "userId", required = true) Long userId,
-			@RequestBody(required = true) User user) {
+			@PathVariable(name = "userId", required = true) Long userId, @RequestBody(required = true) User user) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User profile update Successfully");
-		if(user.getUserId() == null) {
-			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(),
-					"Please enter valid UserId!");
+		if (user.getUserId() == null) {
+			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(), "Please enter valid UserId!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.BAD_REQUEST);
 		}
 		user.setUserId(userId);

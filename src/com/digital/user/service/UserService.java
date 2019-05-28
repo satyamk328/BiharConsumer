@@ -51,7 +51,6 @@ public class UserService {
 		login.setUserId(user.getUserId());
 		login.setClientHost("localhost");
 		login.setClientIp("127.0.0.1");
-		login.setSessionId("");
 	}
 	
 	public Long addUser(User user) {
