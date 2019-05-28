@@ -35,8 +35,6 @@ public class TicketMaster {
 	private String email; 
 	private String gender; 
 	private Long phoneNumber; 
-	private String idType; 
-	private String idNumber; 
 	private Integer isLicence; 
 	private Date bookingDate;
 	private Long policyId;

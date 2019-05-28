@@ -26,8 +26,6 @@ public class CustomerBusTicketVO {
 	private int age;
 	private String email;
 	private String phonenumber;
-	private String idtype;
-	private String idnumber;
 	private boolean islicence;
 	private String seatnumber;
 		

@@ -56,21 +56,6 @@ public class DataUtils {
 		return simpleDateFormat.format(date);
 	}
 	
-	public Map<String, String> validIdCardTypes() {
-		Map<String, String> idTypes = new HashMap<>();
-		idTypes.put("NULL_IDCARD", "NULL_IDCARD");
-		idTypes.put("DRIVING_LICENSE", "DRIVING_LICENSE");
-		idTypes.put("PASSPORT", "PASSPORT");
-		idTypes.put("PANCARD", "PANCARD");
-		idTypes.put("GOVT_ICARD", "GOVT_ICARD");
-		idTypes.put("BANK_PASSBOOK", "BANK_PASSBOOK");
-		idTypes.put("STUDENT_ICARD", "STUDENT_ICARD");
-		idTypes.put("CREDIT_CARD", "CREDIT_CARD");
-		idTypes.put("UNIQUE_ICARD", "UNIQUE_ICARD");
-		idTypes.put("VOTER_ICARD", "VOTER_ICARD");
-		return idTypes;
-	}
-
 	public List<String> getTimeList() {
 		List<String> busTypes = new ArrayList<>();
 		busTypes.add("Before 6 am");
@@ -89,18 +74,6 @@ public class DataUtils {
 		return busTypes;
 	}
 
-	public String parseBusDate(String str) {
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		Date date = null;
-		try {
-			date = dateFormat.parse(str);
-		} catch (ParseException e) {
-			log.error(e.getMessage());
-		}
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return simpleDateFormat.format(date);
-	}
-
 	public Date convertStringToDateFormat(String date, String format) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat(format);
@@ -117,11 +90,6 @@ public class DataUtils {
 		return dateFormat.format(dateValues);
 	}
 
-	public String formatDateToString(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		return sdf.format(date);
-	}
 
 	public static void main(String[] args) {
 		System.out.println(getDate());
