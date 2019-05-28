@@ -17,6 +17,7 @@ import com.digital.model.RoutedCity;
 import com.digital.model.extrator.BusTripDetailsExtrator;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
+import com.digital.utils.CommonUtil;
 import com.digital.utils.DataUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,10 @@ public class BusScheduleDao {
 
 	@Autowired
 	private DataUtils dataUtils;
+	
+	@Autowired
+	private CommonUtil commonUtil;
+	
 	@Autowired
 	private TicketDao bookingDao;
 
@@ -85,7 +90,7 @@ public class BusScheduleDao {
 	public synchronized int bookTickets(TicketVO bookTicketVO) {
 
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
-		String pnr = dataUtils.getPNRNumber(String.valueOf(bookTicketVO.getUserId()), bookTicketVO.getSrcCityId(),
+		String pnr = commonUtil.getPNRNumber(String.valueOf(bookTicketVO.getUserId()), bookTicketVO.getSrcCityId(),
 				bookTicketVO.getDestCityId(),
 				bookingDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
 		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {

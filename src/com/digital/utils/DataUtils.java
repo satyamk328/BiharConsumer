@@ -5,11 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.TimeZone;
 
 import org.springframework.stereotype.Component;
 
@@ -39,21 +36,6 @@ public class DataUtils {
 		// return false if nothing matches the input
 		else
 			return false;
-	}
-
-	public String getPNRNumber(String name, Long sourceId, Long destId, Integer bookCount) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(sourceId);
-		builder.append(destId);
-		builder.append(bookCount);
-		builder.append(getDate());
-		return builder.toString();
-	}
-
-	public static String getDate() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyy");
-		Date date = new Date();
-		return simpleDateFormat.format(date);
 	}
 	
 	public List<String> getTimeList() {
@@ -90,10 +72,6 @@ public class DataUtils {
 		return dateFormat.format(dateValues);
 	}
 
-
-	public static void main(String[] args) {
-		System.out.println(getDate());
-	}
 
 	public String getGenerateOTP() {
 		Random rnd = new Random();

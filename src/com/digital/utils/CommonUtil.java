@@ -80,4 +80,19 @@ public class CommonUtil {
 		
 		return ((diffDays * 24 *60) + (diffHours * 60) + diffMinutes);
 	}
+	
+	public String getPNRNumber(String name, Long sourceId, Long destId, Integer bookCount) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(sourceId);
+		builder.append(destId);
+		builder.append(bookCount);
+		builder.append(getDate());
+		return builder.toString();
+	}
+	
+	public static String getDate() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyy");
+		Date date = new Date();
+		return simpleDateFormat.format(date);
+	}
 }
