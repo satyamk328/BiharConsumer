@@ -131,7 +131,7 @@ public class UserDao {
 	public int resetPassword(Long userId, String pass) {
 		log.debug("Running reset query for resetPassword {}", resetUserPasswordQuery);
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("password", commonUtil.decrypt(pass));
+		parameters.addValue("password", commonUtil.encrypt(pass));
 		parameters.addValue("userId", userId);
 		return jdbcTemplateObject.update(resetUserPasswordQuery, parameters);
 	}
