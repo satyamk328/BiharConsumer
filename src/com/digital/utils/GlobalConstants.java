@@ -25,4 +25,6 @@ public class GlobalConstants {
 	public static final String BOOKING_CONFIRMATION_TICKET = "";
 	
 	public static final int MAX_SHEET_ALLOWED_PER_BOOKING = 5;
+	
+	public static final String SEPARATOR = "::";
 }

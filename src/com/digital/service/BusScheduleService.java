@@ -23,6 +23,7 @@ import com.digital.model.SeatDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
+import com.digital.utils.GlobalConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,11 +67,11 @@ public class BusScheduleService {
 
 		busScheduleDetails.forEach(route -> {
 			route.setBoardingLocations(route.getSrcStops() != null
-					? cityDao.getCityStopDetails(route.getSourceId(), Arrays.asList(route.getSrcStops().split("::")))
+					? cityDao.getCityStopDetails(route.getSourceId(), Arrays.asList(route.getSrcStops().split(GlobalConstants.SEPARATOR)))
 					: new ArrayList<>());
 
 			route.setDroppingLocations(route.getDestStops() != null ? cityDao.getCityStopDetails(
-					route.getDestinationId(), Arrays.asList(route.getDestStops().split("::"))) : new ArrayList<>());
+					route.getDestinationId(), Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
 
 			route.setCancellationPolicy(
 					route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId()) : new ArrayList<>());
@@ -96,7 +97,7 @@ public class BusScheduleService {
 			X: for (SeatDetails seat : seatDetails) {
 				for (TicketDetails ticketDetail : ticketDetails) {
 					if (seat.getSeatId() == ticketDetail.getSeatId()) {
-						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 						int i = -1;
 						for (RoutedCity routedCity : routedCities) {
 							i++;
@@ -136,11 +137,11 @@ public class BusScheduleService {
 				tripVO.getSourceId(), tripVO.getDestinationId());
 
 		scheduleSeatDetails.setBoardingPoints(busDetails.getSrcStops() != null ? cityDao.getCityStopDetails(
-				busDetails.getSourceId(), Arrays.asList(busDetails.getSrcStops().split("::"))) : new ArrayList<>());
+				busDetails.getSourceId(), Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
 
 		scheduleSeatDetails.setDroppingPoints(
 				busDetails.getDestStops() != null ? cityDao.getCityStopDetails(busDetails.getDestinationId(),
-						Arrays.asList(busDetails.getDestStops().split("::"))) : new ArrayList<>());
+						Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
 		busDetails.setBusDetails(
 				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
 
@@ -154,7 +155,7 @@ public class BusScheduleService {
 		X: for (SeatDetails seat : seatDetails) {
 			for (TicketDetails ticketDetail : ticketDetails) {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
-					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							seat.setIsBooked(true);
