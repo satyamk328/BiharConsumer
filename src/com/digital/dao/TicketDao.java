@@ -127,35 +127,37 @@ public class TicketDao {
 		Map<Long, String> statusData = new LinkedHashMap<Long, String>();
 
 		for (Long ticketId : ticketIds) {
-			TicketMaster ticket = getTicketByTicketId(ticketId, phoneNumber);
-
-			// If ticket is not found in DB
-			if (ticket == null) {
-				statusData.put(ticketId, ticketId + " is invalid.");
-				continue;
-			}
-
-			BusDepatureTimeDetails depatureDetails = getBusStartTimeByScheduleId(ticket.getScheduleId());
-			List<TicketCancellationPolicy> cancellationPolicies = getTicketCancellationPolicy(ticket.getBusId());
-			Date busSchDateTime = CommonUtil.dateByDateAndTimeString(depatureDetails.getDepartureDate(),
-					depatureDetails.getDepartureTime());
-
-			// If try to cancell ticket after bus start time
-			if (busSchDateTime.compareTo(new Date()) == -1) {
-				statusData.put(ticketId, "This ticket " + ticketId
-						+ " can not be cancelled becuse you are trying to cancel ticket after bus start");
-				continue;
-			}
-
-			Long minutesAfterBooking = 0L;// TODO calculate
-			Long minutesBeforeStart = CommonUtil.getMinutesDiff(busSchDateTime, new Date());
-
-			TicketCancellationPolicy policy = CommonUtil.getPolicyToApply(cancellationPolicies, minutesAfterBooking,
-					minutesBeforeStart);
-			ticket.setPolicyId(policy.getPolicyId());
-			ticket.setRefundAmount(CommonUtil.getRefundAmount(policy, ticket.getTotalFare()));
 
 			try {
+
+				TicketMaster ticket = getTicketByTicketId(ticketId, phoneNumber);
+
+				// If ticket is not found in DB
+				if (ticket == null) {
+					statusData.put(ticketId, ticketId + " is invalid.");
+					continue;
+				}
+
+				BusDepatureTimeDetails depatureDetails = getBusStartTimeByScheduleId(ticket.getScheduleId());
+				List<TicketCancellationPolicy> cancellationPolicies = getTicketCancellationPolicy(ticket.getBusId());
+				Date busSchDateTime = CommonUtil.dateByDateAndTimeString(depatureDetails.getDepartureDate(),
+						depatureDetails.getDepartureTime());
+
+				// If try to cancell ticket after bus start time
+				if (busSchDateTime.compareTo(new Date()) == -1) {
+					statusData.put(ticketId, "This ticket " + ticketId
+							+ " can not be cancelled becuse you are trying to cancel ticket after bus start");
+					continue;
+				}
+
+				Long minutesAfterBooking = 0L;// TODO calculate
+				Long minutesBeforeStart = CommonUtil.getMinutesDiff(busSchDateTime, new Date());
+
+				TicketCancellationPolicy policy = CommonUtil.getPolicyToApply(cancellationPolicies, minutesAfterBooking,
+						minutesBeforeStart);
+				ticket.setPolicyId(policy.getPolicyId());
+				ticket.setRefundAmount(CommonUtil.getRefundAmount(policy, ticket.getTotalFare()));
+
 				final KeyHolder holder = new GeneratedKeyHolder();
 				final BeanPropertySqlParameterSource beanParameters = new BeanPropertySqlParameterSource(ticket);
 				jdbcTemplateObject.update(insertCancelTicketMasterFromTicketMasterByTicketId, beanParameters, holder);
@@ -176,7 +178,9 @@ public class TicketDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ticketId", ticketId);
 		parameters.addValue("phoneNumber", phoneNumber);
-		return jdbcTemplateObject.queryForObject(selectTicketByTicketId, parameters, TicketMaster.class);
+		List<TicketMaster> result = jdbcTemplateObject.query(selectTicketByTicketId, parameters,
+				new BeanPropertyRowMapper<>(TicketMaster.class));
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 	public List<TicketCancellationPolicy> getTicketCancellationPolicy(Long busId) {
@@ -191,6 +195,8 @@ public class TicketDao {
 		log.debug("Running select query for getBusStartTimeByScheduleId: {}", busStartTimeByScheduleId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
-		return jdbcTemplateObject.queryForObject(busStartTimeByScheduleId, parameters, BusDepatureTimeDetails.class);
+		List<BusDepatureTimeDetails> result = jdbcTemplateObject.query(busStartTimeByScheduleId, parameters,
+				new BeanPropertyRowMapper<>(BusDepatureTimeDetails.class));
+		return result.isEmpty() ? null : result.get(0);
 	}
 }

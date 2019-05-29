@@ -98,7 +98,7 @@ public class TicketController {
 		return new ResponseEntity<>(new InputStreamResource(bis), headers, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/cancelTickets/{phoneNumber}")
+	@GetMapping(value = "/cancelTickets/{phoneNumber}")
 	public ResponseEntity<RestResponse<Object>> cancelTickets(
 			@PathVariable(name = "phoneNumber", required = true) Long phoneNumber,
 			@RequestParam(name = "ticketIds") String ticketIds) throws ParseException {

@@ -12,7 +12,7 @@ public class TicketCancellationPolicy implements Serializable {
 	private Long policyId;
 	private Long busId;
 	private Integer hoursToApply;
-	private Integer refendPercent;
+	private Integer refundPercent;
 	private Integer applyPriority;
 	private String applyTerm;
 	private String description;

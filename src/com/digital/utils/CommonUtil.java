@@ -47,12 +47,9 @@ public class CommonUtil {
 			Long minutesAfterBooking, Long minutesBeforeStart) {
 		// POLOICY ORDER BY PRIORITY
 		for (TicketCancellationPolicy policy : policies) {
-			if ("AFTER_BOOK".equals(policy.getApplyTerm()) && policy.getHoursToApply() * 60 >= minutesAfterBooking) {
+			if ("BEFORE_START".equals(policy.getApplyTerm()) && policy.getHoursToApply() * 60 <= minutesBeforeStart) {
 				return policy;
-			} else if ("BEFORE_START".equals(policy.getApplyTerm())
-					&& policy.getHoursToApply() * 60 <= minutesBeforeStart) {
-				return policy;
-			} else {
+			} else if ("DEFAULT".equals(policy.getApplyTerm())) {
 				return policy;
 			}
 		}
@@ -61,7 +58,7 @@ public class CommonUtil {
 
 	public static Double getRefundAmount(TicketCancellationPolicy policy, Double bookingAmount) {
 		// POLOICY ORDER BY PRIORITY
-		return (policy.getRefendPercent() * bookingAmount) / 100;
+		return (policy.getRefundPercent() * bookingAmount) / 100;
 	}
 
 	public static Date dateByDateAndTimeString(String date, String time) throws ParseException {
@@ -70,15 +67,15 @@ public class CommonUtil {
 		return simpleDateFormat.parse(date + " " + time);
 		// return //simpleDateFormat.parse("2019-04-30 12:30:00");
 	}
-	
+
 	public static Long getMinutesDiff(Date biggerDate, Date lesserDate) {
 		long diff = biggerDate.getTime() - lesserDate.getTime();
-		//long diffSeconds = diff / 1000 % 60;
+		// long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000) % 24;
-		long diffDays = diff / (24 * 60 * 60 * 1000);		
-		
-		return ((diffDays * 24 *60) + (diffHours * 60) + diffMinutes);
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+
+		return ((diffDays * 24 * 60) + (diffHours * 60) + diffMinutes);
 	}
 	
 	public String getPNRNumber(String name, Long sourceId, Long destId, Integer bookCount) {
