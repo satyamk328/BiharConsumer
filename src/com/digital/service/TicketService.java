@@ -16,6 +16,7 @@ import com.digital.dao.TicketDao;
 import com.digital.model.RoutedCity;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
+import com.digital.utils.GlobalConstants;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -51,7 +52,7 @@ public class TicketService {
 
 		String tripId = "";
 		for (RoutedCity routedCity : routedCities) {
-			tripId = tripId + routedCity.getCityId() + "::";
+			tripId = tripId + routedCity.getCityId() + GlobalConstants.SEPARATOR;
 		}
 		tripId = tripId.substring(0, tripId.length() - 2);
 		bookTicketVO.setTripId(tripId);
