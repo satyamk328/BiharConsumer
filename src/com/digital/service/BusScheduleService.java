@@ -97,7 +97,16 @@ public class BusScheduleService {
 				for (TicketDetails ticketDetail : ticketDetails) {
 					if (seat.getSeatId() == ticketDetail.getSeatId()) {
 						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split("::"));
+						int i = -1;
 						for (RoutedCity routedCity : routedCities) {
+							i++;
+							if (i == 0 && tripCitiesIds.get(0)
+									.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
+								continue;
+							} else if (i == (routedCities.size() - 1) && tripCitiesIds.get(tripCitiesIds.size() - 1)
+									.equals(routedCities.get(0).getCityId().toString())) {
+								continue;
+							}
 							if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 								seat.setIsBooked(true);
 								bookedSeat++;
