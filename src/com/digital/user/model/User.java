@@ -24,7 +24,6 @@ public class User extends BaseModel implements Serializable {
 	private Long phoneNumber;
 	private String panNumber;
 	private String aadharNumber;
-	@JsonIgnore(true)
 	private String password;
 	private String city;
 	private String state;

@@ -58,9 +58,9 @@ public class UserService {
 		return userDao.addUser(user);
 	}
 
-	public int resetPassword(Long userId, String pass) {
+	public int resetPassword(Long userId, String oldPassword, String pass) {
 		log.info("call resetPassword()");
-		return userDao.resetPassword(userId, pass);
+		return userDao.resetPassword(userId, oldPassword, pass);
 	}
 
 	public Long lockUser(Long userId, Boolean isLock, int attempt) {

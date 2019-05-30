@@ -87,7 +87,7 @@ public class UserDao {
 		log.debug("Running insert query for addUser {}", insertUserDetailQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		user.setRoleId(3L);
-		user.setPassword(commonUtil.decrypt(user.getPassword()));
+		user.setPassword(commonUtil.encrypt(user.getPassword()));
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(user);
 		jdbcTemplateObject.update(insertUserDetailQuery, parameters, holder);
 		Long userId = (holder.getKey() == null) ? null : holder.getKey().longValue();
@@ -128,10 +128,11 @@ public class UserDao {
 	}
 	
 	@Transactional
-	public int resetPassword(Long userId, String pass) {
+	public int resetPassword(Long userId,String oldPassword, String pass) {
 		log.debug("Running reset query for resetPassword {}", resetUserPasswordQuery);
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("password", commonUtil.encrypt(pass));
+		parameters.addValue("oldPassword", commonUtil.encrypt(oldPassword));
 		parameters.addValue("userId", userId);
 		return jdbcTemplateObject.update(resetUserPasswordQuery, parameters);
 	}

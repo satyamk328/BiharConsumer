@@ -129,9 +129,10 @@ public class UserController {
 	@PutMapping(value = "/resetpassword/{userId}")
 	public ResponseEntity<RestResponse<Object>> resetPassword(
 			@PathVariable(name = "userId", required = true) Long userId,
+			@RequestParam(name = "oldPassword", required = true) String oldPassword,
 			@RequestParam(name = "newPassword", required = true) String pass) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
-		int i = userService.resetPassword(userId, pass);
+		int i = userService.resetPassword(userId,oldPassword, pass);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.INTERNAL_SERVER_ERROR);
