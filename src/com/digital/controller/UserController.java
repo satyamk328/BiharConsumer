@@ -68,9 +68,11 @@ public class UserController {
 		if (userService.loginauthentication(user.getEmail()) != null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this email address already exist into system!");
+			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.CONFLICT);
 		} else if (userService.loginauthentication(String.valueOf(user.getPhoneNumber())) != null) {
 			status = new RestStatus<>(HttpStatus.CONFLICT.toString(),
 					"A user with this phone number already exist into system!");
+			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.CONFLICT);
 		} else {
 			Long userId = userService.addUser(user);
 			if (userId == null) {
