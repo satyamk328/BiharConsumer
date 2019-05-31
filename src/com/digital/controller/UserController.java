@@ -97,8 +97,13 @@ public class UserController {
 					"Your account has been lock. Please contact system administrator!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		if(user.getRoleId() != 3) {
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+					"User Name and password are not authorized. Please contact system administrator!");
+			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		if (!user.getPassword().equals(commonUtil.encrypt(password))) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid username or password!.");
+			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Invalid password!.");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Login login = new Login();

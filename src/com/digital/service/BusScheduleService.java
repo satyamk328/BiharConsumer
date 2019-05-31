@@ -66,12 +66,17 @@ public class BusScheduleService {
 				date);
 
 		busScheduleDetails.forEach(route -> {
-			route.setBoardingLocations(route.getSrcStops() != null
-					? cityDao.getCityStopDetails(route.getSourceId(), Arrays.asList(route.getSrcStops().split(GlobalConstants.SEPARATOR)))
-					: new ArrayList<>());
+			route.setBoardingLocations(
+					route.getSrcStops() != null
+							? cityDao.getCityStopDetails(route.getSourceId(),
+									Arrays.asList(route.getSrcStops().split(GlobalConstants.SEPARATOR)))
+							: new ArrayList<>());
 
-			route.setDroppingLocations(route.getDestStops() != null ? cityDao.getCityStopDetails(
-					route.getDestinationId(), Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
+			route.setDroppingLocations(
+					route.getDestStops() != null
+							? cityDao.getCityStopDetails(route.getDestinationId(),
+									Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR)))
+							: new ArrayList<>());
 
 			route.setCancellationPolicy(
 					route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId()) : new ArrayList<>());
@@ -97,7 +102,8 @@ public class BusScheduleService {
 			X: for (SeatDetails seat : seatDetails) {
 				for (TicketDetails ticketDetail : ticketDetails) {
 					if (seat.getSeatId() == ticketDetail.getSeatId()) {
-						List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
+						List<String> tripCitiesIds = Arrays
+								.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 						int i = -1;
 						for (RoutedCity routedCity : routedCities) {
 							i++;
@@ -136,12 +142,17 @@ public class BusScheduleService {
 		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(),
 				tripVO.getSourceId(), tripVO.getDestinationId());
 
-		scheduleSeatDetails.setBoardingPoints(busDetails.getSrcStops() != null ? cityDao.getCityStopDetails(
-				busDetails.getSourceId(), Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
+		scheduleSeatDetails
+				.setBoardingPoints(busDetails.getSrcStops() != null
+						? cityDao.getCityStopDetails(busDetails.getSourceId(),
+								Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR)))
+						: new ArrayList<>());
 
-		scheduleSeatDetails.setDroppingPoints(
-				busDetails.getDestStops() != null ? cityDao.getCityStopDetails(busDetails.getDestinationId(),
-						Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR))) : new ArrayList<>());
+		scheduleSeatDetails
+				.setDroppingPoints(busDetails.getDestStops() != null
+						? cityDao.getCityStopDetails(busDetails.getDestinationId(),
+								Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR)))
+						: new ArrayList<>());
 		busDetails.setBusDetails(
 				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
 
@@ -153,10 +164,12 @@ public class BusScheduleService {
 		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
 				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
 		X: for (SeatDetails seat : seatDetails) {
+			populateFare(seat, busDetails);
 			for (TicketDetails ticketDetail : ticketDetails) {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
-					List<String> tripCitiesIds = Arrays.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
-					int i=-1;
+					List<String> tripCitiesIds = Arrays
+							.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
+					int i = -1;
 					for (RoutedCity routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							i++;
@@ -179,4 +192,10 @@ public class BusScheduleService {
 		return scheduleSeatDetails;
 	}
 
+	private void populateFare(SeatDetails seat, BusScheduleDetails busDetails) {
+		if (seat.getSeatType().equalsIgnoreCase("SS"))
+			seat.setFare(busDetails.getSeaterFare());
+		else
+			seat.setFare(busDetails.getSleeperFare());
+	}
 }
