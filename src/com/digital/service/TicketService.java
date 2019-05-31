@@ -64,64 +64,6 @@ public class TicketService {
 		return tikcetDao.cancelTickets(bookTicketVO);
 	}	
 	
-	public ByteArrayInputStream citiesReport() {
-
-		//List<TicketVO> ticketVOs = create();
-		Document document = new Document(PageSize.A4.rotate(), 36, 36, 54, 36);
-		document.setMargins(2, 2, 2, 2);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		try {
-			
-		
-			Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
-			LineSeparator addLine = new LineSeparator();
-			
-			Paragraph companyName = new Paragraph("Bus Ticket Booking System", headFont);
-			companyName.setAlignment(Element.ALIGN_CENTER);
-			
-			Paragraph sourceDestination = new Paragraph("From DELHI to Gaya", headFont);
-			sourceDestination.setAlignment(Element.ALIGN_CENTER);
-			
-			Paragraph busNumber = new Paragraph("Bus Number: 12" );
-			
-			Paragraph passengerName = new Paragraph("Passenger Name: SATYAM KUMAR ", headFont);
-
-			Paragraph ticketNumber = new Paragraph("Ticket Number: 12");
-			Paragraph departure = new Paragraph("Departure: 12:30");
-			Paragraph cost = new Paragraph("Travel Cost: € 12000");
-
-			Paragraph footer = new Paragraph("Happy Journey!", headFont);
-			footer.setAlignment(Element.ALIGN_CENTER);
-			
-			
-
-			PdfWriter.getInstance(document, out);
-			document.open();
-			document.add(companyName);
-			document.add(new Chunk(addLine));
-			document.add(sourceDestination);
-			document.add(Chunk.NEWLINE);
-			document.add(Chunk.NEWLINE);
-			document.add(ticketNumber);
-			document.add(busNumber);
-			document.add(passengerName);
-			document.add(departure);
-			document.add(cost);
-			document.add(Chunk.NEWLINE);
-			document.add(Chunk.NEWLINE);
-			document.add(new Chunk(addLine));
-			document.add(footer);
-
-			document.close();
-
-		} catch (DocumentException ex) {
-
-		}
-
-		return new ByteArrayInputStream(out.toByteArray());
-	}
-	
 	public Map<Long, String> cancelTickets(String ticketIds, Long phoneNumber) throws ParseException {
 		List<String> tickets = Arrays.asList(ticketIds.split(","));
 		List<Long> ticketIdsList =  tickets.stream().map(element->Long.parseLong(element)).collect(Collectors.toList());

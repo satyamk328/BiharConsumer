@@ -74,30 +74,6 @@ public class TicketController {
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/pdf/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<InputStreamResource> ticketPDF(
-			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
-			@PathVariable(name = "ticketNumber", required = true) Long ticketNumber) {
-		log.info("call print {},{}", mobileNumber, ticketNumber);
-		// TODO PDF code
-		ByteArrayInputStream bis = bookingService.citiesReport();
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
-		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT");
-		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
-		headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-		headers.add(HttpHeaders.PRAGMA, "no-cache");
-		headers.add(HttpHeaders.EXPIRES, "0");
-
-		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=123.pdf");
-		// headers.add("Content-Disposition", "inline; filename=citiesreport.pdf");
-
-		// headers.setContentLength(bis.);
-		return new ResponseEntity<>(new InputStreamResource(bis), headers, HttpStatus.OK);
-	}
-
 	@GetMapping(value = "/cancelTickets/{phoneNumber}")
 	public ResponseEntity<RestResponse<Object>> cancelTickets(
 			@PathVariable(name = "phoneNumber", required = true) Long phoneNumber,
