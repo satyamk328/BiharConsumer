@@ -1,7 +1,5 @@
 package com.digital.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -13,20 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.digital.dao.BusScheduleDao;
 import com.digital.dao.TicketDao;
+import com.digital.model.CancelTicketDetails;
 import com.digital.model.RoutedCity;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.GlobalConstants;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 
 @Service
 public class TicketService {
@@ -39,6 +28,11 @@ public class TicketService {
 	
 	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
 		return tikcetDao.getTicketDetails(pnr, phone);
+	}
+	
+
+	public List<CancelTicketDetails> getCancelTicketDetails(String pnr, Long phone){
+		return tikcetDao.getCancelTicketDetails(pnr, phone);
 	}
 	
 	public int bookTickets(TicketVO bookTicketVO) {

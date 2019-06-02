@@ -1,22 +1,25 @@
 package com.digital.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class TicketDetails implements Serializable{
-	
+public class TicketDetails implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	private Long ticketId;
 	private Long scheduleId;
-	private Long userId;
+	private String userId;
 	private Long busId;
 	private String pnr;
 	private Long seatId;
 	private String tripId;
+	private String sourceCityName;
+	private String destCityName;
 	private String travelName;
 	private String busType;
 	private Boolean isAc = false;
@@ -36,5 +39,6 @@ public class TicketDetails implements Serializable{
 	private String email;
 	private String gender;
 	private Long phoneNumber;
-
+	private Boolean isLicence;
+	private Date bookingDate;
 }

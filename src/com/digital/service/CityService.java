@@ -28,12 +28,17 @@ public class CityService {
 		return cityDao.getAllCities();
 	}
 
-	@Cacheable(value = "topAllCityByCity", key = "#cityName")
+	@Cacheable(value = "cityDetails.CityName", key = "#cityName")
 	public List<City> getCityByName(String cityName) {
 		log.info("call searchStationByStationName {}", cityName);
 		return cityDao.getCityByName(cityName);
 	}
 
+	@Cacheable(value = "cityDetails.CityId", key = "#cityId")
+	public City getCityById(Long cityId) {
+		return cityDao.getCityById(cityId);
+	}
+	
 	public Long save(City city) {
 		log.info("call addStationName [{}]", city);
 		List<City> cities = cityDao.getCityByName(city.getDisplayName());
@@ -41,10 +46,6 @@ public class CityService {
 			return cityDao.addCity(city);
 		}
 		return 0L;
-	}
-
-	public City getCityById(Long cityId) {
-		return cityDao.getCityById(cityId);
 	}
 
 	public int delete(Long cityId) {

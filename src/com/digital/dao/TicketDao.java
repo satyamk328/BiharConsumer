@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.digital.model.BusDepatureTimeDetails;
 import com.digital.model.TicketCancellationPolicy;
 import com.digital.model.TicketDetails;
-import com.digital.model.TicketMaster;
+import com.digital.model.CancelTicketDetails;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.CommonUtil;
@@ -34,9 +34,15 @@ public class TicketDao {
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
+	
+	@Autowired
+	private CancelPolicyDao cancelPolicyDao;
 
 	@Value("${select_TicketDetails_By_PnrAndPhone}")
 	private String selectTicketDetailsBypnrAndPhone;
+	
+	@Value("${select_cancelTicketDetails_By_PnrAndPhone}")
+	private String selectCancelTicketDetailsBypnrAndPhone;
 
 	@Value("${select_TicketDetails_By_ScheduleAndBusId}")
 	private String selectTicketDetailsByScheduleAndBusId;
@@ -53,15 +59,13 @@ public class TicketDao {
 	@Value("${delete_ticket_master_by_ticketId}")
 	private String deleteTicketMasterByTicketId;
 
-	@Value("${select_cancellation_policy_by_busId}")
-	private String selectCancellationtPolicyByBusId;
-
 	@Value("${select_ticket_by_ticketId}")
 	private String selectTicketByTicketId;
 
 	@Value("${select_bus_StartTime_by_scheduleId}")
 	private String busStartTimeByScheduleId;
 
+	@Transactional(readOnly = true)
 	public List<TicketDetails> getTicketDetails(String pnr, Long phone) {
 		log.debug("Running select query for getTicketDetails: {}", selectTicketDetailsBypnrAndPhone);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -69,6 +73,16 @@ public class TicketDao {
 		parameters.addValue("phone", phone);
 		return jdbcTemplateObject.query(selectTicketDetailsBypnrAndPhone, parameters,
 				new BeanPropertyRowMapper<>(TicketDetails.class));
+	}
+	
+	@Transactional(readOnly = true)
+	public List<CancelTicketDetails> getCancelTicketDetails(String pnr, Long phone) {
+		log.debug("Running select query for getTicketDetails: {}", selectCancelTicketDetailsBypnrAndPhone);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("pnr", pnr);
+		parameters.addValue("phone", phone);
+		return jdbcTemplateObject.query(selectCancelTicketDetailsBypnrAndPhone, parameters,
+				new BeanPropertyRowMapper<>(CancelTicketDetails.class));
 	}
 
 	@Transactional(readOnly = true)
@@ -108,6 +122,7 @@ public class TicketDao {
 		return 1;
 	}
 
+	@Transactional(readOnly=true)
 	public Integer totalTicketCont(Long scheduleId, Long busId) {
 		String sql = "SELECT COUNT(*) FROM ticket_master WHERE ScheduleId =:scheduleId AND BusId =:busId";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -130,7 +145,7 @@ public class TicketDao {
 
 			try {
 
-				TicketMaster ticket = getTicketByTicketId(ticketId, phoneNumber);
+				CancelTicketDetails ticket = getTicketByTicketId(ticketId, phoneNumber);
 
 				// If ticket is not found in DB
 				if (ticket == null) {
@@ -139,7 +154,7 @@ public class TicketDao {
 				}
 
 				BusDepatureTimeDetails depatureDetails = getBusStartTimeByScheduleId(ticket.getScheduleId());
-				List<TicketCancellationPolicy> cancellationPolicies = getTicketCancellationPolicy(ticket.getBusId());
+				List<TicketCancellationPolicy> cancellationPolicies = cancelPolicyDao.getTicketCancellationPolicy(ticket.getBusId());
 				Date busSchDateTime = CommonUtil.dateByDateAndTimeString(depatureDetails.getDepartureDate(),
 						depatureDetails.getDepartureTime());
 
@@ -173,24 +188,18 @@ public class TicketDao {
 		return statusData;
 	}
 
-	public TicketMaster getTicketByTicketId(Long ticketId, Long phoneNumber) {
+	@Transactional(readOnly = true)
+	public CancelTicketDetails getTicketByTicketId(Long ticketId, Long phoneNumber) {
 		log.debug("Running select query for getTicketByTicketId: {}", selectTicketByTicketId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ticketId", ticketId);
 		parameters.addValue("phoneNumber", phoneNumber);
-		List<TicketMaster> result = jdbcTemplateObject.query(selectTicketByTicketId, parameters,
-				new BeanPropertyRowMapper<>(TicketMaster.class));
+		List<CancelTicketDetails> result = jdbcTemplateObject.query(selectTicketByTicketId, parameters,
+				new BeanPropertyRowMapper<>(CancelTicketDetails.class));
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	public List<TicketCancellationPolicy> getTicketCancellationPolicy(Long busId) {
-		log.debug("Running select query for getTicketCancellationPolicy: {}", selectCancellationtPolicyByBusId);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("busId", busId);
-		return jdbcTemplateObject.query(selectCancellationtPolicyByBusId, parameters,
-				new BeanPropertyRowMapper<>(TicketCancellationPolicy.class));
-	}
-
+	@Transactional(readOnly=true)
 	public BusDepatureTimeDetails getBusStartTimeByScheduleId(Long scheduleId) {
 		log.debug("Running select query for getBusStartTimeByScheduleId: {}", busStartTimeByScheduleId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();

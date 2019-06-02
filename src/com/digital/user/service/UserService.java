@@ -3,6 +3,7 @@ package com.digital.user.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.UserDao;
@@ -23,12 +24,13 @@ public class UserService {
 	private UserDao userDao;
 
 
-	// @Cacheable("userAllData")
+    @Cacheable("userAllData")
 	public List<User> getAllUsers() {
 		log.info("call getUsers()");
 		return userDao.findAllUser();
 	}
 
+    @Cacheable(value="userDetails.userId", key="#uid")
 	public User getUserDetailById(Long userId) {
 		return userDao.getUserDetailById(userId);
 	}
@@ -37,7 +39,6 @@ public class UserService {
 		return userDao.updateUser(user);
 	}
 	
-	// @Cacheable("authUser")
 	public User loginauthentication(String email) {
 		log.info("call authUser()");
 		return userDao.loginAuthentication(email);

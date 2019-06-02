@@ -39,10 +39,6 @@ public class CommonUtil {
 		return null;
 	}
 
-	public static void main(String[] args) throws Exception {
-		// System.out.println(encrypt("123"));
-	}
-
 	public static TicketCancellationPolicy getPolicyToApply(List<TicketCancellationPolicy> policies,
 			Long minutesAfterBooking, Long minutesBeforeStart) {
 		// POLOICY ORDER BY PRIORITY
@@ -87,9 +83,10 @@ public class CommonUtil {
 		return builder.toString();
 	}
 	
-	public static String getDate() {
+	private String getDate() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyy");
 		Date date = new Date();
 		return simpleDateFormat.format(date);
 	}
+	
 }

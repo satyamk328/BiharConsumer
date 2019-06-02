@@ -3,67 +3,61 @@
 	monitoring="autodetect" dynamicConfig="true">
 
 	<diskStore path="java.io.tmpdir" />
-
-    <cache name="authUser" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	
+    <cache name="userDetails.userId" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="userDetails" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="userAllData" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="userAllData" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="topAllCity" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="topAllCity" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="cityDetails.CityName" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="topAllCityByCity" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="cityDetails.CityId" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="walletHistory" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="allAmenity" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
-	<cache name="walletDetails" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
-		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
-		<persistence strategy="localTempSwap" />
-	</cache>
-
-	<cache name="routesDetails" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="amenityDetails.Id" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
 
-	<cache name="tripsDetails" maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="1000" eternal="false" diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+	<cache name="routesDetails" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
+	
 </ehcache>

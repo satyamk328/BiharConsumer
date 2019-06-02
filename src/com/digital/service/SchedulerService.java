@@ -41,6 +41,7 @@ public class SchedulerService {
 	@Scheduled(cron = "0 0 12 * * *", zone = "Asia/Kolkata") // 12PM every day
 	public void run1() {
 		System.out.println("I am called by Spring scheduler run1 " + new Date());
+		
 	}
 
 	public void Backupdbtosql() {

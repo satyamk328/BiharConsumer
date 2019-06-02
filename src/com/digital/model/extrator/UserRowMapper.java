@@ -27,8 +27,8 @@ public class UserRowMapper implements RowMapper<User> {
 		user.setCity(rs.getString("City"));
 		user.setState(rs.getString("State"));
 		user.setCountry(rs.getString("Country"));
-		user.setLock(rs.getBoolean("IsLock"));
-		user.setActive(rs.getBoolean("IsActive"));
+		user.setIsLock(rs.getBoolean("IsLock"));
+		user.setIsActive(rs.getBoolean("IsActive"));
 		user.setAttempt(rs.getInt("Attempt"));
 		user.setCreatedBy(rs.getString("CreatedBy"));
 		user.setDateCreated(rs.getDate("DateCreated"));

@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.digital.model.CancelPolicies;
+import com.digital.model.TicketCancellationPolicy;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Repository("cancelPolicyDao")
@@ -20,8 +22,12 @@ public class CancelPolicyDao {
 	 */
 	@Value("${select_bus_cancellationByBusId}")
 	private String selectBusCancelPolicyByBusIdQuery;
+	
 	@Value("${select_bus_cancellation}")
 	private String selectBusCancelPolicyQuery;
+	
+	@Value("${select_cancellation_policy_by_busId}")
+	private String selectCancellationtPolicyByBusId;
 	
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
@@ -40,4 +46,12 @@ public class CancelPolicyDao {
 		return jdbcTemplateObject.query(selectBusCancelPolicyQuery, new BeanPropertyRowMapper<>(CancelPolicies.class));
 	}
 	
+	@Transactional(readOnly=true)
+	public List<TicketCancellationPolicy> getTicketCancellationPolicy(Long busId) {
+		log.debug("Running select query for getTicketCancellationPolicy: {}", selectCancellationtPolicyByBusId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("busId", busId);
+		return jdbcTemplateObject.query(selectCancellationtPolicyByBusId, parameters,
+				new BeanPropertyRowMapper<>(TicketCancellationPolicy.class));
+	}
 }

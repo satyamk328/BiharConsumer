@@ -1,15 +1,11 @@
 package com.digital.controller;
 
-import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digital.model.CancelTicketDetails;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
 import com.digital.service.TicketService;
@@ -37,12 +34,22 @@ public class TicketController {
 	private TicketService bookingService;
 
 	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
-	public ResponseEntity<RestResponse<List<TicketDetails>>> cancelTicket(
+	public ResponseEntity<RestResponse<List<TicketDetails>>> bookTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/cancel/{mobileNumber}/{ticketNumber}")
+	public ResponseEntity<RestResponse<List<CancelTicketDetails>>> cancelTicket(
+			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
+			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
+		log.info("call print {},{}", mobileNumber, ticketNumber);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
+		List<CancelTicketDetails> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 

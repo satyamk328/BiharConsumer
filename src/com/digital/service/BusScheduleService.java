@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.AmenitiesDao;
@@ -59,6 +60,7 @@ public class BusScheduleService {
 	@Autowired
 	private DataUtils dataUtils;
 
+	@Cacheable(value = "routesDetails")
 	public ScheduleBusDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
 		ScheduleBusDetails busDetailsObject = new ScheduleBusDetails();
 		log.info("call searchBusScheduleDetails {}, {}, {}", srcCityId, destCityId, date);
