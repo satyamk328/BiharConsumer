@@ -15,7 +15,10 @@ import com.digital.model.CancelTicketDetails;
 import com.digital.model.RoutedCity;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
+import com.digital.user.service.MailService;
+import com.digital.utils.CommonUtil;
 import com.digital.utils.GlobalConstants;
+import com.digital.utils.MailServiceUtils;
 
 @Service
 public class TicketService {
@@ -25,6 +28,12 @@ public class TicketService {
 	
 	@Autowired
 	private TicketDao tikcetDao;
+	
+	@Autowired
+    private MailService emailService;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 	
 	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
 		return tikcetDao.getTicketDetails(pnr, phone);
@@ -50,8 +59,17 @@ public class TicketService {
 		}
 		tripId = tripId.substring(0, tripId.length() - 2);
 		bookTicketVO.setTripId(tripId);
-
-		return busBookingDao.bookTickets(bookTicketVO);
+        
+		String pnr = commonUtil.getPNRNumber(String.valueOf(bookTicketVO.getUserId()), bookTicketVO.getSrcCityId(),
+				bookTicketVO.getDestCityId(),
+				tikcetDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
+		bookTicketVO.setPnr(pnr);
+		int row = busBookingDao.bookTickets(bookTicketVO);
+		if(row ==1) {
+			emailService.sendEmail(bookingTicketConfirmHeader(bookTicketVO), bookTicketVO.getEmail(),
+					MailServiceUtils.generateBookingTicketMail(bookTicketVO));
+		}
+		return row;
 	}
 
 	public int cancelTickets(TicketVO bookTicketVO) {
@@ -63,5 +81,11 @@ public class TicketService {
 		List<Long> ticketIdsList =  tickets.stream().map(element->Long.parseLong(element)).collect(Collectors.toList());
 		
 		return tikcetDao.cancelTickets(ticketIdsList, phoneNumber);
+	}
+	
+	private String bookingTicketConfirmHeader(TicketVO ticketVO) {
+		return GlobalConstants.BOOKING_CONFIRMATION_HEADER.replace("${TRAVELNAME}", ticketVO.getTravelName())
+				.replace("${DEPARTUREDATE}", ticketVO.getDepartureDate()).replace("${SOURCE}", ticketVO.getSrcCityName())
+				.replace("${DESTINATION}", ticketVO.getDestCityName());
 	}
 }

@@ -50,6 +50,7 @@ public class BusScheduleDetails implements Serializable {
 	private Double rating = 2.5;
 	private String classType;
 	
+	private double distance = 0;
 	private double duration;
 	private int travelDurationDays = 1;
 	

@@ -20,10 +20,15 @@ public class TicketVO {
 	
 	private Long srcCityId;
 	private Long destCityId;
+	private String srcCityName;
+	private String destCityName;
 	
 	private String tripId;
 	private String busType;
+	private String pnr;
+	private String transactionId;
 	private String travelName;
+	private Double distance;
 	private Boolean isAC;
 	private String boadingPoint;
 	private String droppingPoint;
@@ -35,5 +40,6 @@ public class TicketVO {
 	private Boolean isLicence = false;
 	private Long phone;
 	private String email;
+	private Double totalFare;
 	private List<SeatDataToOperate> seatDataToOperate;
 }

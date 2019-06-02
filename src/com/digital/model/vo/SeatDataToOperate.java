@@ -10,7 +10,6 @@ public class SeatDataToOperate {
 	private String seatType;
 	private String seatNumber;
 	private Boolean isLowerBerth;
-	private Double totalFare;
 	private Long seatId;
 	private String custName;
 	private String gender;

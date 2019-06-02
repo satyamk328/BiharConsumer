@@ -51,12 +51,6 @@ public class BusScheduleDao {
 	@Autowired
 	private DataUtils dataUtils;
 	
-	@Autowired
-	private CommonUtil commonUtil;
-	
-	@Autowired
-	private TicketDao bookingDao;
-
 	@Transactional(readOnly = true)
 	public List<BusScheduleDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
@@ -90,9 +84,7 @@ public class BusScheduleDao {
 	public synchronized int bookTickets(TicketVO bookTicketVO) {
 
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
-		String pnr = commonUtil.getPNRNumber(String.valueOf(bookTicketVO.getUserId()), bookTicketVO.getSrcCityId(),
-				bookTicketVO.getDestCityId(),
-				bookingDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
+		
 		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
 			MapSqlParameterSource parameters = new MapSqlParameterSource();
 			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
@@ -101,7 +93,7 @@ public class BusScheduleDao {
 			else
 				parameters.addValue("userId", bookTicketVO.getUserId());
 			parameters.addValue("busId", bookTicketVO.getBusId());
-			parameters.addValue("pnr", pnr);
+			parameters.addValue("pnr", bookTicketVO.getPnr());
 			parameters.addValue("seatId", seatData.getSeatId());
 			parameters.addValue("tripId", bookTicketVO.getTripId());
 			parameters.addValue("travelName", bookTicketVO.getTravelName());
@@ -113,12 +105,13 @@ public class BusScheduleDao {
 			parameters.addValue("arrivalTime", bookTicketVO.getArrivalTime());
 			parameters.addValue("departureDate", bookTicketVO.getDepartureDate());
 			parameters.addValue("departureTime", bookTicketVO.getDepartureTime());
+			parameters.addValue("totalFare", bookTicketVO.getTotalFare());
 			
 			parameters.addValue("seatType", seatData.getSeatType());
 			parameters.addValue("seatNumber", seatData.getSeatNumber());
 			parameters.addValue("seatName", seatData.getSeatNumber());
 			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
-			parameters.addValue("totalFare", seatData.getTotalFare());
+			
 			parameters.addValue("customerName", seatData.getCustName());
 			parameters.addValue("age", seatData.getAge());
 			parameters.addValue("email", bookTicketVO.getEmail());
