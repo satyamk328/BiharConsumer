@@ -1,6 +1,7 @@
 package com.digital.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 /*
@@ -73,7 +74,7 @@ public class CommonUtil {
 
 		return ((diffDays * 24 * 60) + (diffHours * 60) + diffMinutes);
 	}
-	
+
 	public String getPNRNumber(String name, Long sourceId, Long destId, Integer bookCount) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(sourceId);
@@ -82,11 +83,38 @@ public class CommonUtil {
 		builder.append(getDate());
 		return builder.toString();
 	}
-	
+
 	private String getDate() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyy");
 		Date date = new Date();
 		return simpleDateFormat.format(date);
 	}
+
+	public static String convert24HrsTo12Hrs(String input) {
+		DateFormat df = new SimpleDateFormat("HH:mm");
+		DateFormat outputformat = new SimpleDateFormat("hh:mm aa");
+		Date date = null;
+		String output = null;
+		try {
+			date = df.parse(input);
+			output = outputformat.format(date);
+		} catch (ParseException pe) {
+			pe.printStackTrace();
+		}
+		return output;
+	}
 	
+	public static String convert12HrsTo24Hrs(String input) {
+		DateFormat df = new SimpleDateFormat("hh:mm aa");
+		DateFormat outputformat = new SimpleDateFormat("HH:mm");
+		Date date = null;
+		String output = null;
+		try {
+			date = df.parse(input);
+			output = outputformat.format(date);
+		} catch (ParseException pe) {
+			pe.printStackTrace();
+		}
+		return output;
+	}
 }

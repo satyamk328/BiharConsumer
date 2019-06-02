@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.digital.model.BusScheduleDetails;
 import com.digital.model.RoutedCity;
-import com.digital.model.extrator.BusTripDetailsExtrator;
+import com.digital.model.extrator.BusScheduleDetailsExtrator;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.CommonUtil;
@@ -66,7 +66,7 @@ public class BusScheduleDao {
 		parameters.addValue("arrivalDate", dataUtils.convertFormat(date));
 
 		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters,
-				new BusTripDetailsExtrator());
+				new BusScheduleDetailsExtrator());
 
 	}
 
@@ -81,7 +81,7 @@ public class BusScheduleDao {
 		parameters.addValue("destCityId", destCityId);
 
 		List<BusScheduleDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId,
-				parameters, new BusTripDetailsExtrator());
+				parameters, new BusScheduleDetailsExtrator());
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : new BusScheduleDetails();
 	}
