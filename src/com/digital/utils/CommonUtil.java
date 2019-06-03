@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
  * and open the template in the editor.
  */
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class CommonUtil {
 		}
 		return output;
 	}
-	
+
 	public static String convert12HrsTo24Hrs(String input) {
 		DateFormat df = new SimpleDateFormat("hh:mm aa");
 		DateFormat outputformat = new SimpleDateFormat("HH:mm");
@@ -117,4 +118,19 @@ public class CommonUtil {
 		}
 		return output;
 	}
+
+	public String getNextDate(String curDate){
+		final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = format.parse(curDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_YEAR, 1);
+		return format.format(calendar.getTime());
+	}
+	
 }

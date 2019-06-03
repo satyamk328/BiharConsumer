@@ -4,19 +4,27 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.digital.dao.BusScheduleDao;
+import com.digital.model.ScheduleMaster;
+import com.digital.model.TripMaster;
 import com.smattme.MysqlExportService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Satyam Kumar
  *
  */
 @Component
+@Slf4j
 public class SchedulerService {
 
 	@Value("${jdbc.username}")
@@ -28,11 +36,14 @@ public class SchedulerService {
 	@Value("${backup.driver.path}")
 	private String backUpDrirectory;
 
+	@Autowired
+	private BusScheduleDao busScheduleDao;
+
 	@Scheduled(fixedRate = 60000) // for every 1 Hrs
 	public void run2() {
 		System.out.println("I am called by Spring scheduler " + new Date());
 	}
-	
+
 	@Scheduled(cron = "0 0 0 * * ?") // every night 12 AM
 	public void run() {
 		Backupdbtosql();
@@ -40,8 +51,18 @@ public class SchedulerService {
 
 	@Scheduled(cron = "0 0 12 * * *", zone = "Asia/Kolkata") // 12PM every day
 	public void run1() {
-		System.out.println("I am called by Spring scheduler run1 " + new Date());
-		
+		List<ScheduleMaster> scheduleMasters = busScheduleDao.getScheduleIdNotExistInTrip();
+		for (ScheduleMaster scheduleMaster : scheduleMasters) {
+			List<TripMaster> tripMasters = busScheduleDao.getTripMasterByBusId(scheduleMaster.getBusId());
+			for (TripMaster tt : tripMasters) {
+				tt.setScheduleId(scheduleMaster.getScheduleId());
+				tt.setArrivalDate(scheduleMaster.getDepartureDate());
+				int i = busScheduleDao.insertTripMaster(tt);
+				if (i > 0)
+					log.info("Trip inserted successfully !");
+			}
+		}
+
 	}
 
 	public void Backupdbtosql() {

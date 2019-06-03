@@ -1,23 +1,22 @@
 package com.digital.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.ScheduleMaster;
 import com.digital.model.ScheduleBusDetails;
-import com.digital.model.TripDetails;
+import com.digital.model.ScheduleMaster;
+import com.digital.model.TripMaster;
 import com.digital.model.extrator.BusScheduleDetailsExtrator;
 import com.digital.utils.DataUtils;
 
@@ -42,19 +41,25 @@ public class BusScheduleDao {
 
 	@Value("${select_TripCitySequence_ByCityId}")
 	private String selectTripCitySequenceByCityId;
-	
+
 	@Value("${select_bus_StartTime_by_scheduleId}")
 	private String busStartTimeByScheduleId;
-	
+
 	@Value("${select_scheduleIs_not_exist_in_tripmaster}")
 	private String selectScheduleIdNotExistInTrip;
+
+	@Value("${select_trip_master_by_busId}")
+	private String selectTripMasterByBusId;
+	
+	@Value("${insert_trip_master}")
+	private String insertTripMasterQuery;
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
 	@Autowired
 	private DataUtils dataUtils;
-	
+
 	@Transactional(readOnly = true)
 	public List<ScheduleBusDetails> searchTripBySrcDescAndDate(Long srcCityId, Long destCityId, String date) {
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", selectSearchTripBySrcAndDescDateQuery);
@@ -84,9 +89,8 @@ public class BusScheduleDao {
 		return (list != null && !list.isEmpty()) ? list.get(0) : new ScheduleBusDetails();
 	}
 
-
 	@Transactional(readOnly = true)
-	public List<TripDetails> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
+	public List<TripMaster> getTripCitiesBySrcDescCities(Long scheduleId, Integer srcCitySequance,
 			Integer destCitySequance) {
 		log.debug("Running select query for getTripCitiesBySrcDescCities: {}", selectTripCitiesBySrcDescCities);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -94,48 +98,53 @@ public class BusScheduleDao {
 		parameters.addValue("srcCitySequance", srcCitySequance);
 		parameters.addValue("destCitySequance", destCitySequance);
 
-		List<TripDetails> routedCities = jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
-				new BeanPropertyRowMapper<>(TripDetails.class));
+		List<TripMaster> routedCities = jdbcTemplateObject.query(selectTripCitiesBySrcDescCities, parameters,
+				new BeanPropertyRowMapper<>(TripMaster.class));
 		return (routedCities != null && !routedCities.isEmpty()) ? routedCities : new ArrayList<>();
 	}
 
 	@Transactional(readOnly = true)
-	public List<TripDetails> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
+	public List<TripMaster> getTripCitiySequanceByCityId(Long scheduleId, Long cityId) {
 		log.debug("Running select query for getTripCitiySequanceByCityId: {}", selectTripCitySequenceByCityId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
 		parameters.addValue("cityId", cityId);
 
 		return jdbcTemplateObject.query(selectTripCitySequenceByCityId, parameters,
-				new BeanPropertyRowMapper<>(TripDetails.class));
+				new BeanPropertyRowMapper<>(TripMaster.class));
 	}
-	
-	@Transactional(readOnly=true)
-	public ScheduleMaster getBusStartTimeByScheduleId(Long scheduleId) {
+
+	@Transactional(readOnly = true)
+	public List<ScheduleMaster> getBusStartTimeByScheduleId(Long scheduleId) {
 		log.debug("Running select query for getBusStartTimeByScheduleId: {}", busStartTimeByScheduleId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("scheduleId", scheduleId);
 		List<ScheduleMaster> result = jdbcTemplateObject.query(busStartTimeByScheduleId, parameters,
 				new BeanPropertyRowMapper<>(ScheduleMaster.class));
-		return result.isEmpty() ? null : result.get(0);
-	}
-	
-	
-	@Transactional(readOnly=true)
-	public List<Long> getScheduleIdNotExistInTrip() {
-		log.debug("Running select query for getBusStartTimeByScheduleId: {}", selectScheduleIdNotExistInTrip);
-		List<Long> result = jdbcTemplateObject.query(selectScheduleIdNotExistInTrip, new ResultSetExtractor<List<Long>>() {
-			@Override
-			public List<Long> extractData(ResultSet rs) throws SQLException, DataAccessException {
-				List<Long> list = new ArrayList<>();
-				while (rs.next()) {
-					list.add(rs.getLong("ScheduleId"));
-				}
-				return list;
-			}
-		});
 		return result;
 	}
-	
-	
+
+	@Transactional(readOnly = true)
+	public List<ScheduleMaster> getScheduleIdNotExistInTrip() {
+		log.debug("Running select query for getBusStartTimeByScheduleId: {}", selectScheduleIdNotExistInTrip);
+		return jdbcTemplateObject.query(selectScheduleIdNotExistInTrip,
+				new BeanPropertyRowMapper<>(ScheduleMaster.class));
+	}
+
+	@Transactional(readOnly = true)
+	public List<TripMaster> getTripMasterByBusId(Long busId) {
+		log.debug("Running select query for getTripMasterByBusId: {}", selectTripMasterByBusId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("busId", busId);
+		return jdbcTemplateObject.query(selectTripMasterByBusId, parameters,
+				new BeanPropertyRowMapper<>(TripMaster.class));
+	}
+
+	@Transactional(readOnly = true)
+	public int insertTripMaster(TripMaster tripMaster) {
+		log.debug("Running select query for getTripMasterByBusId: {}", insertTripMasterQuery);
+		final KeyHolder holder = new GeneratedKeyHolder();
+		final BeanPropertySqlParameterSource beanParameters = new BeanPropertySqlParameterSource(tripMaster);
+		return jdbcTemplateObject.update(insertTripMasterQuery, beanParameters, holder);
+	}
 }

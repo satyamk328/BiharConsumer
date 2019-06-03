@@ -21,7 +21,7 @@ import com.digital.model.ScheduleBusObject;
 import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.SeatMaster;
 import com.digital.model.TicketDetails;
-import com.digital.model.TripDetails;
+import com.digital.model.TripMaster;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;
@@ -99,7 +99,7 @@ public class BusScheduleService {
 
 			// Calculate seat details
 			int bookedSeat = 0;
-			List<TripDetails> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
+			List<TripMaster> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
 					route.getSrcCitySequance(), route.getDestCitySequance());
 			X: for (SeatMaster seat : seatDetails) {
 				for (TicketDetails ticketDetail : ticketDetails) {
@@ -107,7 +107,7 @@ public class BusScheduleService {
 						List<String> tripCitiesIds = Arrays
 								.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 						int i = -1;
-						for (TripDetails routedCity : routedCities) {
+						for (TripMaster routedCity : routedCities) {
 							i++;
 							if (i == 0 && tripCitiesIds.get(0)
 									.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
@@ -163,7 +163,7 @@ public class BusScheduleService {
 		List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
 				busDetails.getBusId());
 
-		List<TripDetails> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
+		List<TripMaster> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
 				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
 		X: for (SeatMaster seat : seatDetails) {
 			populateFare(seat, busDetails);
@@ -172,7 +172,7 @@ public class BusScheduleService {
 					List<String> tripCitiesIds = Arrays
 							.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 					int i = -1;
-					for (TripDetails routedCity : routedCities) {
+					for (TripMaster routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							i++;
 							if (i == 0 && tripCitiesIds.get(0)

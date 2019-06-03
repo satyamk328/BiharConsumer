@@ -13,7 +13,7 @@ import com.digital.dao.BusScheduleDao;
 import com.digital.dao.TicketDao;
 import com.digital.model.CancelTicketMaster;
 import com.digital.model.TicketDetails;
-import com.digital.model.TripDetails;
+import com.digital.model.TripMaster;
 import com.digital.model.vo.TicketVO;
 import com.digital.user.service.MailService;
 import com.digital.utils.CommonUtil;
@@ -46,15 +46,15 @@ public class TicketService {
 	
 	public int bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId
-		List<TripDetails> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
+		List<TripMaster> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getSrcCityId());
-		List<TripDetails> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
+		List<TripMaster> destCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getDestCityId());
-		List<TripDetails> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
+		List<TripMaster> routedCities = busBookingDao.getTripCitiesBySrcDescCities(bookTicketVO.getScheduleId(),
 				srcCitySeq.get(0).getCitySequance(), destCitySeq.get(0).getCitySequance());
 
 		String tripId = "";
-		for (TripDetails routedCity : routedCities) {
+		for (TripMaster routedCity : routedCities) {
 			tripId = tripId + routedCity.getCityId() + GlobalConstants.SEPARATOR;
 		}
 		tripId = tripId.substring(0, tripId.length() - 2);

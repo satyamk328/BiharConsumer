@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TripDetails implements Serializable{
+public class TripMaster implements Serializable{
 
 	private static final long serialVersionUID = 1702719370829844659L;
 	private Long tripId;
