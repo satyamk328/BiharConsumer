@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.digital.dao.BusScheduleDao;
 import com.digital.model.ScheduleMaster;
 import com.digital.model.TripMaster;
+import com.digital.utils.CommonUtil;
 import com.smattme.MysqlExportService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,9 @@ public class SchedulerService {
 
 	@Autowired
 	private BusScheduleDao busScheduleDao;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 
 	@Scheduled(fixedRate = 60000) // for every 1 Hrs
 	public void run2() {
@@ -49,14 +53,18 @@ public class SchedulerService {
 		Backupdbtosql();
 	}
 
-	@Scheduled(cron = "0 0 12 * * *", zone = "Asia/Kolkata") // 12PM every day
+	@Scheduled(cron = "0 0 12 * * *", zone = "Asia/Kolkata") // 12 AM every day
 	public void run1() {
 		List<ScheduleMaster> scheduleMasters = busScheduleDao.getScheduleIdNotExistInTrip();
 		for (ScheduleMaster scheduleMaster : scheduleMasters) {
-			List<TripMaster> tripMasters = busScheduleDao.getTripMasterByBusId(scheduleMaster.getBusId());
+			Long scheduleId = busScheduleDao.getLatestTripBySrcCityAndDestCityId(
+					scheduleMaster.getSourceCityId(), scheduleMaster.getDestinationCityId());
+			List<TripMaster> tripMasters = busScheduleDao.getTripMasterByScheduleId(scheduleId);
 			for (TripMaster tt : tripMasters) {
 				tt.setScheduleId(scheduleMaster.getScheduleId());
 				tt.setArrivalDate(scheduleMaster.getDepartureDate());
+				if(new Integer(tt.getArrivalTime().split(":")[0]) > 12 )
+					tt.setArrivalDate(commonUtil.getNextDate(scheduleMaster.getDepartureDate()));
 				int i = busScheduleDao.insertTripMaster(tt);
 				if (i > 0)
 					log.info("Trip inserted successfully !");

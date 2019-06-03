@@ -48,9 +48,12 @@ public class BusScheduleDao {
 	@Value("${select_scheduleIs_not_exist_in_tripmaster}")
 	private String selectScheduleIdNotExistInTrip;
 
-	@Value("${select_trip_master_by_busId}")
-	private String selectTripMasterByBusId;
-	
+	@Value("$(select_latest_Trip_by_SrcCity_and_DestCity)")
+	private String selectLatestTripBySrcCityAndDestCity;
+
+	@Value("${select_trip_master_by_scheduleId}")
+	private String selectTripMasterByScheduleId;
+
 	@Value("${insert_trip_master}")
 	private String insertTripMasterQuery;
 
@@ -70,7 +73,6 @@ public class BusScheduleDao {
 
 		return jdbcTemplateObject.query(selectSearchTripBySrcAndDescDateQuery, parameters,
 				new BusScheduleDetailsExtrator());
-
 	}
 
 	@Transactional(readOnly = true)
@@ -85,7 +87,6 @@ public class BusScheduleDao {
 
 		List<ScheduleBusDetails> list = jdbcTemplateObject.query(selectSearchTripBySchIdBusIdSrcCtyIdDescCtyId,
 				parameters, new BusScheduleDetailsExtrator());
-
 		return (list != null && !list.isEmpty()) ? list.get(0) : new ScheduleBusDetails();
 	}
 
@@ -132,11 +133,20 @@ public class BusScheduleDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<TripMaster> getTripMasterByBusId(Long busId) {
-		log.debug("Running select query for getTripMasterByBusId: {}", selectTripMasterByBusId);
+	public Long getLatestTripBySrcCityAndDestCityId(Long srcCityId, Long destCityId) {
+		log.debug("Running select query for getTripMasterByBusId: {}", selectLatestTripBySrcCityAndDestCity);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("busId", busId);
-		return jdbcTemplateObject.query(selectTripMasterByBusId, parameters,
+		parameters.addValue("srcCityId", srcCityId);
+		parameters.addValue("destCityId", destCityId);
+		return jdbcTemplateObject.queryForObject(selectLatestTripBySrcCityAndDestCity, parameters, Long.class);
+	}
+
+	@Transactional(readOnly = true)
+	public List<TripMaster> getTripMasterByScheduleId(Long scheduleId) {
+		log.debug("Running select query for getTripMasterByBusId: {}", selectTripMasterByScheduleId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		return jdbcTemplateObject.query(selectTripMasterByScheduleId, parameters,
 				new BeanPropertyRowMapper<>(TripMaster.class));
 	}
 
