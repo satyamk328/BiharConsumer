@@ -1,6 +1,7 @@
 package com.digital.service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class TicketService {
 	@Autowired
 	private CommonUtil commonUtil;
 	
+	@Autowired
+	private SMSWrapperService smsWrapperService;
+	
 	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
 		return tikcetDao.getTicketDetails(pnr, phone);
 	}
@@ -68,6 +72,7 @@ public class TicketService {
 		if(row ==1) {
 			emailService.sendEmail(bookingTicketConfirmHeader(bookTicketVO), bookTicketVO.getEmail(),
 					MailServiceUtils.generateBookingTicketMail(bookTicketVO));
+			smsWrapperService.sendSMS(bookTicketVO.getPhone(), MailServiceUtils.confirmBookingSMS(bookTicketVO));
 		}
 		return row;
 	}
@@ -82,6 +87,7 @@ public class TicketService {
 		
 		return tikcetDao.cancelTickets(ticketIdsList, phoneNumber);
 	}
+	
 	
 	private String bookingTicketConfirmHeader(TicketVO ticketVO) {
 		return GlobalConstants.BOOKING_CONFIRMATION_HEADER.replace("${TRAVELNAME}", ticketVO.getTravelName())

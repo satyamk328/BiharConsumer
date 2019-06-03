@@ -1,5 +1,6 @@
 package com.digital.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,13 @@ public class SMSWrapperService {
 	@Value("${sms_header_value}")
 	private String headerValue;
 
-	public SMSResponse sendSMS(List<String> numbers, String text) {
+	public SMSResponse sendSMS(Long phone, String text) {
+		List<Long> numbers = new ArrayList<>();
+		numbers.add(phone);
+		return sendSMS(numbers, text);
+	}
+
+	public SMSResponse sendSMS(List<Long> numbers, String text) {
 
 		log.debug("smsGateWayAPi ={}", smsGateWayAPi);
 
