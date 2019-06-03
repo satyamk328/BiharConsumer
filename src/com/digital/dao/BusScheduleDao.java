@@ -48,7 +48,7 @@ public class BusScheduleDao {
 	@Value("${select_scheduleIs_not_exist_in_tripmaster}")
 	private String selectScheduleIdNotExistInTrip;
 
-	@Value("$(select_latest_Trip_by_SrcCity_and_DestCity)")
+	@Value("${select_latest_Trip_by_SrcCity_and_DestCity}")
 	private String selectLatestTripBySrcCityAndDestCity;
 
 	@Value("${select_trip_master_by_scheduleId}")
@@ -150,7 +150,7 @@ public class BusScheduleDao {
 				new BeanPropertyRowMapper<>(TripMaster.class));
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public int insertTripMaster(TripMaster tripMaster) {
 		log.debug("Running select query for getTripMasterByBusId: {}", insertTripMasterQuery);
 		final KeyHolder holder = new GeneratedKeyHolder();
