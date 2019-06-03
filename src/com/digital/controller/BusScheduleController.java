@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.ScheduleBusDetails;
+import com.digital.model.ScheduleBusObject;
 import com.digital.model.ScheduleSeatDetails;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.service.BusScheduleService;
@@ -34,13 +34,13 @@ public class BusScheduleController {
 	private BusScheduleService busService;
 
 	@GetMapping(value = "/route/{source}/{destination}/{date}")
-	public ResponseEntity<RestResponse<ScheduleBusDetails>> searchBusScheduletDetails(
+	public ResponseEntity<RestResponse<ScheduleBusObject>> searchBusScheduletDetails(
 			@PathVariable(name = "source", required = true) Long srcCityId,
 			@PathVariable(name = "destination", required = true) Long destCityId,
 			@PathVariable(name = "date", required = true) String date) {
 		log.info("call search searchBusScheduletDetails:{},{},{}", srcCityId, destCityId, date);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		ScheduleBusDetails tripDetails = busService.searchBusScheduleDetails(srcCityId, destCityId, date);
+		ScheduleBusObject tripDetails = busService.searchBusScheduleDetails(srcCityId, destCityId, date);
 		if (tripDetails.getAvailableRoutes().isEmpty())
 			status = new RestStatus<>(HttpStatus.OK.toString(), String.format(
 					"There are no buses between these two cities. Please try a different date or search with an alternate route."));

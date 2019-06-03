@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.model.CancelTicketDetails;
+import com.digital.model.CancelTicketMaster;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
 import com.digital.service.TicketService;
@@ -44,12 +44,12 @@ public class TicketController {
 	}
 	
 	@GetMapping(value = "/cancel/{mobileNumber}/{ticketNumber}")
-	public ResponseEntity<RestResponse<List<CancelTicketDetails>>> cancelTicket(
+	public ResponseEntity<RestResponse<List<CancelTicketMaster>>> cancelTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		List<CancelTicketDetails> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
+		List<CancelTicketMaster> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 

@@ -16,10 +16,10 @@ import lombok.Setter;
 public class ScheduleSeatDetails implements Serializable {
 
 	private static final long serialVersionUID = 8700716073667499536L;
-	private List<SeatDetails> busSeatDetails = new ArrayList<SeatDetails>();
-	private List<SeatDetails> lowerSeatDetails = new ArrayList<SeatDetails>();
-	private List<SeatDetails> upperSeatDetails = new ArrayList<SeatDetails>();
-	private List<CityStop> boardingPoints = new ArrayList<>();
-	private List<CityStop> droppingPoints = new ArrayList<>();
+	private List<SeatMaster> busSeatDetails = new ArrayList<SeatMaster>();
+	private List<SeatMaster> lowerSeatDetails = new ArrayList<SeatMaster>();
+	private List<SeatMaster> upperSeatDetails = new ArrayList<SeatMaster>();
+	private List<CityStopMaster> boardingPoints = new ArrayList<>();
+	private List<CityStopMaster> droppingPoints = new ArrayList<>();
 	private int maxSeatsAllowed =5;
 }

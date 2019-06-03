@@ -15,13 +15,13 @@ import com.digital.dao.CancelPolicyDao;
 import com.digital.dao.CityDao;
 import com.digital.dao.SeatDao;
 import com.digital.dao.TicketDao;
-import com.digital.model.BusDetails;
-import com.digital.model.BusScheduleDetails;
-import com.digital.model.RoutedCity;
+import com.digital.model.BusMaster;
 import com.digital.model.ScheduleBusDetails;
+import com.digital.model.ScheduleBusObject;
 import com.digital.model.ScheduleSeatDetails;
-import com.digital.model.SeatDetails;
+import com.digital.model.SeatMaster;
 import com.digital.model.TicketDetails;
+import com.digital.model.TripDetails;
 import com.digital.model.vo.SearchTripVO;
 import com.digital.utils.DataUtils;
 import com.digital.utils.GlobalConstants;
@@ -61,10 +61,10 @@ public class BusScheduleService {
 	private DataUtils dataUtils;
 
 	@Cacheable(value = "routesDetails")
-	public ScheduleBusDetails searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
-		ScheduleBusDetails busDetailsObject = new ScheduleBusDetails();
+	public ScheduleBusObject searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
+		ScheduleBusObject busDetailsObject = new ScheduleBusObject();
 		log.info("call searchBusScheduleDetails {}, {}, {}", srcCityId, destCityId, date);
-		List<BusScheduleDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
+		List<ScheduleBusDetails> busScheduleDetails = busBookingDao.searchTripBySrcDescAndDate(srcCityId, destCityId,
 				date);
 
 		busScheduleDetails.forEach(route -> {
@@ -87,27 +87,27 @@ public class BusScheduleService {
 					route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId()) : new ArrayList<>());
 
 			route.setBusDetails(
-					route.getBusId() != null ? busDao.getBusDetailsByBusId(route.getBusId()) : new BusDetails());
+					route.getBusId() != null ? busDao.getBusDetailsByBusId(route.getBusId()) : new BusMaster());
 			// populate city name
 			route.setDestCityName(cityDao.getCityById(route.getDestinationId()).getDisplayName());
 			route.setSrcCityName(cityDao.getCityById(route.getSourceId()).getDisplayName());
 
-			List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId());
+			List<SeatMaster> seatDetails = seatDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId());
 
 			List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(route.getScheduleId(),
 					route.getBusId());
 
 			// Calculate seat details
 			int bookedSeat = 0;
-			List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
+			List<TripDetails> routedCities = busBookingDao.getTripCitiesBySrcDescCities(route.getScheduleId(),
 					route.getSrcCitySequance(), route.getDestCitySequance());
-			X: for (SeatDetails seat : seatDetails) {
+			X: for (SeatMaster seat : seatDetails) {
 				for (TicketDetails ticketDetail : ticketDetails) {
 					if (seat.getSeatId() == ticketDetail.getSeatId()) {
 						List<String> tripCitiesIds = Arrays
 								.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 						int i = -1;
-						for (RoutedCity routedCity : routedCities) {
+						for (TripDetails routedCity : routedCities) {
 							i++;
 							if (i == 0 && tripCitiesIds.get(0)
 									.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
@@ -141,7 +141,7 @@ public class BusScheduleService {
 
 		ScheduleSeatDetails scheduleSeatDetails = new ScheduleSeatDetails();
 		// TODO DB Query also
-		BusScheduleDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(),
+		ScheduleBusDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(),
 				tripVO.getSourceId(), tripVO.getDestinationId());
 
 		scheduleSeatDetails
@@ -156,23 +156,23 @@ public class BusScheduleService {
 								Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR)))
 						: new ArrayList<>());
 		busDetails.setBusDetails(
-				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusDetails());
+				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusMaster());
 
-		List<SeatDetails> seatDetails = seatDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId());
+		List<SeatMaster> seatDetails = seatDao.getSeatDetailsByLayoutId(busDetails.getBusDetails().getLayoutId());
 		scheduleSeatDetails.setBusSeatDetails(seatDetails);
 		List<TicketDetails> ticketDetails = bookingDao.getTicketDetailsByScheduleAndBusId(busDetails.getScheduleId(),
 				busDetails.getBusId());
 
-		List<RoutedCity> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
+		List<TripDetails> routedCities = busBookingDao.getTripCitiesBySrcDescCities(busDetails.getScheduleId(),
 				busDetails.getSrcCitySequance(), busDetails.getDestCitySequance());
-		X: for (SeatDetails seat : seatDetails) {
+		X: for (SeatMaster seat : seatDetails) {
 			populateFare(seat, busDetails);
 			for (TicketDetails ticketDetail : ticketDetails) {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
 					List<String> tripCitiesIds = Arrays
 							.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
 					int i = -1;
-					for (RoutedCity routedCity : routedCities) {
+					for (TripDetails routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
 							i++;
 							if (i == 0 && tripCitiesIds.get(0)
@@ -194,7 +194,7 @@ public class BusScheduleService {
 		return scheduleSeatDetails;
 	}
 
-	private void populateFare(SeatDetails seat, BusScheduleDetails busDetails) {
+	private void populateFare(SeatMaster seat, ScheduleBusDetails busDetails) {
 		if (seat.getSeatType().equalsIgnoreCase("SS"))
 			seat.setFare(busDetails.getSeaterFare());
 		else

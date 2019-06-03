@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.BusDetails;
+import com.digital.model.BusMaster;
 import com.digital.model.extrator.BusDetailsExtractor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +25,12 @@ public class BusDao {
 	private String selectBusDetailsByBusId;
 	
 	@Transactional(readOnly = true)
-	public BusDetails getBusDetailsByBusId(Long busId) {
+	public BusMaster getBusDetailsByBusId(Long busId) {
 		log.debug("Running select query for getBusDetailsByBusId: {}", selectBusDetailsByBusId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("busId", busId);
-		List<BusDetails> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BusDetailsExtractor());
-		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusDetails();
+		List<BusMaster> busDetails = jdbcTemplateObject.query(selectBusDetailsByBusId, parameters,	new BusDetailsExtractor());
+		return (busDetails != null && !busDetails.isEmpty()) ? busDetails.get(0) : new BusMaster();
 	}
 	
 }

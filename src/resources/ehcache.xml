@@ -60,4 +60,11 @@
 		<persistence strategy="localTempSwap" />
 	</cache>
 	
+	<cache name="walletHistory" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
+		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	
 </ehcache>

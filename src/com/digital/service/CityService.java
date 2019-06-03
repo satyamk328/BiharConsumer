@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.CityDao;
-import com.digital.model.City;
+import com.digital.model.CityMaster;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,25 +23,25 @@ public class CityService {
 	private CityDao cityDao;
 
 	@Cacheable("topAllCity")
-	public List<City> getAllCities() {
+	public List<CityMaster> getAllCities() {
 		log.info("call getAllStation()");
 		return cityDao.getAllCities();
 	}
 
 	@Cacheable(value = "cityDetails.CityName", key = "#cityName")
-	public List<City> getCityByName(String cityName) {
+	public List<CityMaster> getCityByName(String cityName) {
 		log.info("call searchStationByStationName {}", cityName);
 		return cityDao.getCityByName(cityName);
 	}
 
 	@Cacheable(value = "cityDetails.CityId", key = "#cityId")
-	public City getCityById(Long cityId) {
+	public CityMaster getCityById(Long cityId) {
 		return cityDao.getCityById(cityId);
 	}
 	
-	public Long save(City city) {
+	public Long save(CityMaster city) {
 		log.info("call addStationName [{}]", city);
-		List<City> cities = cityDao.getCityByName(city.getDisplayName());
+		List<CityMaster> cities = cityDao.getCityByName(city.getDisplayName());
 		if (cities == null || cities.isEmpty()) {
 			return cityDao.addCity(city);
 		}

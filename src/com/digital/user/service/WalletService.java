@@ -5,9 +5,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.digital.dao.WalletDao;
+import com.digital.user.dao.WalletDao;
 import com.digital.user.model.Wallet;
 /**
  * @author Satyam Kumar
@@ -21,7 +22,7 @@ public class WalletService {
 	@Autowired
 	private WalletDao walletDao;
 
-	//@Cacheable(value="walletHistory", key="#uid")
+	@Cacheable(value="walletHistory", key="#uid")
 	public List<Wallet> getWalletHistory(Long userId) {
 		log.info("call getWalletHistory {}", userId);
 		return walletDao.getWalletHistory(userId);

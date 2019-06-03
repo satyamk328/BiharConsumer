@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.digital.dao.UserDao;
+import com.digital.user.dao.UserDao;
 import com.digital.user.model.Login;
 import com.digital.user.model.User;
 

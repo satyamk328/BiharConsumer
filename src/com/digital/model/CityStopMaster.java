@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CityStop implements Serializable{
+public class CityStopMaster implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private Long cityStopId;

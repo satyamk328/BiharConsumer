@@ -5,17 +5,17 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.digital.model.City;
+import com.digital.model.CityMaster;
 
 /**
  * @author Satyam Kumar
  *
  */
-public class CityRowMapper implements RowMapper<City> {
+public class CityRowMapper implements RowMapper<CityMaster> {
 
 	@Override
-	public City mapRow(ResultSet rs, int rowNum) throws SQLException {
-		City user = new City();
+	public CityMaster mapRow(ResultSet rs, int rowNum) throws SQLException {
+		CityMaster user = new CityMaster();
 		user.setCityId(rs.getLong("CityId"));
 		user.setDisplayName(rs.getString("DisplayName"));
 		user.setCityName(rs.getString("CityName"));

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CancelTicketDetails {
+public class CancelTicketMaster {
 	
 	private Long cancelId;
 	private Long ticketId; 

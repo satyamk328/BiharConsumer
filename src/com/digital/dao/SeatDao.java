@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.SeatDetails;
+import com.digital.model.SeatMaster;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,13 +26,13 @@ public class SeatDao {
 	private String selectSeatDetailsByLayoutId;
 
 	@Transactional(readOnly = true)
-	public List<SeatDetails> getSeatDetailsByLayoutId(Long layoutId) {
+	public List<SeatMaster> getSeatDetailsByLayoutId(Long layoutId) {
 		log.debug("Running select query for getSeatDetailsByLayoutId: {}", selectSeatDetailsByLayoutId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("layoutId", layoutId);
 
-		List<SeatDetails> seatDetails = jdbcTemplateObject.query(selectSeatDetailsByLayoutId, parameters,
-				new BeanPropertyRowMapper<>(SeatDetails.class));
+		List<SeatMaster> seatDetails = jdbcTemplateObject.query(selectSeatDetailsByLayoutId, parameters,
+				new BeanPropertyRowMapper<>(SeatMaster.class));
 		return (seatDetails != null && !seatDetails.isEmpty()) ? seatDetails : new ArrayList<>();
 	}
 

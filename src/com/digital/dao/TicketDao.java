@@ -17,11 +17,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import com.digital.model.BusDepatureTimeDetails;
+import com.digital.model.ScheduleMaster;
 import com.digital.model.TicketCancellationPolicy;
 import com.digital.model.TicketDetails;
-import com.digital.model.CancelTicketDetails;
+import com.digital.model.CancelTicketMaster;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.CommonUtil;
@@ -34,6 +35,9 @@ public class TicketDao {
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
+	
+	@Autowired
+	private BusScheduleDao busScheduleDao;
 	
 	@Autowired
 	private CancelPolicyDao cancelPolicyDao;
@@ -62,8 +66,8 @@ public class TicketDao {
 	@Value("${select_ticket_by_ticketId}")
 	private String selectTicketByTicketId;
 
-	@Value("${select_bus_StartTime_by_scheduleId}")
-	private String busStartTimeByScheduleId;
+	@Value("${insert_ticket_master}")
+	private String insertTicketMaster;
 
 	@Transactional(readOnly = true)
 	public List<TicketDetails> getTicketDetails(String pnr, Long phone) {
@@ -76,13 +80,13 @@ public class TicketDao {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<CancelTicketDetails> getCancelTicketDetails(String pnr, Long phone) {
+	public List<CancelTicketMaster> getCancelTicketDetails(String pnr, Long phone) {
 		log.debug("Running select query for getTicketDetails: {}", selectCancelTicketDetailsBypnrAndPhone);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("pnr", pnr);
 		parameters.addValue("phone", phone);
 		return jdbcTemplateObject.query(selectCancelTicketDetailsBypnrAndPhone, parameters,
-				new BeanPropertyRowMapper<>(CancelTicketDetails.class));
+				new BeanPropertyRowMapper<>(CancelTicketMaster.class));
 	}
 
 	@Transactional(readOnly = true)
@@ -145,7 +149,7 @@ public class TicketDao {
 
 			try {
 
-				CancelTicketDetails ticket = getTicketByTicketId(ticketId, phoneNumber);
+				CancelTicketMaster ticket = getTicketByTicketId(ticketId, phoneNumber);
 
 				// If ticket is not found in DB
 				if (ticket == null) {
@@ -153,7 +157,7 @@ public class TicketDao {
 					continue;
 				}
 
-				BusDepatureTimeDetails depatureDetails = getBusStartTimeByScheduleId(ticket.getScheduleId());
+				ScheduleMaster depatureDetails = busScheduleDao.getBusStartTimeByScheduleId(ticket.getScheduleId());
 				List<TicketCancellationPolicy> cancellationPolicies = cancelPolicyDao.getTicketCancellationPolicy(ticket.getBusId());
 				Date busSchDateTime = CommonUtil.dateByDateAndTimeString(depatureDetails.getDepartureDate(),
 						depatureDetails.getDepartureTime());
@@ -189,23 +193,59 @@ public class TicketDao {
 	}
 
 	@Transactional(readOnly = true)
-	public CancelTicketDetails getTicketByTicketId(Long ticketId, Long phoneNumber) {
+	public CancelTicketMaster getTicketByTicketId(Long ticketId, Long phoneNumber) {
 		log.debug("Running select query for getTicketByTicketId: {}", selectTicketByTicketId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ticketId", ticketId);
 		parameters.addValue("phoneNumber", phoneNumber);
-		List<CancelTicketDetails> result = jdbcTemplateObject.query(selectTicketByTicketId, parameters,
-				new BeanPropertyRowMapper<>(CancelTicketDetails.class));
+		List<CancelTicketMaster> result = jdbcTemplateObject.query(selectTicketByTicketId, parameters,
+				new BeanPropertyRowMapper<>(CancelTicketMaster.class));
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	@Transactional(readOnly=true)
-	public BusDepatureTimeDetails getBusStartTimeByScheduleId(Long scheduleId) {
-		log.debug("Running select query for getBusStartTimeByScheduleId: {}", busStartTimeByScheduleId);
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("scheduleId", scheduleId);
-		List<BusDepatureTimeDetails> result = jdbcTemplateObject.query(busStartTimeByScheduleId, parameters,
-				new BeanPropertyRowMapper<>(BusDepatureTimeDetails.class));
-		return result.isEmpty() ? null : result.get(0);
+	@Transactional
+	public synchronized int bookTickets(TicketVO bookTicketVO) {
+
+		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
+		
+		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
+			if (StringUtils.isEmpty(bookTicketVO.getUserId()))
+				parameters.addValue("userId", seatData.getCustName().substring(0, 4));
+			else
+				parameters.addValue("userId", bookTicketVO.getUserId());
+			parameters.addValue("busId", bookTicketVO.getBusId());
+			parameters.addValue("pnr", bookTicketVO.getPnr());
+			parameters.addValue("seatId", seatData.getSeatId());
+			parameters.addValue("tripId", bookTicketVO.getTripId());
+			parameters.addValue("travelName", bookTicketVO.getTravelName());
+			parameters.addValue("busType", bookTicketVO.getBusType());
+			parameters.addValue("isAc", bookTicketVO.getIsAC());
+			parameters.addValue("boadingPoint", bookTicketVO.getBoadingPoint());
+			parameters.addValue("droppingPoint", bookTicketVO.getDroppingPoint());
+			parameters.addValue("arrivalDate", bookTicketVO.getArrivalDate());
+			parameters.addValue("arrivalTime", bookTicketVO.getArrivalTime());
+			parameters.addValue("departureDate", bookTicketVO.getDepartureDate());
+			parameters.addValue("departureTime", bookTicketVO.getDepartureTime());
+			parameters.addValue("totalFare", bookTicketVO.getTotalFare());
+			
+			parameters.addValue("seatType", seatData.getSeatType());
+			parameters.addValue("seatNumber", seatData.getSeatNumber());
+			parameters.addValue("seatName", seatData.getSeatNumber());
+			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
+			
+			parameters.addValue("customerName", seatData.getCustName());
+			parameters.addValue("age", seatData.getAge());
+			parameters.addValue("email", bookTicketVO.getEmail());
+			parameters.addValue("gender", seatData.getGender());
+			parameters.addValue("phoneNumber", bookTicketVO.getPhone());
+			parameters.addValue("isLicence", bookTicketVO.getIsLicence());
+			parameters.addValue("bookingDate", bookTicketVO.getBookingDate());
+					 
+			jdbcTemplateObject.update(insertTicketMaster, parameters);
+		}
+		return 1;
 	}
+	
 }

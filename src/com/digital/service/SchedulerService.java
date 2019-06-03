@@ -28,7 +28,7 @@ public class SchedulerService {
 	@Value("${backup.driver.path}")
 	private String backUpDrirectory;
 
-	@Scheduled(fixedRate = 10000) // for every 1 Hrs
+	@Scheduled(fixedRate = 60000) // for every 1 Hrs
 	public void run2() {
 		System.out.println("I am called by Spring scheduler " + new Date());
 	}

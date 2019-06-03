@@ -16,8 +16,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.digital.model.City;
-import com.digital.model.CityStop;
+import com.digital.model.CityMaster;
+import com.digital.model.CityStopMaster;
 import com.digital.model.extrator.CityRowMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,13 +56,13 @@ public class CityDao {
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
 
 	@Transactional(readOnly = true)
-	public List<City> getAllCities() {
+	public List<CityMaster> getAllCities() {
 		log.debug("Running insert query for getAllStation {}", selectAllCityQuery);
 		return jdbcTemplateObject.query(selectAllCityQuery, new CityRowMapper());
 	}
 
 	@Transactional
-	public List<City> getCityByName(String cityName) {
+	public List<CityMaster> getCityByName(String cityName) {
 		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityName", cityName.toLowerCase());
@@ -70,16 +70,16 @@ public class CityDao {
 	}
 
 	@Transactional
-	public City getCityById(Long cityId) {
+	public CityMaster getCityById(Long cityId) {
 		log.debug("Running insert query for searchStationByStationName {}", selectSearchTopCityByIdQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
-		List<City> cities = jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new CityRowMapper());
-		return cities != null ? cities.get(0) : new City();
+		List<CityMaster> cities = jdbcTemplateObject.query(selectSearchTopCityByIdQuery, parameters, new CityRowMapper());
+		return cities != null ? cities.get(0) : new CityMaster();
 	}
 
 	@Transactional
-	public long addCity(City city) {
+	public long addCity(CityMaster city) {
 		log.debug("Running insert query for addStationName {}", insertTopCityQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(city);
@@ -88,7 +88,7 @@ public class CityDao {
 	}
 
 	@Transactional
-	public int updateCity(Long cityId, City topCities) {
+	public int updateCity(Long cityId, CityMaster topCities) {
 		log.debug("Running insert query for deleteCity {}", updateCityQuery);
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
@@ -110,13 +110,13 @@ public class CityDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<CityStop> getCityStopByCityId(Long cityId) {
+	public List<CityStopMaster> getCityStopByCityId(Long cityId) {
 		log.debug("Running insert query for getCancellationPolicy {}", selectCityStopByCityId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
-		return jdbcTemplateObject.query(selectCityStopByCityId, parameters, new RowMapper<CityStop>() {
-			public CityStop mapRow(ResultSet rs, int rowNum) throws SQLException {
-				CityStop cityStop = new CityStop();
+		return jdbcTemplateObject.query(selectCityStopByCityId, parameters, new RowMapper<CityStopMaster>() {
+			public CityStopMaster mapRow(ResultSet rs, int rowNum) throws SQLException {
+				CityStopMaster cityStop = new CityStopMaster();
 				cityStop.setCityStopId(rs.getLong("CityStopId"));
 				cityStop.setCityId(rs.getLong("CityId"));
 				cityStop.setLocationName(rs.getString("LocationName"));
@@ -130,17 +130,17 @@ public class CityDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<CityStop> getCityStopDetails(Long cityId, List<String> cityStopIds) {
+	public List<CityStopMaster> getCityStopDetails(Long cityId, List<String> cityStopIds) {
 		log.debug("Running select query for getBusBoadingAndStopingPointDetails: {}", selectBoadingStoppingDetailQuery);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("cityId", cityId);
 		parameters.addValue("cityStopIds", cityStopIds);
 		return jdbcTemplateObject.query(selectBoadingStoppingDetailQuery, parameters,
-				new BeanPropertyRowMapper<>(CityStop.class));
+				new BeanPropertyRowMapper<>(CityStopMaster.class));
 	}
 
 	@Transactional
-	public long addCityStop(CityStop cityStop) {
+	public long addCityStop(CityStopMaster cityStop) {
 		log.debug("Running insert query for addCityStop {}", insertCityStopQuery);
 		KeyHolder holder = new GeneratedKeyHolder();
 		BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(cityStop);

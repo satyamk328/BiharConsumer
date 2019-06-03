@@ -8,21 +8,21 @@ import java.util.List;
 
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-import com.digital.model.BusScheduleDetails;
+import com.digital.model.ScheduleBusDetails;
 import com.digital.utils.CommonUtil;
 
 /**
  * @author Satyam Kumar
  *
  */
-public class BusScheduleDetailsExtrator implements ResultSetExtractor<List<BusScheduleDetails>> {
+public class BusScheduleDetailsExtrator implements ResultSetExtractor<List<ScheduleBusDetails>> {
 
 	@Override
-	public List<BusScheduleDetails> extractData(ResultSet rs) throws SQLException {
+	public List<ScheduleBusDetails> extractData(ResultSet rs) throws SQLException {
 
-		List<BusScheduleDetails> busScheduleDetails = new ArrayList<>();
+		List<ScheduleBusDetails> busScheduleDetails = new ArrayList<>();
 		while (rs.next()) {
-			BusScheduleDetails busRoutDetails = new BusScheduleDetails();
+			ScheduleBusDetails busRoutDetails = new ScheduleBusDetails();
 			busRoutDetails.setClassType("Normal");
 			busRoutDetails.setScheduleId(rs.getLong("scheduleId"));
 			busRoutDetails.setBusId(rs.getLong("busId"));
