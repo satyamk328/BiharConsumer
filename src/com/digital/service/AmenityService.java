@@ -17,12 +17,12 @@ public class AmenityService {
 	private AmenitiesDao amenitiesDao;
 
 	@Cacheable("allAmenity")
-	public List<Amenity> getAllAmenity() {
+	public List<Amenity> getAllAmenities() {
 		return amenitiesDao.getAllAmenities();
 	}
 
 	@Cacheable(value = "amenityDetails.Id", key = "#busId")
-	public List<Amenity> getAmenityByBusId(Long busId) {
+	public List<Amenity> getAmenitiesByBusId(Long busId) {
 		return amenitiesDao.getAmenitiesByBusId(busId);
 	}
 

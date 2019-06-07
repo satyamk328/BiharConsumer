@@ -33,16 +33,16 @@ public class AmenityController {
 	@GetMapping("")
 	public ResponseEntity<RestResponse<List<Amenity>>> getAllAmenity() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<Amenity> busAmenities = amenityService.getAllAmenity();
+		List<Amenity> busAmenities = amenityService.getAllAmenities();
 		log.debug("Data fetched successfully from Top cities table");
 		return new ResponseEntity<>(new RestResponse<>(busAmenities, status), HttpStatus.OK);
 	}
 
 	@GetMapping("/{busId}")
-	public ResponseEntity<RestResponse<List<Amenity>>> getAmenityByBusId(
+	public ResponseEntity<RestResponse<List<Amenity>>> getAmenitiesByBusId(
 			@PathVariable(name = "busId", required = true) Long busId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
-		List<Amenity> busAmenities = amenityService.getAmenityByBusId(busId);
+		List<Amenity> busAmenities = amenityService.getAmenitiesByBusId(busId);
 		return new ResponseEntity<>(new RestResponse<>(busAmenities, status), HttpStatus.OK);
 	}
 

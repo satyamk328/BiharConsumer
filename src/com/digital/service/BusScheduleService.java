@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.digital.dao.AmenitiesDao;
 import com.digital.dao.BusDao;
 import com.digital.dao.BusScheduleDao;
 import com.digital.dao.CancelPolicyDao;
@@ -40,7 +39,7 @@ public class BusScheduleService {
 	private BusScheduleDao busBookingDao;
 
 	@Autowired
-	private AmenitiesDao amenitiesDao;
+	private AmenityService amenitiesService;
 
 	@Autowired
 	private CancelPolicyDao policyDao;
@@ -84,7 +83,7 @@ public class BusScheduleService {
 					route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId()) : new ArrayList<>());
 
 			route.setAmenities(
-					route.getBusId() != null ? amenitiesDao.getAmenitiesByBusId(route.getBusId()) : new ArrayList<>());
+					route.getBusId() != null ? amenitiesService.getAmenitiesByBusId(route.getBusId()) : new ArrayList<>());
 
 			route.setBusDetails(
 					route.getBusId() != null ? busDao.getBusDetailsByBusId(route.getBusId()) : new BusMaster());
@@ -130,7 +129,7 @@ public class BusScheduleService {
 
 		});
 		busDetailsObject.setAvailableRoutes(busScheduleDetails);
-		busDetailsObject.setAmenitiesList(amenitiesDao.getAllAmenities());
+		busDetailsObject.setAmenitiesList(amenitiesService.getAllAmenities());
 		List<String> timeList = dataUtils.getTimeList();
 		busDetailsObject.setArrivalTimeList(timeList);
 		busDetailsObject.setDepartureTimeList(timeList);
