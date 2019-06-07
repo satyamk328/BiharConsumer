@@ -152,10 +152,6 @@ public class UserController {
 			@RequestParam(name = "ip", required = false, defaultValue = "127.0.0.0") String ip) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "User Logout Successfully");
 		int i = userService.logOut(userId, ip);
-		if (i == 0) {
-			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
-			return new ResponseEntity<>(new RestResponse<>(true, status), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 		return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.OK);
 	}
 

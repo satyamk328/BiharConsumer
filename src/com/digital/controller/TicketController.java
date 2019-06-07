@@ -40,6 +40,11 @@ public class TicketController {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+		if(details == null || details.isEmpty()) {
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are no ticket available in this pnr and phone. Please enter valid criteria.");
+			return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 	
@@ -50,6 +55,11 @@ public class TicketController {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<CancelTicketMaster> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
+		if(details == null || details.isEmpty()) {
+			status = new RestStatus<>(HttpStatus.OK.toString(),
+					"There are no ticket available in this pnr and phone. Please enter valid criteria.");
+			return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 
