@@ -22,7 +22,7 @@ public class GlobalConstants {
 	
 	public static final String ERROR_MESSAGE = "Currently this service is unavailable. We regret the inconvenience caused. Please try after some time.";
 	public static final String BOOKING_CONFIRMATION_HEADER = "Booking Confirmation on DIGITALBIHAR, Bus Name: ${TRAVELNAME}, ${DEPARTUREDATE}, ${SOURCE} - ${DESTINATION}";
-	
+	public static final String CANCEL_TICKET = "Cancel Ticket";
 	public static final int MAX_SHEET_ALLOWED_PER_BOOKING = 5;
 	
 	public static final String SEPARATOR = "::";

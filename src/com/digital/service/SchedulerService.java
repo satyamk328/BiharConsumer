@@ -64,7 +64,7 @@ public class SchedulerService {
 					? scheduleMaster.getDepartureTime().split(":")[0]
 					: scheduleMaster.getDepartureTime();
 			if (time.equalsIgnoreCase(commonUtil.getFourHrsBeforeHrs())) {
-				smsWrapperService.sendSMS("88003594940", "Your Bus ticket have comfirmed at 14:30 and Driver Name:? Contact No:?");
+				smsWrapperService.sendSMS("8800359490", "Your Bus ticket have comfirmed at 14:30 and Driver Name:? Contact No:?");
 			}
 		});
 	}
