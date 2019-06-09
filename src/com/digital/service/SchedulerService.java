@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.digital.dao.BusScheduleDao;
 import com.digital.model.ScheduleMaster;
+import com.digital.model.TicketDetails;
 import com.digital.model.TripMaster;
 import com.digital.utils.CommonUtil;
 import com.smattme.MysqlExportService;
@@ -50,7 +51,7 @@ public class SchedulerService {
 		System.out.println("******* fire on every second **************");
 	}
 
-    @Scheduled(cron = "0 * * * * *", zone = "Asia/Kolkata")
+	@Scheduled(cron = "0 * * * * *", zone = "Asia/Kolkata")
 	public void fireEveryMinute() {
 		System.out.println("******** fire on every minute ****************");
 	}
@@ -59,13 +60,29 @@ public class SchedulerService {
 	public void everyHrs() {
 		System.out.println("********************* Fires at every hrs every day ****");
 		List<ScheduleMaster> scheduleMasters = busScheduleDao.getCurrentScheduleBus();
-		scheduleMasters.forEach(scheduleMaster -> {
-			String time = scheduleMaster.getDepartureTime().contains(":")
-					? scheduleMaster.getDepartureTime().split(":")[0]
-					: scheduleMaster.getDepartureTime();
-			if (time.equalsIgnoreCase(commonUtil.getFourHrsBeforeHrs())) {
-				smsWrapperService.sendSMS("8800359490", "Your Bus ticket have comfirmed at 14:30 and Driver Name:? Contact No:?");
-			}
+		scheduleMasters.forEach(scheduleBus -> {
+			List<TicketDetails> ticketDetails = busScheduleDao
+					.getTripMasterByScheduleIdBusId(scheduleBus.getScheduleId(), scheduleBus.getBusId());
+			ticketDetails.forEach(ticket -> {
+				String time = ticket.getDepartureTime().contains(":") ? ticket.getDepartureTime().split(":")[0]
+						: ticket.getDepartureTime();
+				if (time.equalsIgnoreCase(commonUtil.getFourHrsBeforeHrs())) {
+					StringBuffer buffer = new StringBuffer("Your Bus ticket have comfirmed at ");
+					buffer.append(ticket.getDepartureDate());
+					buffer.append(" ");
+					buffer.append(ticket.getDepartureTime());
+					buffer.append(", Driver Name : ");
+					buffer.append(scheduleBus.getDriverName());
+					buffer.append("-");
+					buffer.append(scheduleBus.getDriverNumber());
+					buffer.append("Conductor Name : ");
+					buffer.append(scheduleBus.getConductorName());
+					buffer.append("-");
+					buffer.append(scheduleBus.getConductorNumber());
+					smsWrapperService.sendSMS(ticket.getPhoneNumber(), buffer.toString());
+				}
+			});
+
 		});
 	}
 

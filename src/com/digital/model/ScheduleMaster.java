@@ -19,5 +19,9 @@ public class ScheduleMaster {
 	private Double seaterFare;
 	private Boolean isFixed;
 	private Double baseFare;
+	private String driverName;
+	private String driverNumber;
+	private String conductorName;
+	private String conductorNumber;
 
 }

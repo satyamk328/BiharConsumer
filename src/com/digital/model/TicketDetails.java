@@ -18,10 +18,11 @@ public class TicketDetails implements Serializable {
 	private String pnr;
 	private Long seatId;
 	private String tripId;
-	private String sourceCityName;
+	private String srcCityName;
 	private String destCityName;
 	private String travelName;
 	private String busType;
+	private Double distance;
 	private Boolean isAc = false;
 	private String boadingPoint;
 	private String droppingPoint;
@@ -29,6 +30,7 @@ public class TicketDetails implements Serializable {
 	private String departureTime;
 	private String arrivalDate;
 	private String arrivalTime;
+	private String seatType;
 	private String seatNumber;
 	private String seatName;
 	private Boolean isLowerBerth = false;
@@ -38,7 +40,8 @@ public class TicketDetails implements Serializable {
 	private Long age;
 	private String email;
 	private String gender;
-	private Long phoneNumber;
+	private String phoneNumber;
 	private Boolean isLicence;
 	private Date bookingDate;
+	private String bookBy;
 }

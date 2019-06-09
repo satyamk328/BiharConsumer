@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.digital.model.ScheduleBusDetails;
 import com.digital.model.ScheduleMaster;
+import com.digital.model.TicketDetails;
 import com.digital.model.TripMaster;
 import com.digital.model.extrator.BusScheduleDetailsExtrator;
 import com.digital.utils.DataUtils;
@@ -50,7 +51,7 @@ public class BusScheduleDao {
 
 	@Value("${select_current_schedule_bus}")
 	private String selectCurrectScheduleBus;
-	
+
 	@Value("${select_latest_Trip_by_SrcCity_and_DestCity}")
 	private String selectLatestTripBySrcCityAndDestCity;
 
@@ -59,6 +60,9 @@ public class BusScheduleDao {
 
 	@Value("${insert_trip_master}")
 	private String insertTripMasterQuery;
+
+	@Value("${select_ticketmaster_by_scheduleId_busId}")
+	private String selectTicketByScheduleAndBusIdForCustomer;
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
@@ -128,6 +132,10 @@ public class BusScheduleDao {
 		return result;
 	}
 
+	/**
+	 * this method is use to check this bus schedule or not
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<ScheduleMaster> getScheduleIdNotExistInTrip() {
 		log.debug("Running select query for getBusStartTimeByScheduleId: {}", selectScheduleIdNotExistInTrip);
@@ -135,16 +143,11 @@ public class BusScheduleDao {
 				new BeanPropertyRowMapper<>(ScheduleMaster.class));
 	}
 	/**
-	 * this method is use to get current schedule bus
+	 * this method is use to get latest trip data
+	 * @param srcCityId
+	 * @param destCityId
 	 * @return
 	 */
-	@Transactional(readOnly = true)
-	public List<ScheduleMaster> getCurrentScheduleBus() {
-		log.debug("Running select query for getCurrentScheduleBus: {}", selectCurrectScheduleBus);
-		return jdbcTemplateObject.query(selectCurrectScheduleBus,
-				new BeanPropertyRowMapper<>(ScheduleMaster.class));
-	}
-
 	@Transactional(readOnly = true)
 	public Long getLatestTripBySrcCityAndDestCityId(Long srcCityId, Long destCityId) {
 		log.debug("Running select query for getTripMasterByBusId: {}", selectLatestTripBySrcCityAndDestCity);
@@ -153,7 +156,11 @@ public class BusScheduleDao {
 		parameters.addValue("destCityId", destCityId);
 		return jdbcTemplateObject.queryForObject(selectLatestTripBySrcCityAndDestCity, parameters, Long.class);
 	}
-
+	/**
+	 * to get trip data on the basis of scheduleId
+	 * @param scheduleId
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<TripMaster> getTripMasterByScheduleId(Long scheduleId) {
 		log.debug("Running select query for getTripMasterByBusId: {}", selectTripMasterByScheduleId);
@@ -162,7 +169,12 @@ public class BusScheduleDao {
 		return jdbcTemplateObject.query(selectTripMasterByScheduleId, parameters,
 				new BeanPropertyRowMapper<>(TripMaster.class));
 	}
-
+	
+	/**
+	 * insert new trip for schedule bus
+	 * @param tripMaster
+	 * @return
+	 */
 	@Transactional
 	public int insertTripMaster(TripMaster tripMaster) {
 		log.debug("Running select query for getTripMasterByBusId: {}", insertTripMasterQuery);
@@ -170,4 +182,32 @@ public class BusScheduleDao {
 		final BeanPropertySqlParameterSource beanParameters = new BeanPropertySqlParameterSource(tripMaster);
 		return jdbcTemplateObject.update(insertTripMasterQuery, beanParameters, holder);
 	}
+	
+	/**
+	 * this method is use to get current schedule bus
+	 * 
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<ScheduleMaster> getCurrentScheduleBus() {
+		log.debug("Running select query for getCurrentScheduleBus: {}", selectCurrectScheduleBus);
+		return jdbcTemplateObject.query(selectCurrectScheduleBus, new BeanPropertyRowMapper<>(ScheduleMaster.class));
+	}
+
+	/**
+	 * this method is use to get ticket data on the basis of scheduleId BusId for CUSTOMER ticket only
+	 * @param scheduleId
+	 * @param busId
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<TicketDetails> getTripMasterByScheduleIdBusId(Long scheduleId, Long busId) {
+		log.debug("Running select query for getTripMasterByBusId: {}", selectTicketByScheduleAndBusIdForCustomer);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("busId", busId);
+		return jdbcTemplateObject.query(selectTicketByScheduleAndBusIdForCustomer, parameters,
+				new BeanPropertyRowMapper<>(TicketDetails.class));
+	}
+
 }
