@@ -38,7 +38,7 @@ public class TicketVO {
 	private String departureTime;
 	private Date bookingDate = new Date();
 	private Boolean isLicence = false;
-	private Long phone;
+	private String phone;
 	private String email;
 	private Double totalFare;
 	private List<SeatDataToOperate> seatDataToOperate;

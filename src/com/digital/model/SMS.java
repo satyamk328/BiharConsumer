@@ -12,7 +12,7 @@ public class SMS {
 	private String username;
 	private String password;
 	private String from;
-	private List<Long> to;
+	private List<String> to;
 	private String text;
 	private String coding;
 	private String flash;

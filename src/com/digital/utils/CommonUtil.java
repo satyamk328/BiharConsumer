@@ -133,4 +133,14 @@ public class CommonUtil {
 		return format.format(calendar.getTime());
 	}
 	
+	public String getFourHrsBeforeHrs() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.HOUR_OF_DAY, -4);
+		Date date = calendar.getTime();
+		final SimpleDateFormat format = new SimpleDateFormat("HH");
+		return format.format(date);
+	}
+	public static void main(String[] args) {
+		System.out.println(new CommonUtil().getFourHrsBeforeHrs());
+	}
 }

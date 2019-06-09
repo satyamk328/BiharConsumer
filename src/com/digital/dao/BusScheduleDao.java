@@ -48,6 +48,9 @@ public class BusScheduleDao {
 	@Value("${select_scheduleIs_not_exist_in_tripmaster}")
 	private String selectScheduleIdNotExistInTrip;
 
+	@Value("${select_current_schedule_bus}")
+	private String selectCurrectScheduleBus;
+	
 	@Value("${select_latest_Trip_by_SrcCity_and_DestCity}")
 	private String selectLatestTripBySrcCityAndDestCity;
 
@@ -129,6 +132,16 @@ public class BusScheduleDao {
 	public List<ScheduleMaster> getScheduleIdNotExistInTrip() {
 		log.debug("Running select query for getBusStartTimeByScheduleId: {}", selectScheduleIdNotExistInTrip);
 		return jdbcTemplateObject.query(selectScheduleIdNotExistInTrip,
+				new BeanPropertyRowMapper<>(ScheduleMaster.class));
+	}
+	/**
+	 * this method is use to get current schedule bus
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<ScheduleMaster> getCurrentScheduleBus() {
+		log.debug("Running select query for getCurrentScheduleBus: {}", selectCurrectScheduleBus);
+		return jdbcTemplateObject.query(selectCurrectScheduleBus,
 				new BeanPropertyRowMapper<>(ScheduleMaster.class));
 	}
 

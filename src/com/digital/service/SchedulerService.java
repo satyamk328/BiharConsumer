@@ -3,7 +3,6 @@ package com.digital.service;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,38 +38,61 @@ public class SchedulerService {
 
 	@Autowired
 	private BusScheduleDao busScheduleDao;
-	
+
 	@Autowired
 	private CommonUtil commonUtil;
 
-	@Scheduled(fixedRate = 60000) // for every 1 Hrs
-	public void run2() {
-		System.out.println("I am called by Spring scheduler " + new Date());
+	@Autowired
+	private SMSWrapperService smsWrapperService;
+
+	// @Scheduled(cron = "* * * * * *", zone = "Asia/Kolkata")
+	public void fireEverySecond() {
+		System.out.println("******* fire on every second **************");
 	}
 
-	@Scheduled(cron = "0 0 0 * * ?") // every night 12 AM
-	public void run() {
-		Backupdbtosql();
+    @Scheduled(cron = "0 * * * * *", zone = "Asia/Kolkata")
+	public void fireEveryMinute() {
+		System.out.println("******** fire on every minute ****************");
 	}
 
-	@Scheduled(cron = "0 0 12 * * *", zone = "Asia/Kolkata") // 12 AM every day
-	public void run1() {
+	@Scheduled(cron = "0 0 * * * *", zone = "Asia/Kolkata") // Fires at every hrs every day:
+	public void everyHrs() {
+		System.out.println("********************* Fires at every hrs every day ****");
+		List<ScheduleMaster> scheduleMasters = busScheduleDao.getCurrentScheduleBus();
+		scheduleMasters.forEach(scheduleMaster -> {
+			String time = scheduleMaster.getDepartureTime().contains(":")
+					? scheduleMaster.getDepartureTime().split(":")[0]
+					: scheduleMaster.getDepartureTime();
+			if (time.equalsIgnoreCase(commonUtil.getFourHrsBeforeHrs())) {
+				smsWrapperService.sendSMS("88003594940", "Your Bus ticket have comfirmed at 14:30 and Driver Name:? Contact No:?");
+			}
+		});
+	}
+
+	@Scheduled(cron = "0 0 12 * * ?", zone = "Asia/Kolkata") // Fires at 12 PM every day:
+	public void everyAfterNoon() {
+		System.out.println("********************* Fires at 12 PM every day ****");
+	}
+
+	@Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Kolkata") // every night 12 AM
+	public void everyMidNight() {
+		System.out.println("*********************12 AM every day***");
 		List<ScheduleMaster> scheduleMasters = busScheduleDao.getScheduleIdNotExistInTrip();
-		for (ScheduleMaster scheduleMaster : scheduleMasters) {
-			Long scheduleId = busScheduleDao.getLatestTripBySrcCityAndDestCityId(
-					scheduleMaster.getSourceCityId(), scheduleMaster.getDestinationCityId());
+		scheduleMasters.forEach(scheduleBus -> {
+			Long scheduleId = busScheduleDao.getLatestTripBySrcCityAndDestCityId(scheduleBus.getSourceCityId(),
+					scheduleBus.getDestinationCityId());
 			List<TripMaster> tripMasters = busScheduleDao.getTripMasterByScheduleId(scheduleId);
-			for (TripMaster tt : tripMasters) {
-				tt.setScheduleId(scheduleMaster.getScheduleId());
-				tt.setArrivalDate(scheduleMaster.getDepartureDate());
-				if(new Integer(tt.getArrivalTime().split(":")[0]) > 12 )
-					tt.setArrivalDate(commonUtil.getNextDate(scheduleMaster.getDepartureDate()));
-				int i = busScheduleDao.insertTripMaster(tt);
+			tripMasters.forEach(tripMaster -> {
+				tripMaster.setScheduleId(scheduleBus.getScheduleId());
+				tripMaster.setArrivalDate(scheduleBus.getDepartureDate());
+				if (new Integer(tripMaster.getArrivalTime().split(":")[0]) > 12)
+					tripMaster.setArrivalDate(commonUtil.getNextDate(scheduleBus.getDepartureDate()));
+				int i = busScheduleDao.insertTripMaster(tripMaster);
 				if (i > 0)
 					log.info("Trip inserted successfully !");
-			}
-		}
-
+			});
+		});
+		Backupdbtosql();
 	}
 
 	public void Backupdbtosql() {

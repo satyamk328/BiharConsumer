@@ -1,4 +1,8 @@
-package com.digital.controller;
+/*package com.digital.controller;
+
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccavenue.security.AesCryptUtil;
 import com.digital.service.ObjectCache;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
@@ -28,4 +33,14 @@ public class RefreshController {
 		objectCache.clearAppCache();
 		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
 	}
+	
+	@GetMapping("")
+	public ResponseEntity<RestResponse<Object>> loadPayment(HttpServletRequest request) {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
+		
+		 
+		log.debug("Application cache clear Successfully");
+		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
+	}
 }
+*/
