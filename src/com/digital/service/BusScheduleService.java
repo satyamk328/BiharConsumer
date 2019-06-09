@@ -139,7 +139,7 @@ public class BusScheduleService {
 	public ScheduleSeatDetails scheduledBusSeatDetails(SearchTripVO tripVO) {
 
 		ScheduleSeatDetails scheduleSeatDetails = new ScheduleSeatDetails();
-		// TODO DB Query also
+		// DB Query also
 		ScheduleBusDetails busDetails = busBookingDao.scheduledBusDetails(tripVO.getScheduleId(), tripVO.getBusId(),
 				tripVO.getSourceId(), tripVO.getDestinationId());
 

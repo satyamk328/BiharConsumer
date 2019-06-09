@@ -13,5 +13,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/satyam.kumar/Downloads/Integration_kits/Web/JSP_Kit/NON_SEAMLESS_KIT/ccavutil.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

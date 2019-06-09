@@ -19,7 +19,10 @@ public class CancelTicketMaster {
 	private String tripId; 
 	private String travelName; 
 	private String busType; 
+	private Double distance;
 	private Boolean isAc; 
+	private String srcCityName;
+	private String destCityName;
 	private String boadingPoint; 
 	private String droppingPoint; 	
 	private String departureDate; 
@@ -39,6 +42,7 @@ public class CancelTicketMaster {
 	private Long phoneNumber; 
 	private Boolean isLicence; 
 	private Date bookingDate;
+	private String bookBy;
 	private Date cancelDate;
 	private Long policyId;
 	private Double refundAmount;
