@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.BusScheduleDao;
@@ -23,6 +24,9 @@ import com.digital.utils.MailServiceUtils;
 @Service
 public class TicketService {
 
+	@Value("${isOffline}")
+	private boolean isOffLine;
+	
 	@Autowired
 	private BusScheduleDao busBookingDao;
 	
@@ -68,7 +72,7 @@ public class TicketService {
 				tikcetDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
 		bookTicketVO.setPnr(pnr);
 		int row = tikcetDao.bookTickets(bookTicketVO);
-		if(row ==1) {
+		if(row > 1 && !isOffLine) {
 			emailService.sendEmail(bookingTicketConfirmHeader(bookTicketVO), bookTicketVO.getEmail(),
 					MailServiceUtils.generateBookingTicketMail(bookTicketVO));
 			smsWrapperService.sendSMS(bookTicketVO.getPhone(), MailServiceUtils.confirmBookingSMS(bookTicketVO));
