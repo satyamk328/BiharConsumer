@@ -1,7 +1,6 @@
 package com.digital.dao;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,10 +18,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.digital.model.CancelTicketMaster;
 import com.digital.model.ScheduleMaster;
 import com.digital.model.TicketCancellationPolicy;
 import com.digital.model.TicketDetails;
-import com.digital.model.CancelTicketMaster;
 import com.digital.model.vo.SeatDataToOperate;
 import com.digital.model.vo.TicketVO;
 import com.digital.utils.CommonUtil;
@@ -99,7 +98,7 @@ public class TicketDao {
 
 		List<TicketDetails> details = jdbcTemplateObject.query(selectTicketDetailsByScheduleAndBusId, parameters,
 				new BeanPropertyRowMapper<>(TicketDetails.class));
-		return (details != null && !details.isEmpty()) ? details : new ArrayList<>();
+		return details;
 	}
 
 	@Transactional
