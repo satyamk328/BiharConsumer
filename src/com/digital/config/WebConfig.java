@@ -96,7 +96,12 @@ public class WebConfig implements WebMvcConfigurer, TransactionManagementConfigu
 
 	@Override
 	public void addCorsMappings(final CorsRegistry registry) {
-		registry.addMapping("/**");
+		registry.addMapping("/**")
+		.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+		.allowCredentials(true).allowedOrigins("*")
+		.allowedHeaders("Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method",
+				"userContext", "Access-Control-Allow-Origin", "Key", "Authorization", "Access-Control-Request-Headers")
+		.maxAge(1800);
 	}
 
 	@Override
@@ -118,4 +123,6 @@ public class WebConfig implements WebMvcConfigurer, TransactionManagementConfigu
 	public TaskScheduler taskExecutor() {
 		return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(3));
 	}
+	
+	
 }

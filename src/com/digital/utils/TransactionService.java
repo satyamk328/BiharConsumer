@@ -2,6 +2,9 @@ package com.digital.utils;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TransactionService {
 
 	private static final int MAX_SIZE = 18;

@@ -28,10 +28,10 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return new String[] { "/" };
 	}
 
-	@Override
+	/*@Override
 	protected Filter[] getServletFilters() {
 		return new Filter[] { new CorsFilter(), new PerformanceFilter() };
-	}
+	}*/
 
 	@Override
 	protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {

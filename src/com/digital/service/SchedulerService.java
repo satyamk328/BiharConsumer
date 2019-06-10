@@ -51,7 +51,7 @@ public class SchedulerService {
 		System.out.println("******* fire on every second **************");
 	}
 
-	@Scheduled(cron = "0 * * * * *", zone = "Asia/Kolkata")
+	//@Scheduled(cron = "0 * * * * *", zone = "Asia/Kolkata")
 	public void fireEveryMinute() {
 		System.out.println("******** fire on every minute ****************");
 	}
