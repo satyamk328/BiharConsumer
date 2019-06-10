@@ -1,6 +1,4 @@
-/*package com.digital.controller;
-
-import java.util.Enumeration;
+package com.digital.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccavenue.security.AesCryptUtil;
 import com.digital.service.ObjectCache;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
+import com.digital.utils.TransactionService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +23,9 @@ public class RefreshController {
 
 	@Autowired
 	private ObjectCache objectCache;
+	
+	@Autowired
+	private TransactionService transactionService;
 
 	@GetMapping("")
 	public ResponseEntity<RestResponse<Object>> evictCache() {
@@ -34,13 +35,11 @@ public class RefreshController {
 		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
 	}
 	
-	@GetMapping("")
+	@GetMapping("/generate-tranid")
 	public ResponseEntity<RestResponse<Object>> loadPayment(HttpServletRequest request) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
-		
-		 
+		String trans = transactionService.generate();
 		log.debug("Application cache clear Successfully");
-		return new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.OK);
+		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
 }
-*/

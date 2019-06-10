@@ -37,9 +37,6 @@ public class SchedulerService {
 	@Value("${backup.driver.path}")
 	private String backUpDrirectory;
 
-	@Value("${isOffline}")
-	private boolean isOffLine;
-
 	@Autowired
 	private BusScheduleDao busScheduleDao;
 
@@ -62,8 +59,6 @@ public class SchedulerService {
 	@Scheduled(cron = "0 0 * * * *", zone = "Asia/Kolkata") // Fires at every hrs every day:
 	public void everyHrs() {
 		System.out.println("********************* Fires at every hrs every day ****");
-		if (isOffLine)
-			return;
 		List<ScheduleMaster> scheduleMasters = busScheduleDao.getCurrentScheduleBus();
 		scheduleMasters.forEach(scheduleBus -> {
 			List<TicketDetails> ticketDetails = busScheduleDao

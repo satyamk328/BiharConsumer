@@ -8,7 +8,7 @@ public class TransactionService {
 	private static final AtomicLong counter = new AtomicLong();
 	private static String appPlatformId = "S";
 
-	public static String generate() {
+	public String generate() {
 		StringBuilder txnId = new StringBuilder();
 		txnId.append(System.currentTimeMillis());
 		txnId.append(appPlatformId);
@@ -19,9 +19,4 @@ public class TransactionService {
 		return txnId.toString();
 	}
 
-	public static void main(String[] args) {
-		for (int i = 0; i < 1000; i++) {
-			System.out.println(generate());
-		}
-	}
 }

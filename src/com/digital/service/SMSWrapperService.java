@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import com.digital.audit.service.DBLoggingHandler;
 import com.digital.audit.service.RestTemplateService;
+import com.digital.enums.AppName;
 import com.digital.model.SMS;
 import com.digital.model.SMSResponse;
+import com.digital.utils.GlobalConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +45,12 @@ public class SMSWrapperService {
 	@Value("${sms_header_value}")
 	private String headerValue;
 
+	@Value("${isOffline}")
+	private boolean isOffLine;
+
 	public SMSResponse sendSMS(String phone, String text) {
+		if (isOffLine)
+			return null;
 		List<String> numbers = new ArrayList<>();
 		numbers.add(phone);
 		return sendSMS(numbers, text);
@@ -54,6 +61,7 @@ public class SMSWrapperService {
 		log.debug("smsGateWayAPi ={}", smsGateWayAPi);
 
 		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(GlobalConstants.REQUEST_HEADER_SERVICE_NAME, AppName.SMS_GATE_WAY.name());
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		// setting up the request body
