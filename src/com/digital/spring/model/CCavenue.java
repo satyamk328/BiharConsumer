@@ -11,6 +11,5 @@ public class CCavenue implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String encrypted;
-	private String workingKey;
 	private String accessCode;
 }

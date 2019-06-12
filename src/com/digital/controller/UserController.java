@@ -44,9 +44,8 @@ public class UserController {
 	private CommonUtil commonUtil;
 
 	@GetMapping(value = "")
-	public ResponseEntity<RestResponse<Object>> getAllUser(
-			@PathVariable(name = "userId", required = true) Long userId) {
-		log.info("call getUserDetail {}", userId);
+	public ResponseEntity<RestResponse<Object>> getAllUser() {
+		log.info("call getUserDetail {}");
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<User> users = userService.getAllUsers();
 		return new ResponseEntity<>(new RestResponse<>(users, status), HttpStatus.OK);
@@ -99,7 +98,7 @@ public class UserController {
 					"Your account has been lock. Please contact system administrator!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(user.getRoleId() != 3) {
+		if (user.getRoleId() != 3) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 					"User Name and password are not authorized. Please contact system administrator!");
 			return new ResponseEntity<>(new RestResponse<>(user, status), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -139,7 +138,7 @@ public class UserController {
 			@RequestParam(name = "oldPassword", required = true) String oldPassword,
 			@RequestParam(name = "newPassword", required = true) String pass) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Forgot change Successfully");
-		int i = userService.resetPassword(userId,oldPassword, pass);
+		int i = userService.resetPassword(userId, oldPassword, pass);
 		if (i == 0) {
 			status = new RestStatus<>(HttpStatus.INTERNAL_SERVER_ERROR.toString(), GlobalConstants.ERROR_MESSAGE);
 			return new ResponseEntity<>(new RestResponse<>(i, status), HttpStatus.INTERNAL_SERVER_ERROR);
