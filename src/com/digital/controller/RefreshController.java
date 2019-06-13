@@ -49,7 +49,7 @@ public class RefreshController {
 
 	@PostMapping("/encript")
 	public ResponseEntity<RestResponse<Object>> encript(@RequestBody(required = true) CCavenue data) {
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data encripted Successfully");
 		CCavenue trans = objectCache.encript(data.getEncrypted());
 		log.debug("Application cache clear Successfully");
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
@@ -57,7 +57,7 @@ public class RefreshController {
 
 	@GetMapping("/descript/{data}")
 	public ResponseEntity<RestResponse<Object>> descript(@PathVariable(name = "data", required = true) String data) {
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data descripted Successfully");
 		Map<String, String> trans = objectCache.decript(data);
 		log.debug("Application cache clear Successfully");
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);

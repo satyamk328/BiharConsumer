@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import com.ccavenue.security.AesCryptUtil;
 import com.digital.spring.model.CCavenue;
+import com.digital.utils.AesCryptUtil;
 
 @Service
 public class ObjectCache {
