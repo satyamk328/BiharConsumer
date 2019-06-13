@@ -2,12 +2,11 @@ package com.digital.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +40,7 @@ public class RefreshController {
 	}
 
 	@GetMapping("/generate-tranid")
-	public ResponseEntity<RestResponse<Object>> loadPayment(HttpServletRequest request) {
+	public ResponseEntity<RestResponse<Object>> loadPayment() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
 		String trans = transactionService.generate();
 		log.debug("Application cache clear Successfully");
@@ -56,8 +55,8 @@ public class RefreshController {
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
 
-	@GetMapping("/descript")
-	public ResponseEntity<RestResponse<Object>> descript(@RequestBody(required = true) String data) {
+	@GetMapping("/descript/{data}")
+	public ResponseEntity<RestResponse<Object>> descript(@PathVariable(name = "data", required = true) String data) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
 		Map<String, String> trans = objectCache.decript(data);
 		log.debug("Application cache clear Successfully");
