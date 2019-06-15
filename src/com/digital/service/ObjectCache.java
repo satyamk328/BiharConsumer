@@ -24,6 +24,9 @@ public class ObjectCache {
 
 	@Value("${merchantId}")
 	private String merchantId;
+	
+	@Value("${redirectURL}")
+	private String redirectUrl;
 
 	@CacheEvict(value = { "userDetails.userId", "userAllData", "topAllCity", "cityDetails.CityName",
 			"cityDetails.CityId", "allAmenity", "amenityDetails.Id", "routesDetails",
@@ -33,7 +36,7 @@ public class ObjectCache {
 
 	public CCavenue encript(String data) {
 		AesCryptUtil aesUtil = new AesCryptUtil(workingKey);
-		String reData = data.replace("${MERCHANTID}", merchantId);
+		String reData = data.replace("${MERCHANTID}", merchantId).replaceAll("${REDIRECT_URL}", redirectUrl);
 		String encRequest = aesUtil.encrypt(reData);
 		CCavenue cavenue = new CCavenue();
 		cavenue.setAccessCode(accessCode);

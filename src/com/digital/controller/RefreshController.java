@@ -2,6 +2,9 @@ package com.digital.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,4 +65,11 @@ public class RefreshController {
 		log.debug("Application cache clear Successfully");
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/ccavResponseHandler")
+	public void method(HttpServletRequest request,HttpServletResponse httpServletResponse) {
+	    httpServletResponse.setHeader("Location", "http://localhost:3000/ccavResponseHandler?encrypted="+request.getParameter("encResp"));
+	    httpServletResponse.setStatus(303);
+	}
+	
 }
