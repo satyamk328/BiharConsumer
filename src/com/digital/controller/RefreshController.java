@@ -66,7 +66,7 @@ public class RefreshController {
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/ccavResponseHandler")
+	@PostMapping(value = "/ccavResponseHandler")
 	public void method(HttpServletRequest request,HttpServletResponse httpServletResponse) {
 	    httpServletResponse.setHeader("Location", "http://localhost:3000/ccavResponseHandler?encrypted="+request.getParameter("encResp"));
 	    httpServletResponse.setStatus(303);
