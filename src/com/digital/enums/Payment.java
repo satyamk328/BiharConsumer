@@ -14,7 +14,7 @@ public enum Payment {
 		return this.apiName;
 	}
 
-	public static String getPaymentMrssage(Payment payment) {
+	public static String getPaymentMessage(Payment payment) {
 		String string = null;
 		switch (payment) {
 		case SUCCESS:
