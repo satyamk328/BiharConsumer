@@ -2,17 +2,8 @@ package com.digital.enums;
 
 public enum Payment {
 
-	SUCCESS("Success"), ABORTED("Aborted"), FAILURE("Failure"), OTHERS("Others");
+	SUCCESS, ABORTED, FAILURE, OTHERS;
 
-	private String apiName;
-
-	private Payment(String apiName) {
-		this.apiName = apiName;
-	}
-
-	public String getApiName() {
-		return this.apiName;
-	}
 
 	public static String getPaymentMessage(Payment payment) {
 		String string = null;
