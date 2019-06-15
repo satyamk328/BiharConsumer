@@ -1,10 +1,14 @@
 package com.digital.user.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,8 +40,26 @@ public class ContactUsDao {
 	@Value("${delete_complain_detail}")
 	private String deleteComplainDetailQuery;
 
+	@Value("${select_complain_type}")
+	private String selectComplainType;
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplateObject;
+
+	@Transactional(readOnly = true)
+	public List<String> getAllType() {
+		log.debug("Running select query for getAllDetails: {}", selectComplainType);
+		return (List<String>) jdbcTemplateObject.query(selectComplainType, new ResultSetExtractor<List<String>>() {
+			@Override
+			public List<String> extractData(ResultSet rs) throws SQLException {
+				List<String> strings = new ArrayList<>();
+				while (rs.next()) {
+					strings.add(rs.getString("Type"));
+				}
+				return strings;
+			}
+		});
+	}
 
 	@Transactional(readOnly = true)
 	public List<Contact> getAllDetails() {

@@ -38,6 +38,14 @@ public class ContactUsController {
 		return new ResponseEntity<>(new RestResponse<>(contacts, status), HttpStatus.OK);
 	}
 	
+	@GetMapping("/type")
+	public ResponseEntity<RestResponse<List<String>>> getAllType() {
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");
+		List<String> list = contactService.getAllType();
+		log.debug("Data fetched successfully from complain");
+		return new ResponseEntity<>(new RestResponse<>(list, status), HttpStatus.OK);
+	}
+	
 	@GetMapping("/{compId}")
 	public ResponseEntity<RestResponse<Contact>> getById(@PathVariable(name = "compId", required = true) Long compId) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "All Records Fetched Successfully");

@@ -14,6 +14,10 @@ public class ContactUsService {
 	@Autowired
 	private ContactUsDao contactUsDao;
 
+	public List<String> getAllType() {
+		return contactUsDao.getAllType();
+	}
+	
 	public List<Contact> getAllComplain() {
 		return contactUsDao.getAllDetails();
 	}
