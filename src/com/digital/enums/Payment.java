@@ -14,7 +14,7 @@ public enum Payment {
 		return this.apiName;
 	}
 
-	public static String getTimePeriodInterval(Payment payment) {
+	public static String getPaymentMrssage(Payment payment) {
 		String string = null;
 		switch (payment) {
 		case SUCCESS:
