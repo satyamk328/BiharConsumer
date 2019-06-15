@@ -21,7 +21,7 @@ public class AmenityService {
 		return amenitiesDao.getAllAmenities();
 	}
 
-	@Cacheable(value = "amenityDetails.Id", key = "#busId")
+	@Cacheable(value = "amenityDetails.Id")
 	public List<Amenity> getAmenitiesByBusId(Long busId) {
 		return amenitiesDao.getAmenitiesByBusId(busId);
 	}

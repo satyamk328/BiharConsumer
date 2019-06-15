@@ -30,7 +30,7 @@ public class UserService {
 		return userDao.findAllUser();
 	}
 
-    @Cacheable(value="userDetails.userId", key="#uid")
+    @Cacheable(value="userDetails.UserId")
 	public User getUserDetailById(Long userId) {
 		return userDao.getUserDetailById(userId);
 	}

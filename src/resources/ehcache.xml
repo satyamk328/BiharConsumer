@@ -4,7 +4,7 @@
 
 	<diskStore path="java.io.tmpdir" />
 	
-    <cache name="userDetails.userId" maxEntriesLocalHeap="1000"
+    <cache name="userDetails.UserId" maxEntriesLocalHeap="1000"
 		maxEntriesLocalDisk="25" eternal="false" 
 		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">

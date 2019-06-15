@@ -28,13 +28,13 @@ public class CityService {
 		return cityDao.getAllCities();
 	}
 
-	@Cacheable(value = "cityDetails.CityName", key = "#cityName")
+	@Cacheable(value = "cityDetails.CityName")
 	public List<CityMaster> getCityByName(String cityName) {
 		log.info("call searchStationByStationName {}", cityName);
 		return cityDao.getCityByName(cityName);
 	}
 
-	@Cacheable(value = "cityDetails.CityId", key = "#cityId")
+	@Cacheable(value = "cityDetails.CityId")
 	public CityMaster getCityById(Long cityId) {
 		return cityDao.getCityById(cityId);
 	}

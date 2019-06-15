@@ -31,7 +31,7 @@ public class ObjectCache {
 	@Value("${cancelURL}")
 	private String cancelRedirectUrl;
 
-	@CacheEvict(value = { "userDetails.userId", "userAllData", "topAllCity", "cityDetails.CityName",
+	@CacheEvict(value = { "userDetails.UserId", "userAllData", "topAllCity", "cityDetails.CityName",
 			"cityDetails.CityId", "allAmenity", "amenityDetails.Id", "routesDetails",
 			"walletHistory" }, allEntries = true)
 	public void clearAppCache() {
