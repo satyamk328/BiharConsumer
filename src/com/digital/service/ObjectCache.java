@@ -19,6 +19,9 @@ public class ObjectCache {
 
 	@Value("${workingkey}")
 	private String workingKey;
+	
+	@Value("${merchantId}")
+	private String merchantId;
 
 	@CacheEvict(value = { "userDetails.userId", "userAllData", "topAllCity", "cityDetails.CityName",
 			"cityDetails.CityId", "allAmenity", "amenityDetails.Id", "routesDetails",
@@ -28,7 +31,8 @@ public class ObjectCache {
 
 	public CCavenue encript(String data) {
 		AesCryptUtil aesUtil = new AesCryptUtil(workingKey);
-		String encRequest = aesUtil.encrypt(data);
+		String reData = data.replace("${MERCHANTID}", merchantId);
+		String encRequest = aesUtil.encrypt(reData);
 		CCavenue cavenue = new CCavenue();
 		cavenue.setAccessCode(accessCode);
 		cavenue.setEncrypted(encRequest);

@@ -1,7 +1,5 @@
 package com.digital.config;
 
-import javax.servlet.Filter;
-
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
