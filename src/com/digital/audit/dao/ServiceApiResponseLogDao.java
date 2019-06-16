@@ -21,11 +21,21 @@ public class ServiceApiResponseLogDao {
 	
     @Value("${service_api_response_log.insert.entry}")
     private String insertApiAuditLogSql;
+    
+    @Value("${service_api_response_log.update.entry}")
+    private String updateApiAuditLogSql;
 
-    public int addLog(ServiceApiAuditLog apiAuditLog) {
+    public Long addLog(ServiceApiAuditLog apiAuditLog) {
     	log.info("call addLog {}", apiAuditLog);
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(apiAuditLog);
         KeyHolder holder = new GeneratedKeyHolder();
-        return jdbcTemplate.update(insertApiAuditLogSql, params, holder);
+        jdbcTemplate.update(insertApiAuditLogSql, params, holder);
+        return holder.getKey().longValue();
+    }
+    
+    public int updateLog(ServiceApiAuditLog apiAuditLog) {
+    	log.info("call addLog {}", apiAuditLog);
+    	BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(apiAuditLog);
+       return jdbcTemplate.update(updateApiAuditLogSql, params);
     }
 }

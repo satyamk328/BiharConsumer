@@ -185,7 +185,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 	}
 
 	@Async
-	private int auditRequest(final ServiceApiAuditLog restLog) {
+	private Long auditRequest(final ServiceApiAuditLog restLog) {
 		try {
 			return restLogRepository.addLog(restLog);
 		} catch (final DataAccessException e) {
@@ -194,7 +194,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 					+ restLog.getResponseHttpCode() + "] ResponseTime(msec) :[" + restLog.getDurationMilliSeconds()
 					+ "], " + e.getRootCause().toString());
 		}
-		return 0;
+		return 0L;
 
 	}
 

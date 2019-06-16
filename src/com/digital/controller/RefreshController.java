@@ -34,10 +34,14 @@ public class RefreshController {
 
 	@Autowired
 	private TransactionService transactionService;
-	
+
 	@Value("${forwordUrl}")
 	private String forwordUrl;
 
+	/**
+	 * this method is use to clear the cache
+	 * @return
+	 */
 	@GetMapping("")
 	public ResponseEntity<RestResponse<Object>> evictCache() {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Application cache clear Successfully");
@@ -54,6 +58,12 @@ public class RefreshController {
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
 
+	/**
+	 * this method is use to encript the data
+	 * 
+	 * @param data
+	 * @return
+	 */
 	@PostMapping("/encript")
 	public ResponseEntity<RestResponse<Object>> encript(@RequestBody(required = true) CCavenue data) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data encripted Successfully");
@@ -62,18 +72,30 @@ public class RefreshController {
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
 
+	/**
+	 * this method is use to decript the data
+	 * 
+	 * @param data
+	 * @return
+	 */
 	@GetMapping("/descript/{data}")
 	public ResponseEntity<RestResponse<Object>> descript(@PathVariable(name = "data", required = true) String data) {
-		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data descripted Successfully");
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data decripted Successfully");
 		Map<String, String> trans = objectCache.decript(data);
 		log.debug("Application cache clear Successfully");
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
-	
+
+	/**
+	 * this method is use to handle payment gateway request
+	 * 
+	 * @param request
+	 * @param httpServletResponse
+	 */
 	@PostMapping(value = "/ccavResponseHandler")
-	public void method(HttpServletRequest request,HttpServletResponse httpServletResponse) {
-	    httpServletResponse.setHeader("Location", forwordUrl+""+request.getParameter("encResp"));
-	    httpServletResponse.setStatus(303);
+	public void method(HttpServletRequest request, HttpServletResponse httpServletResponse) {
+		httpServletResponse.setHeader("Location", forwordUrl + "" + request.getParameter("encResp"));
+		httpServletResponse.setStatus(303);
 	}
 
 }

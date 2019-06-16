@@ -33,6 +33,13 @@ public class TicketController {
 	@Autowired
 	private TicketService bookingService;
 
+	/**
+	 * this method is use to print all ticket according use
+	 * 
+	 * @param mobileNumber
+	 * @param ticketNumber
+	 * @return
+	 */
 	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
 	public ResponseEntity<RestResponse<List<TicketDetails>>> bookTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
@@ -40,14 +47,20 @@ public class TicketController {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
-		if(details == null || details.isEmpty()) {
+		if (details == null || details.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no ticket available in this pnr and phone. Please enter valid criteria.");
 			return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
-	
+
+	/**
+	 * this method is use to get all cancel ticket
+	 * @param mobileNumber
+	 * @param ticketNumber
+	 * @return
+	 */
 	@GetMapping(value = "/cancel/{mobileNumber}/{ticketNumber}")
 	public ResponseEntity<RestResponse<List<CancelTicketMaster>>> cancelTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
@@ -55,7 +68,7 @@ public class TicketController {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
 		List<CancelTicketMaster> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
-		if(details == null || details.isEmpty()) {
+		if (details == null || details.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no ticket available in this pnr and phone. Please enter valid criteria.");
 			return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.INTERNAL_SERVER_ERROR);
