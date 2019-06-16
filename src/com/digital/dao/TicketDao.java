@@ -190,7 +190,7 @@ public class TicketDao {
 	}
 
 	@Transactional(readOnly = true)
-	public CancelTicketMaster getTicketByTicketId(Long ticketId, Long phoneNumber) {
+	private CancelTicketMaster getTicketByTicketId(Long ticketId, Long phoneNumber) {
 		log.debug("Running select query for getTicketByTicketId: {}", selectTicketByTicketId);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ticketId", ticketId);
@@ -201,7 +201,7 @@ public class TicketDao {
 	}
 
 	@Transactional
-	public synchronized int bookTickets(TicketVO bookTicketVO) {
+	public synchronized TicketVO bookTickets(TicketVO bookTicketVO) {
 
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
 
@@ -246,7 +246,7 @@ public class TicketDao {
 
 			jdbcTemplateObject.update(insertTicketMaster, parameters);
 		}
-		return 1;
+		return bookTicketVO;
 	}
 
 }

@@ -84,8 +84,8 @@ public class TicketController {
 			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(), "Customer details is incurrect");
 			new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.BAD_REQUEST);
 		}
-		int bStatus = bookingService.bookTickets(bookTicketVO);
-		if (bStatus != 1) {
+		TicketVO bStatus = bookingService.bookTickets(bookTicketVO);
+		if (bStatus != null) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no seats available in this bus. Please select a different bus.");
 		}

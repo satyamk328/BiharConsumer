@@ -47,7 +47,7 @@ public class TicketService {
 		return tikcetDao.getCancelTicketDetails(pnr, phone);
 	}
 	
-	public int bookTickets(TicketVO bookTicketVO) {
+	public TicketVO bookTickets(TicketVO bookTicketVO) {
 		// Logic to generate tripId
 		List<TripMaster> srcCitySeq = busBookingDao.getTripCitiySequanceByCityId(bookTicketVO.getScheduleId(),
 				bookTicketVO.getSrcCityId());
@@ -67,8 +67,8 @@ public class TicketService {
 				bookTicketVO.getDestCityId(),
 				tikcetDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
 		bookTicketVO.setPnr(pnr);
-		int row = tikcetDao.bookTickets(bookTicketVO);
-		if(row > 0) {
+		TicketVO row = tikcetDao.bookTickets(bookTicketVO);
+		if(row != null) {
 			emailService.sendEmail(bookingTicketConfirmHeader(bookTicketVO), bookTicketVO.getEmail(),
 					MailServiceUtils.generateBookingTicketMail(bookTicketVO));
 			smsWrapperService.sendSMS(bookTicketVO.getPhone(), MailServiceUtils.confirmBookingSMS(bookTicketVO));
@@ -83,7 +83,6 @@ public class TicketService {
 	public Map<Long, String> cancelTickets(String ticketIds, Long phoneNumber) throws ParseException {
 		List<String> tickets = Arrays.asList(ticketIds.split(","));
 		List<Long> ticketIdsList =  tickets.stream().map(element->Long.parseLong(element)).collect(Collectors.toList());
-		
 		return tikcetDao.cancelTickets(ticketIdsList, phoneNumber);
 	}
 	
