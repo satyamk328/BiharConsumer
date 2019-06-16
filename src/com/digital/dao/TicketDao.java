@@ -204,47 +204,50 @@ public class TicketDao {
 	public synchronized TicketVO bookTickets(TicketVO bookTicketVO) {
 
 		log.debug("Running select query for searchTripBySrcDescAndDate: {}", insertTicketMaster);
+		try {
+			for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
+				MapSqlParameterSource parameters = new MapSqlParameterSource();
+				parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
+				if (StringUtils.isEmpty(bookTicketVO.getUserId()))
+					parameters.addValue("userId", seatData.getCustName().substring(0, 4));
+				else
+					parameters.addValue("userId", bookTicketVO.getUserId());
+				parameters.addValue("busId", bookTicketVO.getBusId());
+				parameters.addValue("pnr", bookTicketVO.getPnr());
+				parameters.addValue("seatId", seatData.getSeatId());
+				parameters.addValue("tripId", bookTicketVO.getTripId());
+				parameters.addValue("srcCityName", bookTicketVO.getSrcCityName());
+				parameters.addValue("destCityName", bookTicketVO.getDestCityName());
+				parameters.addValue("travelName", bookTicketVO.getTravelName());
+				parameters.addValue("busType", bookTicketVO.getBusType());
+				parameters.addValue("distance", bookTicketVO.getDistance());
+				parameters.addValue("isAc", bookTicketVO.getIsAC());
+				parameters.addValue("boadingPoint", bookTicketVO.getBoadingPoint());
+				parameters.addValue("droppingPoint", bookTicketVO.getDroppingPoint());
+				parameters.addValue("departureDate", bookTicketVO.getDepartureDate());
+				parameters.addValue("departureTime", bookTicketVO.getDepartureTime());
+				parameters.addValue("arrivalDate", bookTicketVO.getArrivalDate());
+				parameters.addValue("arrivalTime", bookTicketVO.getArrivalTime());
+				parameters.addValue("seatType", seatData.getSeatType());
 
-		for (SeatDataToOperate seatData : bookTicketVO.getSeatDataToOperate()) {
-			MapSqlParameterSource parameters = new MapSqlParameterSource();
-			parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
-			if (StringUtils.isEmpty(bookTicketVO.getUserId()))
-				parameters.addValue("userId", seatData.getCustName().substring(0, 4));
-			else
-				parameters.addValue("userId", bookTicketVO.getUserId());
-			parameters.addValue("busId", bookTicketVO.getBusId());
-			parameters.addValue("pnr", bookTicketVO.getPnr());
-			parameters.addValue("seatId", seatData.getSeatId());
-			parameters.addValue("tripId", bookTicketVO.getTripId());
-			parameters.addValue("srcCityName", bookTicketVO.getSrcCityName());
-			parameters.addValue("destCityName", bookTicketVO.getDestCityName());
-			parameters.addValue("travelName", bookTicketVO.getTravelName());
-			parameters.addValue("busType", bookTicketVO.getBusType());
-			parameters.addValue("distance", bookTicketVO.getDistance());
-			parameters.addValue("isAc", bookTicketVO.getIsAC());
-			parameters.addValue("boadingPoint", bookTicketVO.getBoadingPoint());
-			parameters.addValue("droppingPoint", bookTicketVO.getDroppingPoint());
-			parameters.addValue("departureDate", bookTicketVO.getDepartureDate());
-			parameters.addValue("departureTime", bookTicketVO.getDepartureTime());
-			parameters.addValue("arrivalDate", bookTicketVO.getArrivalDate());
-			parameters.addValue("arrivalTime", bookTicketVO.getArrivalTime());
-			parameters.addValue("seatType", seatData.getSeatType());
+				parameters.addValue("totalFare", bookTicketVO.getTotalFare());
 
-			parameters.addValue("totalFare", bookTicketVO.getTotalFare());
+				parameters.addValue("seatNumber", seatData.getSeatNumber());
+				parameters.addValue("seatName", seatData.getSeatNumber());
+				parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
+				parameters.addValue("chartStatus", "Done");
+				parameters.addValue("customerName", seatData.getCustName());
+				parameters.addValue("age", seatData.getAge());
+				parameters.addValue("email", bookTicketVO.getEmail());
+				parameters.addValue("gender", seatData.getGender());
+				parameters.addValue("phoneNumber", bookTicketVO.getPhone());
+				parameters.addValue("isLicence", bookTicketVO.getIsLicence());
+				parameters.addValue("bookingDate", bookTicketVO.getBookingDate());
 
-			parameters.addValue("seatNumber", seatData.getSeatNumber());
-			parameters.addValue("seatName", seatData.getSeatNumber());
-			parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
-			parameters.addValue("chartStatus", "Done");
-			parameters.addValue("customerName", seatData.getCustName());
-			parameters.addValue("age", seatData.getAge());
-			parameters.addValue("email", bookTicketVO.getEmail());
-			parameters.addValue("gender", seatData.getGender());
-			parameters.addValue("phoneNumber", bookTicketVO.getPhone());
-			parameters.addValue("isLicence", bookTicketVO.getIsLicence());
-			parameters.addValue("bookingDate", bookTicketVO.getBookingDate());
-
-			jdbcTemplateObject.update(insertTicketMaster, parameters);
+				jdbcTemplateObject.update(insertTicketMaster, parameters);
+			}
+		} catch (Exception e) {
+			return null;
 		}
 		return bookTicketVO;
 	}
