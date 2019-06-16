@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,9 @@ public class RefreshController {
 
 	@Autowired
 	private TransactionService transactionService;
+	
+	@Value("${forwordUrl}")
+	private String forwordUrl;
 
 	@GetMapping("")
 	public ResponseEntity<RestResponse<Object>> evictCache() {
@@ -68,8 +72,8 @@ public class RefreshController {
 	
 	@PostMapping(value = "/ccavResponseHandler")
 	public void method(HttpServletRequest request,HttpServletResponse httpServletResponse) {
-	    httpServletResponse.setHeader("Location", "http://localhost:3000/ccavResponseHandler?encrypted="+request.getParameter("encResp"));
+	    httpServletResponse.setHeader("Location", forwordUrl+""+request.getParameter("encResp"));
 	    httpServletResponse.setStatus(303);
 	}
-	
+
 }
