@@ -15,7 +15,7 @@ import lombok.Setter;
 public class TicketVO {
 
 	private Long scheduleId;
-	private Long userId;
+	private String userId;
 	private Long busId;
 	
 	private Long srcCityId;

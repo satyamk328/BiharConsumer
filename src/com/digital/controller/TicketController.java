@@ -77,7 +77,7 @@ public class TicketController {
 			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
 
-		ByteArrayInputStream bis = ticketPdfReport.ticketReport(details);
+		ByteArrayInputStream bis = ticketPdfReport.ticketReport1(details);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
