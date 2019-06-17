@@ -102,7 +102,7 @@ public class TicketPdfReport {
 	private void createReportTable(Paragraph paragraph, List<TicketDetails> dataObjList) {
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100);
-		paragraph.add(new Chunk("Online Bus Ticket Repot :- ", SMALL_BOLD));
+		paragraph.add(new Chunk("Passenger Details :- ", SMALL_BOLD));
 		if (null == dataObjList) {
 			paragraph.add(new Chunk("No data to display."));
 			return;
