@@ -1,11 +1,23 @@
 package com.digital.controller;
 
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
+import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpHeaders.EXPIRES;
+import static org.springframework.http.HttpHeaders.PRAGMA;
+
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.digital.model.CancelTicketMaster;
 import com.digital.model.TicketDetails;
 import com.digital.model.vo.TicketVO;
+import com.digital.service.TicketPdfReport;
 import com.digital.service.TicketService;
 import com.digital.spring.model.RestResponse;
 import com.digital.spring.model.RestStatus;
@@ -32,6 +45,9 @@ public class TicketController {
 
 	@Autowired
 	private TicketService bookingService;
+	
+	@Autowired
+	private TicketPdfReport ticketPdfReport;
 
 	/**
 	 * this method is use to print all ticket according use
@@ -55,8 +71,30 @@ public class TicketController {
 		return new ResponseEntity<>(new RestResponse<>(details, status), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/pdfreport/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<InputStreamResource> citiesReport(
+			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
+			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
+		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+
+		ByteArrayInputStream bis = ticketPdfReport.ticketReport(details);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
+		headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		headers.add(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT");
+		headers.add(ACCESS_CONTROL_ALLOW_HEADERS, CONTENT_TYPE);
+		headers.add(CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+		headers.add(PRAGMA, "no-cache");
+		headers.add(EXPIRES, "0");
+		headers.add("Content-Disposition", "inline; filename=ticketdetails.pdf");
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
+				.body(new InputStreamResource(bis));
+	}
+
 	/**
 	 * this method is use to get all cancel ticket
+	 * 
 	 * @param mobileNumber
 	 * @param ticketNumber
 	 * @return
