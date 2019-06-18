@@ -22,13 +22,13 @@ public class WalletService {
 	@Autowired
 	private WalletDao walletDao;
 
-	@Cacheable(value="walletHistory", key="#uid")
+	@Cacheable(value="walletHistory")
 	public List<Wallet> getWalletHistory(Long userId) {
 		log.info("call getWalletHistory {}", userId);
 		return walletDao.getWalletHistory(userId);
 	}
 
-	//@Cacheable(value="walletDetails", key="#uid")
+	@Cacheable(value="walletDetails")
 	public Wallet getWalletDetails(Long userId) {
 		log.info("call getWalletDetails {}", userId);
 		return walletDao.getWalletDetails(userId);

@@ -13,6 +13,9 @@ public class ContactUsService {
 
 	@Autowired
 	private ContactUsDao contactUsDao;
+	
+	@Autowired
+	private MailService mailService;
 
 	public List<String> getAllType() {
 		return contactUsDao.getAllType();
@@ -27,6 +30,7 @@ public class ContactUsService {
 	}
 
 	public Long addContact(Contact contact) {
+		//mailService.sendEmail(con, emailTo, Content);
 		return contactUsDao.addComplain(contact);
 	}
 
