@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,9 +66,10 @@ public class RefreshController {
 	 * @return
 	 */
 	@PostMapping("/encript")
-	public ResponseEntity<RestResponse<Object>> encript(@RequestBody(required = true) CCavenue data) {
+	public ResponseEntity<RestResponse<Object>> encript(@RequestBody(required = true) CCavenue data,
+			HttpServletRequest request) {
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Data encripted Successfully");
-		CCavenue trans = objectCache.encript(data.getEncrypted());
+		CCavenue trans = objectCache.encript(data.getEncrypted(),request);
 		log.debug("Application cache clear Successfully");
 		return new ResponseEntity<>(new RestResponse<>(trans, status), HttpStatus.OK);
 	}
