@@ -45,7 +45,7 @@ public class TicketController {
 
 	@Autowired
 	private TicketService bookingService;
-	
+
 	@Autowired
 	private TicketPdfReport ticketPdfReport;
 

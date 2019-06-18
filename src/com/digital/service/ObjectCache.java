@@ -4,12 +4,10 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import com.digital.enums.Payment;
 import com.digital.spring.model.CCavenue;
 import com.digital.utils.AesCryptUtil;
 
@@ -24,10 +22,10 @@ public class ObjectCache {
 
 	@Value("${merchantId}")
 	private String merchantId;
-	
+
 	@Value("${redirectURL}")
 	private String redirectUrl;
-	
+
 	@Value("${cancelURL}")
 	private String cancelRedirectUrl;
 
@@ -69,12 +67,7 @@ public class ObjectCache {
 				}
 			}
 		}
-		if (StringUtils.isBlank(hs.get("order_status"))) {
-			hs.put("order_message", "");
-		} else {
-			hs.put("order_message", Payment.getPaymentMessage(Payment.valueOf(hs.get("order_status").toUpperCase())));
-		}
 		return hs;
 	}
-	
+
 }
