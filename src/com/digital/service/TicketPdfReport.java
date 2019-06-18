@@ -13,6 +13,8 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -27,7 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 public class TicketPdfReport {
 
 	private final static String[] HEADER_ARRAY = { "S.No.", "Name", "Age", "Gender", "Status", "Seat/Berth" };
+	private final static String[] FARE_ARRAY = { "Ticket Fare.", "Service Charge", "Travel Insurance Premium",
+			"Total Fare" };
 	public final static Font SMALL_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+	public final static Font HEADER_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 	public final static Font NORMAL_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
 	public static final String PDF_EXTENSION = ".pdf";
 
@@ -39,6 +44,7 @@ public class TicketPdfReport {
 			document.open();
 			addTitlePage(document, tickets);
 			addContent(document, tickets);
+			addCustomerCare(document);
 			document.close();
 		} catch (DocumentException ex) {
 			log.error("Error occurred: {0}", ex);
@@ -55,7 +61,8 @@ public class TicketPdfReport {
 			return;
 		Paragraph preface = new Paragraph();
 		addEmptyLine(preface, 3);
-		preface.add(new Phrase("Online DigitalBihar Bus Ticket  ",  new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLDITALIC)));
+		preface.add(new Phrase("Online DigitalBihar Bus Ticket  ",
+				new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLDITALIC)));
 		addEmptyLine(preface, 2);
 		preface.add(new Phrase("Ticket No. : ", SMALL_BOLD));
 		preface.add(new Phrase(details.getPnr(), NORMAL_FONT));
@@ -68,9 +75,9 @@ public class TicketPdfReport {
 		preface.add(new Phrase(details.getDepartureDate(), NORMAL_FONT));
 		addEmptyLine(preface, 1);
 		preface.add(new Phrase("Scheduled Departure* : ", SMALL_BOLD));
-		preface.add(new Phrase(details.getDepartureDate()+" "+details.getDepartureTime(), NORMAL_FONT));
+		preface.add(new Phrase(details.getDepartureDate() + " " + details.getDepartureTime(), NORMAL_FONT));
 		preface.add(new Phrase("  Scheduled Arrival : ", SMALL_BOLD));
-		preface.add(new Phrase(details.getArrivalDate()+" "+details.getArrivalTime(), NORMAL_FONT));
+		preface.add(new Phrase(details.getArrivalDate() + " " + details.getArrivalTime(), NORMAL_FONT));
 		addEmptyLine(preface, 1);
 		preface.add(new Phrase("From :", SMALL_BOLD));
 		preface.add(new Phrase(details.getSrcCityName(), NORMAL_FONT));
@@ -81,7 +88,7 @@ public class TicketPdfReport {
 		preface.add(new Phrase(details.getEmail(), NORMAL_FONT));
 		preface.add(new Phrase("  Phone :", SMALL_BOLD));
 		preface.add(new Phrase(details.getPhoneNumber(), NORMAL_FONT));
-		document.addSubject("PDF : jjj" );
+		document.addSubject("PDF : jjj");
 		preface.setAlignment(Element.ALIGN_CENTER);
 		document.add(preface);
 	}
@@ -102,7 +109,9 @@ public class TicketPdfReport {
 	private void createReportTable(Paragraph paragraph, List<TicketDetails> dataObjList) {
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100);
-		paragraph.add(new Chunk("Passenger Details :- ", SMALL_BOLD));
+		Font font = HEADER_FONT;
+		font.setColor(BaseColor.MAGENTA);
+		paragraph.add(new Chunk("Passenger Details ", font));
 		if (null == dataObjList) {
 			paragraph.add(new Chunk("No data to display."));
 			return;
@@ -119,6 +128,8 @@ public class TicketPdfReport {
 			count++;
 		}
 		paragraph.add(table);
+		addEmptyLine(paragraph, 2);
+		createFareDetails(paragraph, dataObjList.get(0).getTotalFare());
 	}
 
 	private void addToTable(PdfPTable table, String data) {
@@ -135,4 +146,44 @@ public class TicketPdfReport {
 		}
 		table.setHeaderRows(1);
 	}
+
+	private void createFareDetails(Paragraph paragraph, Double fare) {
+		PdfPTable table = new PdfPTable(4);
+		table.setWidthPercentage(100);
+		Font font = HEADER_FONT;
+		font.setColor(BaseColor.MAGENTA);
+		paragraph.add(new Chunk("Fare Details (Inclusive of GST) ", font));
+		if (null == fare) {
+			paragraph.add(new Chunk("No data to display."));
+			return;
+		}
+		addHeaderInTable(FARE_ARRAY, table);
+		addToTable(table, "Rs. " + String.valueOf(fare));
+		addToTable(table, String.format("Rs. 0.00"));
+		addToTable(table, String.format("Rs. 0.00"));
+		addToTable(table, "Rs. " + String.valueOf(fare));
+		paragraph.add(table);
+	}
+
+	private void addCustomerCare(Document document) throws DocumentException {
+		Paragraph preface = new Paragraph();
+		addEmptyLine(preface, 3);
+		Font font = HEADER_FONT;
+		font.setColor(BaseColor.MAGENTA);
+		preface.add(new Chunk("Customer Care ", font));
+
+		ListItem listItem;
+		com.itextpdf.text.List list = new com.itextpdf.text.List(true, 15);
+		listItem = new ListItem(
+				"For any further assistance, please contact us at 24*7 Hrs.Customer Support at 0755-6610661, 0755-4090600 (Language: Hindi and English) or mail us at care@digitalbihar.com",
+				FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL));
+		list.add(listItem);
+		listItem = new ListItem(
+				"For any enquiries or information regarding your transaction with DIGITALBIHAR, do not provide your credit/debit card details by any means to DIGITALBIHAR. All your queries can be replied on the basis of 15 digit DIGITALBIHAR Transaction id/ 10 digit Ticket no./ User id. DIGITALBIHAR does not store the credit/ debit card information in any form during the transaction.",
+				FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL));
+		list.add(listItem);
+		document.add(preface);
+		document.add(list);
+	}
+
 }
