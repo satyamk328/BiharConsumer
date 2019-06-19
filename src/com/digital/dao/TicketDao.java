@@ -209,7 +209,7 @@ public class TicketDao {
 				MapSqlParameterSource parameters = new MapSqlParameterSource();
 				parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
 				if (StringUtils.isEmpty(bookTicketVO.getUserId()))
-					parameters.addValue("userId", seatData.getCustName().substring(0, 4));
+					parameters.addValue("userId", seatData.getFName().substring(0, 4));
 				else
 					parameters.addValue("userId", bookTicketVO.getUserId());
 				parameters.addValue("busId", bookTicketVO.getBusId());
@@ -235,8 +235,8 @@ public class TicketDao {
 				parameters.addValue("seatNumber", seatData.getSeatNumber());
 				parameters.addValue("seatName", seatData.getSeatNumber());
 				parameters.addValue("isLowerBerth", seatData.getIsLowerBerth());
-				parameters.addValue("chartStatus", "Done");
-				parameters.addValue("customerName", seatData.getCustName());
+				parameters.addValue("chartStatus", "CNF");
+				parameters.addValue("customerName", seatData.getFName()+" "+seatData.getLName());
 				parameters.addValue("age", seatData.getAge());
 				parameters.addValue("email", bookTicketVO.getEmail());
 				parameters.addValue("gender", seatData.getGender());

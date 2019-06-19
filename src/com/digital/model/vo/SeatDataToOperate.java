@@ -11,7 +11,8 @@ public class SeatDataToOperate {
 	private String seatNumber;
 	private Boolean isLowerBerth;
 	private Long seatId;
-	private String custName;
+	private String fName;
+	private String lName;
 	private String gender;
 	private Long age;
 

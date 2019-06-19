@@ -35,16 +35,21 @@ public class MailService {
 			return;
 		sendMail(emailTo, null, null, Subject, Content);
 	}
+	
+	public void sendEmail(String Subject, String emailTo,String emailBcc, String Content) {
+		log.info("call sendEmail()");
+		sendMail(emailTo, null, emailBcc, Subject, Content);
+	}
 
 	public void sendMail(final String emailTo, final String emailCC, final String emailBcc, final String Subject,
 			final String Content) {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-				if (!StringUtils.isEmpty(emailCC.trim())) {
+				if (emailCC != null && !StringUtils.isEmpty(emailCC.trim())) {
 					helper.setCc(InternetAddress.parse(emailCC));
 				}
-				if (!StringUtils.isEmpty(emailBcc.trim())) {
+				if (emailBcc != null && !StringUtils.isEmpty(emailBcc.trim())) {
 					helper.setBcc(InternetAddress.parse(emailBcc));
 				}
 				helper.setSentDate(new Date());

@@ -134,8 +134,8 @@ public interface MailServiceUtils {
 		int i = 1;
 		for (SeatDataToOperate operate : ticketVO.getSeatDataToOperate()) {
 			String passenger = PESSENGER_DETAILS.replace("${SNO}", String.valueOf(i))
-					.replace("${CUSTNAME}", operate.getCustName()).replace("${AGE}", String.valueOf(operate.getAge()))
-					.replace("${GENDER}", operate.getGender())
+					.replace("${CUSTNAME}", operate.getFName() + " " + operate.getLName())
+					.replace("${AGE}", String.valueOf(operate.getAge())).replace("${GENDER}", operate.getGender())
 					.replace("${COACH}", operate.getIsLowerBerth() ? "Lower" : "Upper")
 					.replace("${SEATNO}", operate.getSeatNumber());
 			builder.append(passenger);
@@ -156,59 +156,54 @@ public interface MailServiceUtils {
 				.replace("${SEATTYPE}", ticketVO.getIsAC() ? "AC" : "NON AC")
 				.replace("${SOURCE}", ticketVO.getSrcCityName()).replace("${DESTNAME}", ticketVO.getDestCityName())
 				.replace("${DESPTIME}", ticketVO.getDepartureTime())
-				.replace("${CUSTNAME}", ticketVO.getSeatDataToOperate().get(0).getCustName())
+				.replace("${CUSTNAME}",
+						ticketVO.getSeatDataToOperate().get(0).getFName() + " "
+								+ ticketVO.getSeatDataToOperate().get(0).getLName())
 				.replace("${ISLOWER}", ticketVO.getSeatDataToOperate().get(0).getIsLowerBerth() ? "Lower" : "Upper")
 				.replace("${SEATNAME}", seatNo.toString()).replace("${FARE}", ticketVO.getTotalFare().toString());
 	}
-	
-	public static final String CANCEL_TICKET ="<html>\r\n" + 
-			"<body>\r\n" + 
-			"	<div id=\"m_2071843100773735499ircp_confirmation_div\">\r\n" + 
-			"		<span style=\"color: #500050;\">\r\n" + 
-			"			<table width=\"100%\">\r\n" + 
-			"				<tbody>\r\n" + 
-			"					<tr>\r\n" + 
-			"						<td colspan=\"2\"\r\n" + 
-			"							style=\"font: 12px arial; color: #333; text-align: justify\"><hr>\r\n" + 
-			"							<br> <b>This is a system generated mail. Please do not\r\n" + 
-			"								reply to this email ID. If you have a query or need any\r\n" + 
-			"								clarification you may: <br>(1) Call our 24-hour Customer\r\n" + 
-			"								Care or<br>(2) Email Us <a href=\"mailto:care@irctc.co.in\"\r\n" + 
-			"								target=\"_blank\">www.digitalbihar@gmail.com</a>\r\n" + 
-			"						</b> <br>\r\n" + 
-			"							<hr> <br></td>\r\n" + 
-			"					</tr>\r\n" + 
-			"				</tbody>\r\n" + 
-			"			</table> <br>\r\n" + 
-			"			<p>\r\n" + 
-			"				<b>Dear Customer,</b>\r\n" + 
-			"			</p>\r\n" + 
-			"		</span>\r\n" + 
-			"		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n" + 
-			"			We wish to inform you that your ticket against PNR Number: <b>${PNR}</b>\r\n" + 
-			"			has been cancelled successfully as per your request. The refund\r\n" + 
-			"			amount of <b>Rs. ${AMOUNT}</b> will be refunded back to your respective\r\n" + 
-			"			account shortly.\r\n" + 
-			"		</p>\r\n" + 
-			"		<p style=\"text-align: justify; color: #000000\">\r\n" + 
-			"			For any problem please contact us 24x7 Hrs. Customer Support at <b>+91-8800359490, +91-7004525434 (Language: Hindi and English)</b>\r\n" + 
-			"		</p>\r\n" + 
-			"		<br>\r\n" + 
-			"		<hr>\r\n" + 
-			"		\r\n" + 
-			"		<br>\r\n" + 
-			"		<p>\r\n" + 
-			"			<b>Warm Regards,<br>Customer Care<br>Internet Ticketing<br>DigitalBihar\r\n" + 
-			"			</b>\r\n" + 
-			"		</p>\r\n" + 
-			"		<div class=\"yj6qo\"></div>\r\n" + 
-			"		<div class=\"adL\">\r\n" + 
-			"			<br>\r\n" + 
-			"		</div>\r\n" + 
-			"	</div>\r\n" + 
-			"</body>\r\n" + 
-			"</html>";
+
+	public static final String CANCEL_TICKET = "<html>\r\n" + "<body>\r\n"
+			+ "	<div id=\"m_2071843100773735499ircp_confirmation_div\">\r\n"
+			+ "		<span style=\"color: #500050;\">\r\n" + "			<table width=\"100%\">\r\n"
+			+ "				<tbody>\r\n" + "					<tr>\r\n"
+			+ "						<td colspan=\"2\"\r\n"
+			+ "							style=\"font: 12px arial; color: #333; text-align: justify\"><hr>\r\n"
+			+ "							<br> <b>This is a system generated mail. Please do not\r\n"
+			+ "								reply to this email ID. If you have a query or need any\r\n"
+			+ "								clarification you may: <br>(1) Call our 24-hour Customer\r\n"
+			+ "								Care or<br>(2) Email Us <a href=\"mailto:care@irctc.co.in\"\r\n"
+			+ "								target=\"_blank\">www.digitalbihar@gmail.com</a>\r\n"
+			+ "						</b> <br>\r\n" + "							<hr> <br></td>\r\n"
+			+ "					</tr>\r\n" + "				</tbody>\r\n" + "			</table> <br>\r\n"
+			+ "			<p>\r\n" + "				<b>Dear Customer,</b>\r\n" + "			</p>\r\n"
+			+ "		</span>\r\n" + "		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n"
+			+ "			We wish to inform you that your ticket against PNR Number: <b>${PNR}</b>\r\n"
+			+ "			has been cancelled successfully as per your request. The refund\r\n"
+			+ "			amount of <b>Rs. ${AMOUNT}</b> will be refunded back to your respective\r\n"
+			+ "			account shortly.\r\n" + "		</p>\r\n"
+			+ "		<p style=\"text-align: justify; color: #000000\">\r\n"
+			+ "			For any problem please contact us 24x7 Hrs. Customer Support at <b>+91-8800359490, +91-7004525434 (Language: Hindi and English)</b>\r\n"
+			+ "		</p>\r\n" + "		<br>\r\n" + "		<hr>\r\n" + "		\r\n" + "		<br>\r\n"
+			+ "		<p>\r\n" + "			<b>Warm Regards,<br>Customer Care<br>Internet Ticketing<br>DigitalBihar\r\n"
+			+ "			</b>\r\n" + "		</p>\r\n" + "		<div class=\"yj6qo\"></div>\r\n"
+			+ "		<div class=\"adL\">\r\n" + "			<br>\r\n" + "		</div>\r\n" + "	</div>\r\n"
+			+ "</body>\r\n" + "</html>";
+
 	public static String cancelTicket(String pnr, Long amount) {
 		return CANCEL_TICKET.replace("${PNR}", pnr).replace("${AMOUNT}", String.valueOf(amount));
 	}
+
+	public static String COMPAIN = "<div id=\"m_9048556215788085426ircp_confirmation_div\">\r\n"
+			+ "		<br><p><b>Dear Customer,</b></p>\r\n" + "		<p>Thank you for writing to us.<br/>\r\n"
+			+ "		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n"
+			+ "			This is a system-generated response to acknowledge receipt of your e-mail. Our Customer Service Executive will respond within 2 (Two) working days.\r\n"
+			+ "		</p>\r\n" + "		<p style=\"text-align: justify; color: #000000\">\r\n"
+			+ "			For any problem please contact us 24x7 Hrs. Customer Support at <b>+91-8800359490 (Language: Hindi and English)</b>\r\n"
+			+ "		</p>\r\n" + "		<br>\r\n" + "		<p>\r\n"
+			+ "			<b>Warm Regards,<br>Customer Care<br>DIGITALBIHAR\r\n" + "			</b>\r\n"
+			+ "		</p>\r\n" + "		<div class=\"yj6qo\"></div>\r\n" + "		<div class=\"adL\">\r\n"
+			+ "			<br>\r\n" + "		</div></div>";
+
+	
 }
