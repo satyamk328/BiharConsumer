@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.digital.dao.BusDao;
@@ -59,7 +58,7 @@ public class BusScheduleService {
 	@Autowired
 	private DataUtils dataUtils;
 
-	@Cacheable(value = "routesDetails")
+	//@Cacheable(value = "routesDetails")
 	public ScheduleBusObject searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
 		ScheduleBusObject busDetailsObject = new ScheduleBusObject();
 		log.info("call searchBusScheduleDetails {}, {}, {}", srcCityId, destCityId, date);
@@ -183,7 +182,7 @@ public class BusScheduleService {
 							}
 							seat.setIsBooked(true);
 							seat.setIsReservedForLadies(
-									"Female".equalsIgnoreCase(ticketDetail.getGender()) ? true : false);
+									"F".equalsIgnoreCase(ticketDetail.getGender()) ? true : false);
 							continue X;
 						}
 					}
