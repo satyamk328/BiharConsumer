@@ -194,16 +194,29 @@ public interface MailServiceUtils {
 		return CANCEL_TICKET.replace("${PNR}", pnr).replace("${AMOUNT}", String.valueOf(amount));
 	}
 
-	public static String COMPAIN = "<div id=\"m_9048556215788085426ircp_confirmation_div\">\r\n"
-			+ "		<br><p><b>Dear Customer,</b></p>\r\n" + "		<p>Thank you for writing to us.<br/>\r\n"
-			+ "		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n"
-			+ "			This is a system-generated response to acknowledge receipt of your e-mail. Our Customer Service Executive will respond within 2 (Two) working days.\r\n"
-			+ "		</p>\r\n" + "		<p style=\"text-align: justify; color: #000000\">\r\n"
-			+ "			For any problem please contact us 24x7 Hrs. Customer Support at <b>+91-8800359490 (Language: Hindi and English)</b>\r\n"
-			+ "		</p>\r\n" + "		<br>\r\n" + "		<p>\r\n"
-			+ "			<b>Warm Regards,<br>Customer Care<br>DIGITALBIHAR\r\n" + "			</b>\r\n"
-			+ "		</p>\r\n" + "		<div class=\"yj6qo\"></div>\r\n" + "		<div class=\"adL\">\r\n"
-			+ "			<br>\r\n" + "		</div></div>";
+	public static String COMPAIN = "<div id=\"m_9048556215788085426ircp_confirmation_div\">\r\n" + 
+			"		<br><p><b>Dear Customer,</b></p>\r\n" + 
+			"		<p>Thank you for writing to us.<br/>\r\n" + 
+			"		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n" + 
+			"			This is a system-generated response to acknowledge receipt of your e-mail. Our Customer Service Executive will respond within 2 (Two) working days.\r\n" + 
+			"		</p>\r\n" + 
+			"		<p style=\"text-align: justify; color: #000000; text-align: justify\">\r\n" + 
+			"		${MESSAGE}\r\n" + 
+			"		</p>\r\n" + 
+			"		<p style=\"text-align: justify; color: #000000\">\r\n" + 
+			"			For any problem please contact us 24x7 Hrs. Customer Support at <b>+91-8800359490 (Language: Hindi and English)</b>\r\n" + 
+			"		</p>\r\n" + 
+			"		<br>\r\n" + 
+			"		<p>\r\n" + 
+			"			<b>Warm Regards,<br>Customer Care<br>DIGITALBIHARa\r\n" + 
+			"			</b>\r\n" + 
+			"		</p>\r\n" + 
+			"		<div class=\"yj6qo\"></div>\r\n" + 
+			"		<div class=\"adL\">\r\n" + 
+			"			<br>\r\n" + 
+			"		</div></div>";
 
-	
+	public static String complain(String desc) {
+		return COMPAIN.replace("${MESSAGE}", desc);
+	}
 }

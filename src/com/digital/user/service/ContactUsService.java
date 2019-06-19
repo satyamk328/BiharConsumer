@@ -33,7 +33,7 @@ public class ContactUsService {
 
 	public Long addContact(Contact contact) {
 		mailService.sendEmail("<AUTO> " + contact.getComplainType(), contact.getSenderEmail(),
-				GlobalConstants.ERROR_EMAIL, MailServiceUtils.COMPAIN);
+				GlobalConstants.ERROR_EMAIL, MailServiceUtils.complain(contact.getDescription()));
 		return contactUsDao.addComplain(contact);
 	}
 
