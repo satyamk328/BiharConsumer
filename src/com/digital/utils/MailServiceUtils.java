@@ -208,7 +208,7 @@ public interface MailServiceUtils {
 			"		</p>\r\n" + 
 			"		<br>\r\n" + 
 			"		<p>\r\n" + 
-			"			<b>Warm Regards,<br>Customer Care<br>DIGITALBIHARa\r\n" + 
+			"			<b>Warm Regards,<br>Customer Care<br>DIGITALBIHAR\r\n" + 
 			"			</b>\r\n" + 
 			"		</p>\r\n" + 
 			"		<div class=\"yj6qo\"></div>\r\n" + 
