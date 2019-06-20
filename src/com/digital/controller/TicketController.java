@@ -150,9 +150,11 @@ public class TicketController {
 			throws ParseException {
 		log.info("call search cancelTickets:{}", seatIds);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are available");
+		
 		List<String> seatIdList = Arrays.asList(seatIds.split(","));
 		List<Long> seatList = seatIdList.stream().map(element -> Long.parseLong(element)).collect(Collectors.toList());
 		List<TicketDetails> ticketSatatus = bookingService.validateTicket(scheduleId, busId, seatList);
+		
 		if (ticketSatatus != null && !ticketSatatus.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are already researved for another user");
 		}
