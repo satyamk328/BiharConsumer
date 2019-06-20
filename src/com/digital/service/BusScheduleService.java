@@ -116,6 +116,7 @@ public class BusScheduleService {
 								seat.setIsBooked(true);
 								seat.setIsReservedForLadies(
 										"F".equalsIgnoreCase(ticketDetail.getGender()) ? true : false);
+								bookedSeat++;
 								continue X;
 							}
 						}

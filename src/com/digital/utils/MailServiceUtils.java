@@ -122,14 +122,14 @@ public interface MailServiceUtils {
 				.replace("${TRANSACIONID}", ticketVO.getTransactionId())
 				.replace("${BOOKINGDATE}", ticketVO.getBookingDate().toString())
 				.replace("${SOURCENAME}", ticketVO.getSrcCityName())
-				.replace("$${DEPARTUREDATE}", ticketVO.getDepartureDate())
-				.replace("$${DESTINATIONNAME}", ticketVO.getDestCityName())
+				.replace("${DEPARTUREDATE}", ticketVO.getDepartureDate())
+				.replace("${DESTINATIONNAME}", ticketVO.getDestCityName())
 				.replace("${DESTINATIONDATE}", ticketVO.getDepartureDate())
-				.replace("$${DESTINATIONDATE}", ticketVO.getDepartureDate() + " " + ticketVO.getDepartureTime())
-				.replace("$${ARRIVALDATETIME}", ticketVO.getArrivalDate() + " " + ticketVO.getArrivalTime())
-				.replace("$${PHONE}", ticketVO.getPhone().toString())
-				.replace("$${DISTANCE}", ticketVO.getDistance().toString())
-				.replace("$${AUDITCOUNT}", String.valueOf(ticketVO.getSeatDataToOperate().size()));
+				.replace("${DESTINATIONDATE}", ticketVO.getDepartureDate() + " " + ticketVO.getDepartureTime())
+				.replace("${ARRIVALDATETIME}", ticketVO.getArrivalDate() + " " + ticketVO.getArrivalTime())
+				.replace("${PHONE}", ticketVO.getPhone().toString())
+				.replace("${DISTANCE}", ticketVO.getDistance().toString())
+				.replace("${AUDITCOUNT}", String.valueOf(ticketVO.getSeatDataToOperate().size()));
 		builder.append(body);
 		int i = 1;
 		for (SeatDataToOperate operate : ticketVO.getSeatDataToOperate()) {
