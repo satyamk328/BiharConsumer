@@ -60,7 +60,7 @@ public class CommonUtil {
 	}
 
 	public static Date dateByDateAndTimeString(String date, String time) throws ParseException {
-		String pattern = "yyyy-MM-dd HH:mm:ss";
+		String pattern = "yyyy-MM-dd HH:mm";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		return simpleDateFormat.parse(date + " " + time);
 		// return //simpleDateFormat.parse("2019-04-30 12:30:00");
