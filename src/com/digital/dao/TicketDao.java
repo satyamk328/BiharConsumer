@@ -225,7 +225,7 @@ public class TicketDao {
 				MapSqlParameterSource parameters = new MapSqlParameterSource();
 				parameters.addValue("scheduleId", bookTicketVO.getScheduleId());
 				if (StringUtils.isEmpty(bookTicketVO.getUserId()))
-					parameters.addValue("userId", seatData.getFName().substring(0, 4));
+					parameters.addValue("userId", "USER");
 				else
 					parameters.addValue("userId", bookTicketVO.getUserId());
 				parameters.addValue("busId", bookTicketVO.getBusId());
