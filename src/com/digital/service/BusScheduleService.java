@@ -65,13 +65,13 @@ public class BusScheduleService {
 
 		busScheduleDetails.forEach(route -> {
 			route.setBoardingLocations(
-					route.getSrcStops() != null
+					route.getSrcStops() != null && !"".equals(route.getSrcStops().trim())
 							? cityService.getCityStopDetails(route.getSourceId(),
 									Arrays.asList(route.getSrcStops().split(GlobalConstants.SEPARATOR)))
 							: cityService.getCityStopByCityId(route.getSourceId()));
 
 			route.setDroppingLocations(
-					route.getDestStops() != null
+					route.getDestStops() != null && !"".equals(route.getSrcStops().trim())
 							? cityService.getCityStopDetails(route.getDestinationId(),
 									Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR)))
 							: cityService.getCityStopByCityId(route.getDestinationId()));
@@ -102,19 +102,20 @@ public class BusScheduleService {
 					if (seat.getSeatId() == ticketDetail.getSeatId()) {
 						List<String> tripCitiesIds = Arrays
 								.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
-						int i = -1;
 						for (TripMaster routedCity : routedCities) {
-							i++;
-							if (i == 0 && tripCitiesIds.get(0)
-									.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
-								continue;
-							} else if (i == (routedCities.size() - 1) && tripCitiesIds.get(tripCitiesIds.size() - 1)
-									.equals(routedCities.get(0).getCityId().toString())) {
-								continue;
-							}
 							if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
+								if (tripCitiesIds.get(0)
+										.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
+									seat.setIsBooked(false);
+									continue X;
+								} else if (tripCitiesIds.get(tripCitiesIds.size() - 1)
+										.equals(routedCities.get(0).getCityId().toString())) {
+									seat.setIsBooked(false);
+									continue X;
+								}
 								seat.setIsBooked(true);
-								bookedSeat++;
+								seat.setIsReservedForLadies(
+										"F".equalsIgnoreCase(ticketDetail.getGender()) ? true : false);
 								continue X;
 							}
 						}
@@ -141,13 +142,13 @@ public class BusScheduleService {
 				tripVO.getSourceId(), tripVO.getDestinationId());
 
 		scheduleSeatDetails
-				.setBoardingPoints(busDetails.getSrcStops() != null
+				.setBoardingPoints(busDetails.getSrcStops() != null && !"".equals(busDetails.getSrcStops().trim())
 						? cityService.getCityStopDetails(busDetails.getSourceId(),
 								Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR)))
 						: cityService.getCityStopByCityId(busDetails.getSourceId()));
 
 		scheduleSeatDetails
-				.setDroppingPoints(busDetails.getDestStops() != null
+				.setDroppingPoints(busDetails.getDestStops() != null && !"".equals(busDetails.getSrcStops().trim())
 						? cityService.getCityStopDetails(busDetails.getDestinationId(),
 								Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR)))
 						: cityService.getCityStopByCityId(busDetails.getDestinationId()));
@@ -167,16 +168,16 @@ public class BusScheduleService {
 				if (seat.getSeatId() == ticketDetail.getSeatId()) {
 					List<String> tripCitiesIds = Arrays
 							.asList(ticketDetail.getTripId().split(GlobalConstants.SEPARATOR));
-					int i = -1;
 					for (TripMaster routedCity : routedCities) {
 						if (tripCitiesIds.contains(routedCity.getCityId().toString())) {
-							i++;
-							if (i == 0 && tripCitiesIds.get(0)
+							if (tripCitiesIds.get(0)
 									.equals(routedCities.get(routedCities.size() - 1).getCityId().toString())) {
-								continue;
-							} else if (i == (routedCities.size() - 1) && tripCitiesIds.get(tripCitiesIds.size() - 1)
+								seat.setIsBooked(false);
+								continue X;
+							} else if (tripCitiesIds.get(tripCitiesIds.size() - 1)
 									.equals(routedCities.get(0).getCityId().toString())) {
-								continue;
+								seat.setIsBooked(false);
+								continue X;
 							}
 							seat.setIsBooked(true);
 							seat.setIsReservedForLadies(
@@ -184,6 +185,7 @@ public class BusScheduleService {
 							continue X;
 						}
 					}
+					
 				}
 			}
 		}
