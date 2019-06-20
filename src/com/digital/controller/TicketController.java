@@ -10,8 +10,10 @@ import static org.springframework.http.HttpHeaders.PRAGMA;
 
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -118,16 +120,43 @@ public class TicketController {
 	public ResponseEntity<RestResponse<Object>> bookTickets(@RequestBody(required = true) TicketVO bookTicketVO) {
 		log.info("call search bookedBusTicket:{}", bookTicketVO);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Bus Ticket booked Successfully");
+		TicketVO bStatus = null;
 		if (StringUtils.isEmpty(bookTicketVO.getSeatDataToOperate())) {
 			status = new RestStatus<>(HttpStatus.BAD_REQUEST.toString(), "Customer details is incurrect");
 			new ResponseEntity<>(new RestResponse<>(null, status), HttpStatus.BAD_REQUEST);
 		}
-		TicketVO bStatus = bookingService.bookTickets(bookTicketVO);
-		if (bStatus != null) {
-			status = new RestStatus<>(HttpStatus.OK.toString(),
-					"There are no seats available in this bus. Please select a different bus.");
+		
+		List<Long> seatIds = bookTicketVO.getSeatDataToOperate().stream().map(urEntity -> urEntity.getSeatId())
+				.collect(Collectors.toList());
+		List<TicketDetails> ticketDetails = bookingService.validateTicket(bookTicketVO.getScheduleId(),
+				bookTicketVO.getBusId(), seatIds);
+		
+		if (ticketDetails != null && !ticketDetails.isEmpty()) {
+			status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are already researved for another user");
+		} else {
+			bStatus = bookingService.bookTickets(bookTicketVO);
+			if (bStatus != null) {
+				status = new RestStatus<>(HttpStatus.OK.toString(),
+						"There are no seats available in this bus. Please select a different bus.");
+			}
 		}
 		return new ResponseEntity<>(new RestResponse<>(bStatus, status), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/validateTicket/{scheduleId}/{busId}")
+	public ResponseEntity<RestResponse<Object>> validateTicket(
+			@PathVariable(name = "scheduleId", required = true) Long scheduleId,
+			@PathVariable(name = "busId", required = true) Long busId, @RequestParam(name = "ticketIds") String seatIds)
+			throws ParseException {
+		log.info("call search cancelTickets:{}", seatIds);
+		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are available");
+		List<String> seatIdList = Arrays.asList(seatIds.split(","));
+		List<Long> seatList = seatIdList.stream().map(element -> Long.parseLong(element)).collect(Collectors.toList());
+		List<TicketDetails> ticketSatatus = bookingService.validateTicket(scheduleId, busId, seatList);
+		if (ticketSatatus != null && !ticketSatatus.isEmpty()) {
+			status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are already researved for another user");
+		}
+		return new ResponseEntity<>(new RestResponse<>(ticketSatatus, status), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/cancelTickets")

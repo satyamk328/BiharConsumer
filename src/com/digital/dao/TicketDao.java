@@ -49,6 +49,9 @@ public class TicketDao {
 
 	@Value("${select_TicketDetails_By_ScheduleAndBusId}")
 	private String selectTicketDetailsByScheduleAndBusId;
+	
+	@Value("${select_TicketDetails_By_ScheduleAndBusIdANDSeatId}")
+	private String selectValidateTicketDetailsByScheduleAndBusIdANDSeatId;
 
 	@Value("${insert_cancel_ticket_master_from_ticket_master}")
 	private String insertCancelTicketMasterFromTicketMaster;
@@ -88,6 +91,19 @@ public class TicketDao {
 				new BeanPropertyRowMapper<>(CancelTicketMaster.class));
 	}
 
+	@Transactional(readOnly = true)
+	public List<TicketDetails> validateTicket(Long scheduleId, Long busId, List<Long> seatId) {
+		log.debug("Running select query for getTicketDetailsByScheduleAndBusId: {}",
+				selectValidateTicketDetailsByScheduleAndBusIdANDSeatId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("scheduleId", scheduleId);
+		parameters.addValue("busId", busId);
+		parameters.addValue("seatId", seatId);
+		List<TicketDetails> details = jdbcTemplateObject.query(selectValidateTicketDetailsByScheduleAndBusIdANDSeatId, parameters,
+				new BeanPropertyRowMapper<>(TicketDetails.class));
+		return details;
+	}
+	
 	@Transactional(readOnly = true)
 	public List<TicketDetails> getTicketDetailsByScheduleAndBusId(Long scheduleId, Long busId) {
 		log.debug("Running select query for getTicketDetailsByScheduleAndBusId: {}",

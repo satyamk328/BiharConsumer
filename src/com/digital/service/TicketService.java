@@ -67,6 +67,7 @@ public class TicketService {
 				bookTicketVO.getDestCityId(),
 				tikcetDao.totalTicketCont(bookTicketVO.getScheduleId(), bookTicketVO.getBusId()));
 		bookTicketVO.setPnr(pnr);
+		
 		TicketVO row = tikcetDao.bookTickets(bookTicketVO);
 		if(row != null) {
 			emailService.sendEmail(bookingTicketConfirmHeader(bookTicketVO), bookTicketVO.getEmail(),
@@ -86,6 +87,9 @@ public class TicketService {
 		return tikcetDao.cancelTickets(ticketIdsList, phoneNumber);
 	}
 	
+	public List<TicketDetails> validateTicket(Long scheduleId, Long busId,List<Long> seatId) {
+		return tikcetDao.validateTicket(scheduleId, busId, seatId);
+	}
 	
 	private String bookingTicketConfirmHeader(TicketVO ticketVO) {
 		return GlobalConstants.BOOKING_CONFIRMATION_HEADER.replace("${TRAVELNAME}", ticketVO.getTravelName())
