@@ -132,7 +132,7 @@ public class TicketController {
 				bookTicketVO.getBusId(), seatIds);
 		
 		if (ticketDetails != null && !ticketDetails.isEmpty()) {
-			status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are already researved for another user");
+			status = new RestStatus<>(HttpStatus.OK.toString(), "Thease seats are already researved for another user.Please choose another seats");
 		} else {
 			bStatus = bookingService.bookTickets(bookTicketVO);
 			if (bStatus != null) {
