@@ -199,6 +199,7 @@ public class TicketDao {
 				jdbcTemplateObject.update(deleteTicketMasterByTicketId, sqlParameters);
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 			statusData.put(ticketId, "This ticket " + ticketId + " has been cancelled successfully");
 		}

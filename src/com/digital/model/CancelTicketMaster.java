@@ -14,7 +14,7 @@ public class CancelTicketMaster {
 	private Long scheduleId; 
 	private String userId; 
 	private Long busId; 
-	private String pnr; 
+	private String pNR; 
 	private Long seatId; 
 	private String tripId; 
 	private String travelName; 
