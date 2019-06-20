@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.digital.dao.CityDao;
 import com.digital.model.CityMaster;
+import com.digital.model.CityStopMaster;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +39,7 @@ public class CityService {
 	public CityMaster getCityById(Long cityId) {
 		return cityDao.getCityById(cityId);
 	}
-	
+
 	public Long save(CityMaster city) {
 		log.info("call addStationName [{}]", city);
 		List<CityMaster> cities = cityDao.getCityByName(city.getDisplayName());
@@ -52,5 +53,15 @@ public class CityService {
 		log.info("call deleteCity [{}]", cityId);
 		cityDao.deleteCityStop(cityId);
 		return cityDao.deleteCity(cityId);
+	}
+
+	@Cacheable("subCityById")
+	public List<CityStopMaster> getCityStopByCityId(Long cityId) {
+		return cityDao.getCityStopByCityId(cityId);
+	}
+
+	@Cacheable("subCityByIdAndSubId")
+	public List<CityStopMaster> getCityStopDetails(Long cityId, List<String> cityStopIds) {
+		return cityDao.getCityStopDetails(cityId, cityStopIds);
 	}
 }

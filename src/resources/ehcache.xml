@@ -53,7 +53,14 @@
 		<persistence strategy="localTempSwap" />
 	</cache>
 
-	<cache name="routesDetails" maxEntriesLocalHeap="1000"
+	<cache name="subCityById" maxEntriesLocalHeap="1000"
+		maxEntriesLocalDisk="25" eternal="false" 
+		timeToIdleSeconds="600" timeToLiveSeconds="1440"
+		memoryStoreEvictionPolicy="LFU" transactionalMode="off">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	
+	<cache name="subCityByIdAndSubId" maxEntriesLocalHeap="1000"
 		maxEntriesLocalDisk="25" eternal="false" 
 		timeToIdleSeconds="600" timeToLiveSeconds="1440"
 		memoryStoreEvictionPolicy="LFU" transactionalMode="off">

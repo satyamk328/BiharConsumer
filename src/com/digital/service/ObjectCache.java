@@ -42,7 +42,7 @@ public class ObjectCache {
 	private ServiceApiResponseLogDao responseLog;
 
 	@CacheEvict(value = { "userDetails.UserId", "userAllData", "topAllCity", "cityDetails.CityName",
-			"cityDetails.CityId", "allAmenity", "amenityDetails.Id", "routesDetails",
+			"cityDetails.CityId", "allAmenity", "amenityDetails.Id", "subCityById", "subCityByIdAndSubId",
 			"walletHistory" }, allEntries = true)
 	public void clearAppCache() {
 	}

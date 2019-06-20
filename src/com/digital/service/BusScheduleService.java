@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.digital.dao.BusDao;
 import com.digital.dao.BusScheduleDao;
 import com.digital.dao.CancelPolicyDao;
-import com.digital.dao.CityDao;
 import com.digital.dao.SeatDao;
 import com.digital.dao.TicketDao;
 import com.digital.model.BusMaster;
@@ -44,7 +43,7 @@ public class BusScheduleService {
 	private CancelPolicyDao policyDao;
 
 	@Autowired
-	private CityDao cityDao;
+	private CityService cityService;
 
 	@Autowired
 	private TicketDao bookingDao;
@@ -58,7 +57,6 @@ public class BusScheduleService {
 	@Autowired
 	private DataUtils dataUtils;
 
-	//@Cacheable(value = "routesDetails")
 	public ScheduleBusObject searchBusScheduleDetails(Long srcCityId, Long destCityId, String date) {
 		ScheduleBusObject busDetailsObject = new ScheduleBusObject();
 		log.info("call searchBusScheduleDetails {}, {}, {}", srcCityId, destCityId, date);
@@ -68,15 +66,15 @@ public class BusScheduleService {
 		busScheduleDetails.forEach(route -> {
 			route.setBoardingLocations(
 					route.getSrcStops() != null
-							? cityDao.getCityStopDetails(route.getSourceId(),
+							? cityService.getCityStopDetails(route.getSourceId(),
 									Arrays.asList(route.getSrcStops().split(GlobalConstants.SEPARATOR)))
-							: new ArrayList<>());
+							: cityService.getCityStopByCityId(route.getSourceId()));
 
 			route.setDroppingLocations(
 					route.getDestStops() != null
-							? cityDao.getCityStopDetails(route.getDestinationId(),
+							? cityService.getCityStopDetails(route.getDestinationId(),
 									Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR)))
-							: new ArrayList<>());
+							: cityService.getCityStopByCityId(route.getSourceId()));
 
 			route.setCancellationPolicy(
 					route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId()) : new ArrayList<>());
@@ -87,8 +85,8 @@ public class BusScheduleService {
 			route.setBusDetails(
 					route.getBusId() != null ? busDao.getBusDetailsByBusId(route.getBusId()) : new BusMaster());
 			// populate city name
-			route.setDestCityName(cityDao.getCityById(route.getDestinationId()).getDisplayName());
-			route.setSrcCityName(cityDao.getCityById(route.getSourceId()).getDisplayName());
+			route.setDestCityName(cityService.getCityById(route.getDestinationId()).getDisplayName());
+			route.setSrcCityName(cityService.getCityById(route.getSourceId()).getDisplayName());
 
 			List<SeatMaster> seatDetails = seatDao.getSeatDetailsByLayoutId(route.getBusDetails().getLayoutId());
 
@@ -144,13 +142,13 @@ public class BusScheduleService {
 
 		scheduleSeatDetails
 				.setBoardingPoints(busDetails.getSrcStops() != null
-						? cityDao.getCityStopDetails(busDetails.getSourceId(),
+						? cityService.getCityStopDetails(busDetails.getSourceId(),
 								Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR)))
 						: new ArrayList<>());
 
 		scheduleSeatDetails
 				.setDroppingPoints(busDetails.getDestStops() != null
-						? cityDao.getCityStopDetails(busDetails.getDestinationId(),
+						? cityService.getCityStopDetails(busDetails.getDestinationId(),
 								Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR)))
 						: new ArrayList<>());
 		busDetails.setBusDetails(
