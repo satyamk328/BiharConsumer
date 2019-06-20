@@ -15,8 +15,8 @@ public class CityStopMaster implements Serializable{
 	private String locationName;
 	private String locationAddress;
 	private String landMark;
-	private double lat;
-	private double lng;
+	private String lat;
+	private String lng;
 	private String contactNumber;
 	
 }

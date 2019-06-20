@@ -74,7 +74,7 @@ public class BusScheduleService {
 					route.getDestStops() != null
 							? cityService.getCityStopDetails(route.getDestinationId(),
 									Arrays.asList(route.getDestStops().split(GlobalConstants.SEPARATOR)))
-							: cityService.getCityStopByCityId(route.getSourceId()));
+							: cityService.getCityStopByCityId(route.getDestinationId()));
 
 			route.setCancellationPolicy(
 					route.getBusId() != null ? policyDao.getCancelPolicyByBusId(route.getBusId()) : new ArrayList<>());
@@ -144,13 +144,13 @@ public class BusScheduleService {
 				.setBoardingPoints(busDetails.getSrcStops() != null
 						? cityService.getCityStopDetails(busDetails.getSourceId(),
 								Arrays.asList(busDetails.getSrcStops().split(GlobalConstants.SEPARATOR)))
-						: new ArrayList<>());
+						: cityService.getCityStopByCityId(busDetails.getSourceId()));
 
 		scheduleSeatDetails
 				.setDroppingPoints(busDetails.getDestStops() != null
 						? cityService.getCityStopDetails(busDetails.getDestinationId(),
 								Arrays.asList(busDetails.getDestStops().split(GlobalConstants.SEPARATOR)))
-						: new ArrayList<>());
+						: cityService.getCityStopByCityId(busDetails.getDestinationId()));
 		busDetails.setBusDetails(
 				busDetails.getBusId() != null ? busDao.getBusDetailsByBusId(busDetails.getBusId()) : new BusMaster());
 

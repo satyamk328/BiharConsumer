@@ -122,8 +122,8 @@ public class CityDao {
 				cityStop.setLocationName(rs.getString("LocationName"));
 				cityStop.setLocationAddress(rs.getString("LocationAddress"));
 				cityStop.setLandMark(rs.getString("LandMark"));
-				cityStop.setLat(rs.getLong("Lat"));
-				cityStop.setLng(rs.getLong("Lng"));
+				cityStop.setLat(rs.getString("Lat"));
+				cityStop.setLng(rs.getString("Lng"));
 				return cityStop;
 			}
 		});
