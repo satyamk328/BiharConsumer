@@ -38,13 +38,13 @@ public class TicketService {
 	@Autowired
 	private SMSWrapperService smsWrapperService;
 	
-	public List<TicketDetails> getTicketDetails(String pnr, Long phone){
-		return tikcetDao.getTicketDetails(pnr, phone);
+	public List<TicketDetails> getBookTicketList(String pnr, Long phone){
+		return tikcetDao.getBookTicketList(pnr, phone);
 	}
 	
 
-	public List<CancelTicketMaster> getCancelTicketDetails(String pnr, Long phone){
-		return tikcetDao.getCancelTicketDetails(pnr, phone);
+	public List<CancelTicketMaster> getCancelTicketList(String pnr, Long phone){
+		return tikcetDao.getCancelTicketList(pnr, phone);
 	}
 	
 	public TicketVO bookTickets(TicketVO bookTicketVO) {

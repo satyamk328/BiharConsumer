@@ -36,7 +36,7 @@ public class TicketPdfReport {
 	public final static Font NORMAL_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
 	public static final String PDF_EXTENSION = ".pdf";
 
-	public ByteArrayInputStream ticketReport1(List<TicketDetails> tickets) {
+	public ByteArrayInputStream ticketReport(List<TicketDetails> tickets) {
 		Document document = new Document(PageSize.A4);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
@@ -111,11 +111,11 @@ public class TicketPdfReport {
 		table.setWidthPercentage(100);
 		Font font = HEADER_FONT;
 		font.setColor(BaseColor.MAGENTA);
-		paragraph.add(new Chunk("Passenger Details ", font));
-		if (null == dataObjList) {
-			paragraph.add(new Chunk("No data to display."));
+		if (null == dataObjList || dataObjList.isEmpty()) {
+			paragraph.add(new Chunk("Invalid ticketId and mobile number. Please try again leter!",HEADER_FONT));
 			return;
 		}
+		paragraph.add(new Chunk("Passenger Details ", font));
 		addHeaderInTable(HEADER_ARRAY, table);
 		int count = 1;
 		for (TicketDetails dataObject : dataObjList) {
@@ -175,7 +175,7 @@ public class TicketPdfReport {
 		ListItem listItem;
 		com.itextpdf.text.List list = new com.itextpdf.text.List(true, 15);
 		listItem = new ListItem(
-				"For any further assistance, please contact us at 24*7 Hrs.Customer Support at 0755-6610661, 0755-4090600 (Language: Hindi and English) or mail us at care@digitalbihar.com",
+				"For any further assistance, please contact us at 24*7 Hrs.Customer Support at +91-8800359490  (Language: Hindi and English) or mail us at www.digitalbihar@gmail.com",
 				FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL));
 		list.add(listItem);
 		listItem = new ListItem(

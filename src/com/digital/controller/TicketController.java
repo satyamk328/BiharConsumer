@@ -7,6 +7,7 @@ import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.EXPIRES;
 import static org.springframework.http.HttpHeaders.PRAGMA;
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
@@ -59,12 +60,12 @@ public class TicketController {
 	 * @return
 	 */
 	@GetMapping(value = "/{mobileNumber}/{ticketNumber}")
-	public ResponseEntity<RestResponse<List<TicketDetails>>> bookTicket(
+	public ResponseEntity<RestResponse<List<TicketDetails>>> getBookTicketList(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
 			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+		List<TicketDetails> details = bookingService.getBookTicketList(ticketNumber, mobileNumber);
 		if (details == null || details.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no ticket available in this pnr and phone. Please enter valid criteria.");
@@ -74,12 +75,13 @@ public class TicketController {
 	}
 
 	@GetMapping(value = "/pdfreport/{mobileNumber}/{ticketNumber}", produces = MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<InputStreamResource> citiesReport(
+	public ResponseEntity<InputStreamResource> downloanTicket(
 			@PathVariable(name = "mobileNumber", required = true) Long mobileNumber,
-			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
-		List<TicketDetails> details = bookingService.getTicketDetails(ticketNumber, mobileNumber);
+			@PathVariable(name = "ticketNumber", required = true) String ticketNumber,
+			@RequestParam(value = "download", required = false, defaultValue = "1") int download) {
+		List<TicketDetails> details = bookingService.getBookTicketList(ticketNumber, mobileNumber);
 
-		ByteArrayInputStream bis = ticketPdfReport.ticketReport1(details);
+		ByteArrayInputStream bis = ticketPdfReport.ticketReport(details);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE));
@@ -89,7 +91,12 @@ public class TicketController {
 		headers.add(CACHE_CONTROL, "no-cache, no-store, must-revalidate");
 		headers.add(PRAGMA, "no-cache");
 		headers.add(EXPIRES, "0");
-		headers.add("Content-Disposition", "inline; filename=ticketdetails.pdf");
+		if (download == 1) {
+			headers.add(CONTENT_DISPOSITION, "attachment; filename=" + ticketNumber + ".pdf");
+		} else {
+			headers.add(CONTENT_DISPOSITION, "inline; filename=" + ticketNumber + ".pdf");
+		}
+		
 		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
 				.body(new InputStreamResource(bis));
 	}
@@ -107,7 +114,7 @@ public class TicketController {
 			@PathVariable(name = "ticketNumber", required = true) String ticketNumber) {
 		log.info("call print {},{}", mobileNumber, ticketNumber);
 		RestStatus<String> status = new RestStatus<>(HttpStatus.OK.toString(), "Fetch record Successfully");
-		List<CancelTicketMaster> details = bookingService.getCancelTicketDetails(ticketNumber, mobileNumber);
+		List<CancelTicketMaster> details = bookingService.getCancelTicketList(ticketNumber, mobileNumber);
 		if (details == null || details.isEmpty()) {
 			status = new RestStatus<>(HttpStatus.OK.toString(),
 					"There are no ticket available in this pnr and phone. Please enter valid criteria.");

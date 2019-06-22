@@ -72,7 +72,7 @@ public class TicketDao {
 	private String insertTicketMaster;
 
 	@Transactional(readOnly = true)
-	public List<TicketDetails> getTicketDetails(String pnr, Long phone) {
+	public List<TicketDetails> getBookTicketList(String pnr, Long phone) {
 		log.debug("Running select query for getTicketDetails: {}", selectTicketDetailsBypnrAndPhone);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("pnr", pnr);
@@ -82,7 +82,7 @@ public class TicketDao {
 	}
 
 	@Transactional(readOnly = true)
-	public List<CancelTicketMaster> getCancelTicketDetails(String pnr, Long phone) {
+	public List<CancelTicketMaster> getCancelTicketList(String pnr, Long phone) {
 		log.debug("Running select query for getTicketDetails: {}", selectCancelTicketDetailsBypnrAndPhone);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("pnr", pnr);
